@@ -5,9 +5,10 @@ family_app.py
 親友與老手專屬・白話文量化投資導航系統 (Family & Veteran Companion App)
 特點：
 - 純前端架構：僅讀取 published_signals.json，零依賴 DuckDB / 爬蟲 / 後端 API，秒級極速部署於 Streamlit Cloud
-- 視覺美學：溫潤紙質亮色主題 (Warm Paper Light Theme)，去 AI 霓虹感，高易讀性排版，深紅/琥珀高對比警示框
-- 三大安全機制：通關密語驗證鎖、資料新鮮度防呆檢查、法規客觀化字眼
-- 五大互動模組：股市天氣預報、傻瓜零股配資機、持股一鍵健檢、波段資優生卡片、老手處置出關狙擊專區
+- 視覺革命：高鐵時刻表級「巨無霸字體 (視覺放大 3~5 倍)」＋ 全寬手機直式上下堆疊，徹底根絕左右硬擠
+- 破解限制：全域 CSS 強制穿透 Streamlit 預設字體限制，Tabs、Input、Button、Toggle 全面高對比放大
+- 極簡文案：砍掉 70% 贅字，全站改用「10 字以內的大字口訣」
+- 五大模組：股市天氣預報、巨型零股配資機、持股一鍵健檢、直式波段看板、老手處置狙擊口訣專區
 """
 
 import os
@@ -18,7 +19,7 @@ import pandas as pd
 import streamlit as st
 
 # ============================================================
-# 1. 頁面設定與自訂紙質亮色 CSS
+# 1. 頁面設定與自訂巨無霸紙質亮色 CSS
 # ============================================================
 st.set_page_config(
     page_title="白話投資導航・親友與老手指南",
@@ -59,128 +60,47 @@ html, body, [data-testid="stAppViewContainer"] {
 }
 
 .main .block-container {
-    max-width: 780px !important;
+    max-width: 820px !important;
     padding-top: 1.5rem !important;
-    padding-bottom: 3.5rem !important;
+    padding-bottom: 4rem !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
 }
-
-/* 標題與內文字級排版 */
-h1 {
-    font-size: 26px !important;
-    font-weight: 900 !important;
-    color: var(--text-primary) !important;
-    margin-bottom: 6px !important;
-}
-h2 {
-    font-size: 20px !important;
-    font-weight: 800 !important;
-    color: var(--text-primary) !important;
-    margin-top: 24px !important;
-    margin-bottom: 12px !important;
-}
-h3 {
-    font-size: 17px !important;
-    font-weight: 700 !important;
-    color: var(--text-primary) !important;
-}
-p, div {
-    line-height: 1.6 !important;
-}
-
-/* 純白內容卡片 */
-.paper-card {
-    background: #FFFFFF;
-    border-radius: 14px;
-    padding: 20px;
-    margin-bottom: 16px;
-    border: 1px solid #E2E8F0;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
-}
-
-/* 高對比防呆警示塊 */
-.alert-danger {
-    background: #FEF2F2 !important;
-    border-left: 6px solid #DC2626 !important;
-    color: #991B1B !important;
-    padding: 14px 18px !important;
-    border-radius: 8px !important;
-    margin: 12px 0 !important;
-    font-size: 15px !important;
-    line-height: 1.6 !important;
-}
-
-.alert-warning {
-    background: #FFFBEB !important;
-    border-left: 6px solid #D97706 !important;
-    color: #92400E !important;
-    padding: 14px 18px !important;
-    border-radius: 8px !important;
-    margin: 12px 0 !important;
-    font-size: 15px !important;
-    line-height: 1.6 !important;
-}
-
-.alert-success {
-    background: #F0FDF4 !important;
-    border-left: 6px solid #16A34A !important;
-    color: #166534 !important;
-    padding: 14px 18px !important;
-    border-radius: 8px !important;
-    margin: 12px 0 !important;
-    font-size: 15px !important;
-    line-height: 1.6 !important;
-}
-
-.alert-info {
-    background: #EFF6FF !important;
-    border-left: 6px solid #2563EB !important;
-    color: #1E40AF !important;
-    padding: 14px 18px !important;
-    border-radius: 8px !important;
-    margin: 12px 0 !important;
-    font-size: 15px !important;
-    line-height: 1.6 !important;
-}
-
-/* 徽章標籤 */
-.badge-tag {
-    display: inline-block;
-    padding: 3px 8px;
-    border-radius: 6px;
-    font-size: 12px;
-    font-weight: 700;
-    margin-right: 6px;
-    margin-bottom: 4px;
-}
-.badge-green { background: #DCFCE7; color: #15803D; }
-.badge-amber { background: #FEF3C7; color: #B45309; }
-.badge-blue  { background: #DBEAFE; color: #1D4ED8; }
-.badge-red   { background: #FEE2E2; color: #B91C1C; }
 
 /* ============================================================
-   強制全面覆蓋為亮色高易讀性主題 (徹底根絕深色底色與反白文字消失問題)
+   一、 破解 Streamlit 字體鎖死限制 (全域強制 CSS 覆蓋)
    ============================================================ */
 
-/* 1. Tabs 頁籤樣式與超高對比實體按鈕 (徹底根絕手機上文字過淡或反白消失問題) */
+/* 1. 強制解除段落限制 */
+.stMarkdown p, .stMarkdown span, .stMarkdown div, .stMarkdown li {
+    font-size: inherit !important;
+    line-height: 1.4 !important;
+}
+
+/* 2. 放大分頁籤 (Tabs) */
 [data-testid="stTabs"] {
     background-color: transparent !important;
+    margin-bottom: 24px !important;
 }
 
 [data-testid="stTabs"] [data-baseweb="tab-list"] {
     background-color: #E2E8F0 !important;
-    padding: 6px !important;
-    border-radius: 12px !important;
+    padding: 8px !important;
+    border-radius: 16px !important;
     gap: 8px !important;
-    border: 1.5px solid #CBD5E1 !important;
+    border: 2px solid #CBD5E1 !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
 }
 
-/* 未選中之頁籤：實體純白按鈕底色、清晰深岩灰粗體字、不透明度 100% 絕不淡化 */
 [data-testid="stTabs"] button[data-baseweb="tab"] {
     background-color: #FFFFFF !important;
-    border-radius: 8px !important;
-    padding: 8px 14px !important;
-    border: 1px solid #CBD5E1 !important;
+    border-radius: 12px !important;
+    padding: 14px 18px !important;
+    border: 1.5px solid #CBD5E1 !important;
     opacity: 1 !important;
+    flex: 1 1 auto !important;
+    text-align: center !important;
 }
 
 [data-testid="stTabs"] button[data-baseweb="tab"] *,
@@ -188,16 +108,16 @@ p, div {
 [data-testid="stTabs"] button[data-baseweb="tab"] span,
 [data-testid="stTabs"] button[data-baseweb="tab"] div {
     color: #1E293B !important;
-    font-size: 15px !important;
-    font-weight: 800 !important;
+    font-size: 24px !important;
+    font-weight: 900 !important;
     opacity: 1 !important;
+    line-height: 1.2 !important;
 }
 
-/* 選中之當前頁籤：深黑深邃底色、純白醒目字體、立體陰影 */
 [data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] {
     background-color: #0F172A !important;
-    border: 1px solid #0F172A !important;
-    box-shadow: 0 3px 8px rgba(15, 23, 42, 0.25) !important;
+    border: 1.5px solid #0F172A !important;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25) !important;
     opacity: 1 !important;
 }
 
@@ -206,87 +126,158 @@ p, div {
 [data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] span,
 [data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] div {
     color: #FFFFFF !important;
+    font-size: 24px !important;
     font-weight: 900 !important;
     opacity: 1 !important;
 }
 
-[data-testid="stTabs"] [data-baseweb="tab-border"] {
-    display: none !important;
-}
-
+[data-testid="stTabs"] [data-baseweb="tab-border"],
 [data-testid="stTabs"] [data-baseweb="tab-highlight"] {
     display: none !important;
 }
 
-/* 2. 輸入框全面轉為白色高易讀性 (避免黑底白字或灰底灰字) */
+/* 3. 放大輸入框、選擇器標題與本體 (Label & Input) */
+label,
+[data-testid="stWidgetLabel"] p,
+[data-testid="stWidgetLabel"] div,
+[data-testid="stWidgetLabel"] span {
+    color: #1E293B !important;
+    font-size: 26px !important;
+    font-weight: 900 !important;
+    line-height: 1.4 !important;
+    margin-bottom: 8px !important;
+}
+
 [data-baseweb="input"],
 [data-testid="stTextInput"] div[data-baseweb="input"],
 [data-testid="stNumberInput"] div[data-baseweb="input"] {
     background-color: #FFFFFF !important;
-    border: 1.5px solid #CBD5E1 !important;
-    border-radius: 10px !important;
-    color: #0F172A !important;
+    border: 2.5px solid #CBD5E1 !important;
+    border-radius: 14px !important;
+    min-height: 64px !important;
+    padding: 6px 14px !important;
 }
 
 [data-baseweb="input"]:focus-within {
     border-color: #16A34A !important;
-    box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.2) !important;
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.25) !important;
 }
 
 input, [data-baseweb="input"] input {
     background-color: #FFFFFF !important;
     color: #0F172A !important;
-    font-weight: 700 !important;
-    font-size: 16px !important;
+    font-weight: 900 !important;
+    font-size: 28px !important;
+    height: 52px !important;
 }
 
 input::placeholder {
     color: #94A3B8 !important;
+    font-size: 24px !important;
 }
 
 /* 數字輸入框加減按鈕 */
 [data-testid="stNumberInput"] button {
     background-color: #F1F5F9 !important;
     color: #1E293B !important;
-    border: none !important;
-}
-[data-testid="stNumberInput"] button:hover {
-    background-color: #E2E8F0 !important;
-    color: #0F172A !important;
-}
-
-/* 3. 所有 Widget 標籤與提示文字 */
-label,
-[data-testid="stWidgetLabel"] p,
-[data-testid="stWidgetLabel"] div,
-[data-testid="stWidgetLabel"] span {
-    color: #1E293B !important;
-    font-size: 15px !important;
-    font-weight: 800 !important;
-}
-
-/* 4. Expander 標題文字 */
-[data-testid="stExpander"] details summary span,
-[data-testid="stExpander"] details summary p {
-    color: #1E293B !important;
-    font-weight: 700 !important;
-    font-size: 14px !important;
-}
-[data-testid="stExpander"] details {
-    background-color: #FFFFFF !important;
-    border: 1px solid #CBD5E1 !important;
+    min-width: 52px !important;
+    min-height: 52px !important;
+    font-size: 28px !important;
     border-radius: 10px !important;
 }
 
-/* 5. Checkbox / Toggle 標籤文字 */
-[data-testid="stCheckbox"] label span,
-[data-testid="stToggle"] label span {
-    color: #1E293B !important;
-    font-weight: 700 !important;
-    font-size: 15px !important;
+/* 按鈕 (st.button) */
+.stButton > button {
+    font-size: 28px !important;
+    font-weight: 900 !important;
+    padding: 16px 28px !important;
+    border-radius: 14px !important;
+    min-height: 64px !important;
+    width: 100% !important;
 }
 
-/* 隱藏 Streamlit 預設多餘元素 */
+/* Toggle 與 Checkbox 標題與圖示 */
+[data-testid="stCheckbox"] label span,
+[data-testid="stToggle"] label span,
+[data-testid="stToggle"] label p {
+    color: #1E293B !important;
+    font-weight: 900 !important;
+    font-size: 26px !important;
+    line-height: 1.4 !important;
+}
+
+[data-testid="stToggle"] [data-baseweb="toggle"] {
+    transform: scale(1.35) !important;
+    margin-right: 14px !important;
+}
+
+/* 4. 純白內容卡片與警示框 */
+.paper-card {
+    background: #FFFFFF;
+    border-radius: 18px;
+    padding: 24px 22px;
+    margin-bottom: 20px;
+    border: 1.5px solid #E2E8F0;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+}
+
+.alert-danger {
+    background: #FEF2F2 !important;
+    border-left: 8px solid #DC2626 !important;
+    color: #991B1B !important;
+    padding: 20px 22px !important;
+    border-radius: 14px !important;
+    margin: 14px 0 !important;
+    line-height: 1.5 !important;
+}
+
+.alert-warning {
+    background: #FFFBEB !important;
+    border-left: 8px solid #D97706 !important;
+    color: #92400E !important;
+    padding: 20px 22px !important;
+    border-radius: 14px !important;
+    margin: 14px 0 !important;
+    line-height: 1.5 !important;
+}
+
+.alert-success {
+    background: #F0FDF4 !important;
+    border-left: 8px solid #16A34A !important;
+    color: #166534 !important;
+    padding: 20px 22px !important;
+    border-radius: 14px !important;
+    margin: 14px 0 !important;
+    line-height: 1.5 !important;
+}
+
+.alert-info {
+    background: #EFF6FF !important;
+    border-left: 8px solid #2563EB !important;
+    color: #1E40AF !important;
+    padding: 20px 22px !important;
+    border-radius: 14px !important;
+    margin: 14px 0 !important;
+    line-height: 1.5 !important;
+}
+
+/* 膠囊亮點大標籤 (22px ~ 24px 粗體，padding: 10px 16px，圓角 12px) */
+.badge-tag {
+    display: inline-block;
+    padding: 10px 16px !important;
+    border-radius: 12px !important;
+    font-size: 22px !important;
+    font-weight: 900 !important;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    line-height: 1.2 !important;
+}
+.badge-green { background: #DCFCE7 !important; color: #15803D !important; border: 1.5px solid #BBF7D0 !important; }
+.badge-amber { background: #FEF3C7 !important; color: #B45309 !important; border: 1.5px solid #FDE68A !important; }
+.badge-blue  { background: #DBEAFE !important; color: #1D4ED8 !important; border: 1.5px solid #BFDBFE !important; }
+.badge-red   { background: #FEE2E2 !important; color: #B91C1C !important; border: 1.5px solid #FECACA !important; }
+
+/* 隱藏 Streamlit 多餘元素 */
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
 header {visibility: hidden;}
@@ -296,7 +287,7 @@ st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
 
 # ============================================================
-# 2. 安全機制一：家庭通關密語驗證鎖
+# 2. 安全機制一：家庭通關密語驗證鎖 (巨無霸化)
 # ============================================================
 PASSCODE_DEFAULT = "8888"
 def get_expected_passcode():
@@ -311,18 +302,16 @@ if "family_authenticated" not in st.session_state:
     st.session_state.family_authenticated = False
 
 if not st.session_state.family_authenticated:
-    render_html("<div style='height: 40px;'></div>")
+    render_html("<div style='height: 30px;'></div>")
     render_html("""
-    <div class='paper-card' style='text-align: center; padding: 32px 24px;'>
-        <div style='font-size: 42px; margin-bottom: 12px;'>🧭</div>
-        <h1 style='margin-bottom: 8px;'>親友專屬・白話投資參考導航</h1>
-        <div style='color: #64748B; font-size: 15px; margin-bottom: 24px;'>
-            本站專供親友與老手交流使用，請輸入通關密語以解鎖今日最新訊號。
-        </div>
+    <div class='paper-card' style='text-align: center; padding: 36px 20px; border-top: 8px solid #2563EB;'>
+        <div style='font-size: 90px !important; line-height: 1 !important; margin-bottom: 16px;'>🧭</div>
+        <div style='font-size: 38px !important; font-weight: 900 !important; color: #1E293B; margin-bottom: 12px;'>親友專屬・白話投資導航</div>
+        <div style='font-size: 24px !important; font-weight: 800 !important; color: #64748B; margin-bottom: 24px;'>請輸入通關密語解鎖今日訊號</div>
     </div>
     """)
 
-    c_left, c_mid, c_right = st.columns([1, 2, 1])
+    c_left, c_mid, c_right = st.columns([1, 4, 1])
     with c_mid:
         user_input_passcode = st.text_input("🔑 輸入通關密語", type="password", placeholder="預設為 8888")
         if st.button("🔓 驗證解鎖進入", use_container_width=True, type="primary"):
@@ -331,7 +320,7 @@ if not st.session_state.family_authenticated:
                 st.session_state.family_authenticated = True
                 st.rerun()
             else:
-                st.error("密語不正確，請詢問版主喔！")
+                render_html("<div class='alert-danger' style='font-size: 24px !important; font-weight: 900 !important; text-align: center;'>密語不正確，請詢問版主喔！</div>")
     st.stop()
 
 
@@ -343,9 +332,9 @@ SIGNALS_FILE = os.path.join(PROJECT_ROOT, "published_signals.json")
 
 if not os.path.exists(SIGNALS_FILE):
     render_html("""
-    <div class='alert-danger'>
-        <b>🚧 尚未找到 published_signals.json 信號檔</b><br>
-        版主目前尚未在本地指揮官後台點擊「📤 匯出並發布親友版最新訊號」，請稍候再重新整理頁面！
+    <div class='alert-danger' style='font-size: 26px !important; font-weight: 900 !important;'>
+        🚧 尚未找到 published_signals.json 訊號檔<br>
+        版主目前尚未在本地後台發布最新訊號，請稍候再重新整理！
     </div>
     """)
     st.stop()
@@ -355,8 +344,8 @@ try:
         data = json.load(f)
 except Exception as e:
     render_html(f"""
-    <div class='alert-danger'>
-        <b>❌ 讀取信號檔失敗:</b> {str(e)}
+    <div class='alert-danger' style='font-size: 26px !important; font-weight: 900 !important;'>
+        ❌ 讀取訊號檔失敗: {str(e)}
     </div>
     """)
     st.stop()
@@ -391,7 +380,6 @@ def check_freshness(data_date_val: str) -> tuple[bool, str]:
                 return True, "週末休息中（顯示本週五收盤訊號）"
                 
         # 3. 如果今天是平日且在開盤前 (09:00 前)
-        # 例如週二清晨看週一收盤，此時昨天的資料依然是最新可用訊號
         if today.weekday() < 5 and now_tw.hour < 9:
             yesterday = today - datetime.timedelta(days=1)
             if today.weekday() == 0: # 週一晨間看上週五
@@ -400,35 +388,38 @@ def check_freshness(data_date_val: str) -> tuple[bool, str]:
                 return True, "盤前備戰中（顯示前一交易日收盤訊號）"
                 
         # 4. 判定為過期
-        return False, f"版主尚未更新最新一期的盤後資料（目前顯示為 {data_date_val} 舊訊號），今日請先暫停參考喔！"
+        return False, f"版主尚未更新最新盤後資料（目前為 {data_date_val}），今日暫停參考！"
     except Exception:
         return True, "資料狀態已載入"
 
 is_fresh, freshness_msg = check_freshness(data_date_str)
 
-# 若資料過期，最頂部強制深紅高對比防呆框
+# 若資料過期，最頂部強制深紅高對比大防呆框 (28px)
 if not is_fresh:
     render_html(f"""
-    <div class='alert-danger'>
-        <b>🚨 🚧 注意：{freshness_msg}</b>
+    <div class='alert-danger' style='font-size: 28px !important; font-weight: 900 !important; padding: 22px !important;'>
+        🚨 🚧 {freshness_msg}
     </div>
     """)
 
 
 # ============================================================
-# 5. 頂部導航列與版頭 (親切白話風)
+# 5. 頂部導航列與版頭 (巨型親切看板)
 # ============================================================
 render_html(f"""
-<div style='display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 14px;'>
-    <div>
-        <h1 style='margin: 0;'>🧭 親友與老手・白話投資導航</h1>
-        <div style='color: #64748B; font-size: 14px; margin-top: 4px;'>
-            客觀量化統計 ｜ 零投顧話術 ｜ 嚴守停損紀律
-        </div>
+<div style='margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid #E2E8F0;'>
+    <div style='font-size: 40px !important; font-weight: 900 !important; color: #1E293B; line-height: 1.2;'>
+        🧭 親友與老手・白話投資導航
     </div>
-    <div style='text-align: right;'>
-        <span class='badge-tag badge-blue'>資料日期: {data_date_str}</span>
-        <div style='color: #94A3B8; font-size: 12px; margin-top: 2px;'>發布: {generated_at[5:16] if len(generated_at)>=16 else generated_at}</div>
+    <div style='display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-top: 10px; gap: 8px;'>
+        <div style='font-size: 22px !important; font-weight: 800 !important; color: #64748B;'>
+            客觀量化 ｜ 嚴守停損 ｜ 絕不凹單
+        </div>
+        <div>
+            <span style='background: #DBEAFE; color: #1D4ED8; font-size: 20px !important; font-weight: 900 !important; padding: 6px 14px; border-radius: 8px;'>
+                資料日期: {data_date_str}
+            </span>
+        </div>
     </div>
 </div>
 """)
@@ -437,114 +428,94 @@ render_html(f"""
 # ============================================================
 # 區塊一：今日股市天氣預報（大盤紅綠燈）
 # ============================================================
+render_html("<div style='font-size: 38px !important; font-weight: 900 !important; color: #1E293B; margin: 28px 0 16px 0;'>🌤️ 今日股市天氣預報</div>")
+
 regime = data.get("market_regime", {})
 rec_equity = int(regime.get("recommended_equity_pct", 50))
 rec_cash = int(regime.get("recommended_cash_pct", 50))
 halt_buys = bool(regime.get("halt_new_buys", False))
 weather_title = regime.get("weather_title", "⛅ 多雲警戒")
-weather_desc = regime.get("weather_desc", "")
 taiex_c = regime.get("taiex_close", 0)
 
-# 天氣卡片色彩微調
+# 天氣與狀態主圖示 (90px)
 if rec_equity >= 80:
+    weather_icon = "☀️"
     weather_border = "#16A34A"
-    weather_badge = "badge-green"
+    weather_desc_short = "大盤晴朗多頭！照表配置好股票！"
 elif rec_equity >= 50:
+    weather_icon = "⛅"
     weather_border = "#D97706"
-    weather_badge = "badge-amber"
+    weather_desc_short = "大盤月線震盪中！保留一半現金防守！"
 else:
+    weather_icon = "⛈️"
     weather_border = "#DC2626"
-    weather_badge = "badge-red"
+    weather_desc_short = "大盤急跌暴風雨！全數空手保留現金！"
 
 render_html(f"""
-<div class='paper-card' style='border-top: 5px solid {weather_border};'>
-    <div style='display: flex; justify-content: space-between; align-items: center;'>
-        <div style='font-size: 20px; font-weight: 800; color: #1E293B;'>
-            {weather_title}
-        </div>
-        <span class='badge-tag {weather_badge}'>大盤位階: {taiex_c:,.0f} 點</span>
-    </div>
-    <div style='font-size: 15px; color: #475569; margin: 10px 0;'>
-        {weather_desc}
-    </div>
-    <div style='display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px;'>
-        <div style='background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px; padding: 12px; text-align: center;'>
-            <div style='font-size: 13px; color: #64748B;'>今日參考持股上限</div>
-            <div style='font-size: 26px; font-weight: 900; color: {weather_border}; margin-top: 2px;'>{rec_equity}%</div>
-        </div>
-        <div style='background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px; padding: 12px; text-align: center;'>
-            <div style='font-size: 13px; color: #64748B;'>應保留銀行防守現金</div>
-            <div style='font-size: 26px; font-weight: 900; color: #1E293B; margin-top: 2px;'>{rec_cash}%</div>
-        </div>
-    </div>
+<div class='paper-card' style='border-top: 8px solid {weather_border}; padding: 26px 20px; text-align: center; border-radius: 18px;'>
+    <div style='font-size: 90px !important; line-height: 1 !important; margin: 6px 0;'>{weather_icon}</div>
+    <div style='font-size: 40px !important; font-weight: 900 !important; color: #1E293B; margin-top: 8px;'>{weather_title}</div>
+    <div style='font-size: 24px !important; font-weight: 800 !important; color: #64748B; margin-top: 6px;'>大盤指數: {taiex_c:,.0f} 點</div>
+    <div style='font-size: 26px !important; font-weight: 900 !important; color: {weather_border}; margin-top: 14px;'>{weather_desc_short}</div>
 </div>
 """)
 
 
 # ============================================================
-# 區塊二：傻瓜零股配資試算機（含小資防呆）
+# 區塊二：傻瓜零股配資試算機（上下堆疊巨型數字看板）
 # ============================================================
-render_html("<h2>💰 傻瓜零股配資試算機</h2>")
+render_html("<div style='font-size: 38px !important; font-weight: 900 !important; color: #1E293B; margin: 36px 0 16px 0;'>💰 傻瓜零股配資試算機</div>")
 
-with st.container():
-    col_cap1, col_cap2 = st.columns([1.5, 2.5])
-    with col_cap1:
-        user_capital = st.number_input(
-            "輸入預計投資總本金 (新台幣元)",
-            min_value=10000,
-            max_value=50000000,
-            value=300000,
-            step=10000
-        )
-    with col_cap2:
-        render_html(
-            f"<div style='font-size: 13px; color: #64748B; margin-top: 28px;'>"
-            f"系統將依今日大盤天氣（上限 <b>{rec_equity}%</b>）與 <b>9 等分</b> 模式，自動計算每檔股票可買進之金額與安全防守現金。"
-            f"</div>"
-        )
+user_capital = st.number_input(
+    "輸入預計投資總本金 (新台幣元)",
+    min_value=10000,
+    max_value=50000000,
+    value=300000,
+    step=10000
+)
 
-    # 運算金額
-    investable_total = user_capital * (rec_equity / 100.0)
-    cash_reserve = user_capital - investable_total
-    single_stock_budget = investable_total / 9.0
+# 運算金額
+investable_total = user_capital * (rec_equity / 100.0)
+cash_reserve = user_capital - investable_total
+single_stock_budget = investable_total / 9.0
 
-    render_html(f"""
-    <div class='paper-card' style='background: #F8FAFC; border: 1px dashed #CBD5E1;'>
-        <div style='display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center;'>
-            <div>
-                <div style='font-size: 12px; color: #64748B;'>目前參考可入市金額</div>
-                <div style='font-size: 20px; font-weight: 800; color: #16A34A; margin-top: 4px;'>NT$ {investable_total:,.0f}</div>
-            </div>
-            <div>
-                <div style='font-size: 12px; color: #64748B;'>必須留在銀行的保命現金</div>
-                <div style='font-size: 20px; font-weight: 800; color: #1E293B; margin-top: 4px;'>NT$ {cash_reserve:,.0f}</div>
-            </div>
-            <div>
-                <div style='font-size: 12px; color: #64748B;'>單一檔股票分配額度 (÷9)</div>
-                <div style='font-size: 20px; font-weight: 800; color: #2563EB; margin-top: 4px;'>NT$ {single_stock_budget:,.0f}</div>
-            </div>
+# 資金比例直接做成三張上下堆疊的巨型數字卡 (38px 超粗體)
+render_html(f"""
+<div style='margin-top: 16px;'>
+    <div class='paper-card' style='border-left: 8px solid #16A34A; padding: 22px 20px; margin-bottom: 14px;'>
+        <div style='font-size: 38px !important; font-weight: 900 !important; color: #16A34A; line-height: 1.2;'>
+            📈 最多買股：{rec_equity}%（${investable_total:,.0f}）
         </div>
+    </div>
+    <div class='paper-card' style='border-left: 8px solid #1E293B; padding: 22px 20px; margin-bottom: 14px;'>
+        <div style='font-size: 38px !important; font-weight: 900 !important; color: #1E293B; line-height: 1.2;'>
+            🏦 必留現金：{rec_cash}%（${cash_reserve:,.0f}）
+        </div>
+    </div>
+    <div class='paper-card' style='border-left: 8px solid #2563EB; padding: 22px 20px; margin-bottom: 14px;'>
+        <div style='font-size: 38px !important; font-weight: 900 !important; color: #2563EB; line-height: 1.2;'>
+            🎯 每檔分配：${single_stock_budget:,.0f} 元
+        </div>
+    </div>
+</div>
+""")
+
+# 小額本金防呆 (26px 粗體)
+if single_stock_budget < 10000:
+    render_html("""
+    <div class='alert-warning' style='font-size: 26px !important; font-weight: 900 !important; padding: 18px 20px !important;'>
+        💡 資金較小，建議集中買前 3~5 檔即可！
     </div>
     """)
 
-    # 小額本金防呆
-    if single_stock_budget < 10000:
-        render_html("""
-        <div class='alert-warning'>
-            <b>💡 貼心提醒：</b>由於單檔分配金額較小（未滿 10,000 元），為避免零股最低手續費與價差耗損，建議只挑選前 3~5 名集中參考即可（請確認您的券商具備零股 1 元手續費優惠）。
-        </div>
-        """)
-
 
 # ============================================================
-# 區塊三：「我手上的股票怎麼辦？」一鍵健檢（含心理建設）
+# 區塊三：「我手上的股票怎麼辦？」一鍵健檢
 # ============================================================
-render_html("<h2>🔍 「我手上的股票怎麼辦？」一鍵健檢</h2>")
+render_html("<div style='font-size: 38px !important; font-weight: 900 !important; color: #1E293B; margin: 38px 0 16px 0;'>🔍 「我手上的股票怎麼辦？」一鍵健檢</div>")
 
 all_search_dict = data.get("all_searchable_stocks", {})
-c_search, c_btn = st.columns([3, 1])
-with c_search:
-    search_query = st.text_input("輸入股票代號（例如: 6672, 4760, 6187, 2330）", placeholder="請輸入 4 碼台股代號").strip()
+search_query = st.text_input("輸入股票代號（例如: 6672, 4760, 6187, 2330）", placeholder="請輸入 4 碼台股代號").strip()
 
 if search_query:
     target_info = all_search_dict.get(search_query)
@@ -552,45 +523,64 @@ if search_query:
     if target_info:
         t_name = target_info.get("name", "")
         t_rank = target_info.get("rank", 999)
-        t_status = target_info.get("status", "OUTSIDE")
         t_close = target_info.get("close", 0.0)
 
         if isinstance(t_rank, int) and t_rank <= 9:
             render_html(f"""
-            <div class='alert-success'>
-                <b>🟢 動能強勢（前 9 強 - 第 {t_rank} 名）：{search_query} {t_name}</b><br>
-                目前最新收盤價: {t_close:,.2f} 元 ｜ 綜合分數排名前 9 強，表現優異，基本面與動能雙全，可安心續抱。
+            <div class='alert-success' style='padding: 22px 20px !important; border-radius: 14px;'>
+                <div style='font-size: 30px !important; font-weight: 900 !important; color: #166534;'>
+                    🟢 動能超強（第 {t_rank} 名）！安心抱牢！
+                </div>
+                <div style='font-size: 28px !important; font-weight: 900 !important; color: #0F172A; margin-top: 10px;'>
+                    {search_query} {t_name} ｜ 現價: {t_close:,.2f} 元
+                </div>
             </div>
             """)
         elif isinstance(t_rank, int) and t_rank <= 15:
             render_html(f"""
-            <div class='alert-info'>
-                <b>🔵 安全緩衝區（第 {t_rank} 名）：{search_query} {t_name}</b><br>
-                目前最新收盤價: {t_close:,.2f} 元 ｜ 表現平穩，原本已持有的朋友可繼續安心續抱；但空手者不建議盲目追高。
+            <div class='alert-info' style='padding: 22px 20px !important; border-radius: 14px;'>
+                <div style='font-size: 30px !important; font-weight: 900 !important; color: #1E40AF;'>
+                    🔵 安全緩衝（第 {t_rank} 名）！續抱、不加碼！
+                </div>
+                <div style='font-size: 28px !important; font-weight: 900 !important; color: #0F172A; margin-top: 10px;'>
+                    {search_query} {t_name} ｜ 現價: {t_close:,.2f} 元
+                </div>
             </div>
             """)
         else:
             render_html(f"""
-            <div class='alert-danger'>
-                <b>🔴 動能轉弱（已跌出前 15 名）：{search_query} {t_name}</b><br>
-                目前排名: 第 {t_rank} 名 ｜ 已不符合強勢標準，參考紀律為適時汰弱換取現金。<br><br>
-                <b>💡 系統小叮嚀：</b>量化篩選就像果農挑水果，發現不甜就換下一顆。小幅調整換回現金是為了保護本金，千萬別因為捨不得而抱著弱勢股喔！
+            <div class='alert-danger' style='padding: 22px 20px !important; border-radius: 14px;'>
+                <div style='font-size: 30px !important; font-weight: 900 !important; color: #991B1B;'>
+                    🔴 跌出榜外！動能轉弱，找機會賣出換現金！
+                </div>
+                <div style='font-size: 28px !important; font-weight: 900 !important; color: #0F172A; margin-top: 10px;'>
+                    {search_query} {t_name} ｜ 現價: {t_close:,.2f} 元
+                </div>
+                <div style='font-size: 24px !important; font-weight: 900 !important; color: #991B1B; margin-top: 14px; padding-top: 12px; border-top: 1px dashed #FCA5A5;'>
+                    💡 果農挑水果，不甜就換！小賠換現金才能抓下一檔飆股。
+                </div>
             </div>
             """)
     else:
         render_html(f"""
-        <div class='alert-danger'>
-            <b>🔴 動能轉弱（未進入全市場前段班）：{search_query}</b><br>
-            此檔股票目前未通過流動性濾網（5日均成交值 >= 2億元）或近 20 日動能偏弱，不在強勢觀察池內。建議優先保留現金或換入具備高動能之資優生！<br><br>
-            <b>💡 系統小叮嚀：</b>量化篩選就像果農挑水果，發現不甜就換下一顆。小幅調整換回現金是為了保護本金，千萬別因為捨不得而抱著弱勢股喔！
+        <div class='alert-danger' style='padding: 22px 20px !important; border-radius: 14px;'>
+            <div style='font-size: 30px !important; font-weight: 900 !important; color: #991B1B;'>
+                🔴 未進強勢榜！動能偏弱，建議保留現金！
+            </div>
+            <div style='font-size: 28px !important; font-weight: 900 !important; color: #0F172A; margin-top: 10px;'>
+                股票代號: {search_query}
+            </div>
+            <div style='font-size: 24px !important; font-weight: 900 !important; color: #991B1B; margin-top: 14px; padding-top: 12px; border-top: 1px dashed #FCA5A5;'>
+                💡 果農挑水果，不甜就換！小賠換現金才能抓下一檔飆股。
+            </div>
         </div>
         """)
 
 
 # ============================================================
-# 區塊四：波段資優生名單（手機卡片式 ＋ 大盤連動鎖 ＋ 處置避雷）
+# 區塊四：波段資優生名單（手機直式 5 層全寬大看板結構）
 # ============================================================
-st.markdown("<h2>🏆 波段資優生名單</h2>", unsafe_allow_html=True)
+render_html("<div style='font-size: 40px !important; font-weight: 900 !important; color: #1E293B; margin: 42px 0 20px 0;'>🏆 波段資優生名單</div>")
 
 core1 = data.get("core_1_swing", {})
 top_9 = core1.get("top_9", [])
@@ -598,26 +588,28 @@ buffer_15 = core1.get("buffer_10_15", [])
 dropped_15 = core1.get("dropped_from_top15", [])
 
 tab_top9, tab_buffer, tab_dropped = st.tabs([
-    f"🟢 動能前 9 強 ({len(top_9)})",
-    f"🔵 安穩緩衝區 ({len(buffer_15)})",
-    f"🔴 動能轉弱區 ({len(dropped_15)})"
+    f"🟢 前 9 強 ({len(top_9)})",
+    f"🔵 緩衝區 ({len(buffer_15)})",
+    f"🔴 轉弱 ({len(dropped_15)})"
 ])
 
 # -------------------------------------------------------------
 # Tab 1: 前 9 強名單
 # -------------------------------------------------------------
 with tab_top9:
-    # 大盤連動鎖
+    # 大盤連動大字黃框 (28px ~ 30px 粗體)
     if halt_buys:
         render_html("""
-        <div class='alert-warning'>
-            <b>🟡 目前大盤處於跌破月線震盪警戒中！以下名單僅供觀察，空手者建議先看戲、暫緩建立新部位！</b>
+        <div class='alert-warning' style='padding: 20px 22px !important; border-radius: 14px;'>
+            <div style='font-size: 30px !important; font-weight: 900 !important; color: #92400E; line-height: 1.3;'>🟡 大盤跌破月線警戒！</div>
+            <div style='font-size: 28px !important; font-weight: 900 !important; color: #92400E; margin-top: 6px; line-height: 1.3;'>👉 空手者先看戲，暫停買新股！</div>
         </div>
         """)
     else:
         render_html("""
-        <div class='alert-success'>
-            <b>🟢 大盤結構穩健，動能強勢名單具備良好攻擊力道！</b>
+        <div class='alert-success' style='padding: 20px 22px !important; border-radius: 14px;'>
+            <div style='font-size: 30px !important; font-weight: 900 !important; color: #166534; line-height: 1.3;'>🟢 大盤穩健多頭！</div>
+            <div style='font-size: 28px !important; font-weight: 900 !important; color: #166534; margin-top: 6px; line-height: 1.3;'>👉 照表配置，動能強勁！</div>
         </div>
         """)
 
@@ -637,31 +629,38 @@ with tab_top9:
 
         warning_block = ""
         if s_warn:
-            warning_block = (
-                f"<div class='alert-warning' style='margin: 8px 0; padding: 10px 14px !important; font-size: 13px !important;'>"
-                f"<b>{s_warn}</b><br>"
-                f"此檔目前關禁閉（處置）或剛出關，波動極度劇烈，一般投資人請直接跳過！（跳過之預算額度請直接留現金，不必往下遞補第 10 名）。"
-                f"</div>"
-            )
+            warning_block = f"""
+            <div class='alert-warning' style='border-left: 8px solid #D97706 !important; padding: 18px 20px !important; margin: 14px 0 !important; border-radius: 12px;'>
+                <div style='font-size: 28px !important; font-weight: 900 !important; color: #92400E; line-height: 1.3;'>⚠️ 關禁閉劇烈波動！新手直接跳過！</div>
+                <div style='font-size: 26px !important; font-weight: 900 !important; color: #92400E; margin-top: 6px; line-height: 1.3;'>👉 這筆錢請直接留現金，別買第 10 名</div>
+            </div>
+            """
 
         card_html = f"""
-        <div class='paper-card' style='padding: 16px 18px;'>
-            <div style='display: flex; justify-content: space-between; align-items: center;'>
-                <div>
-                    <span style='background: #16A34A; color: #FFF; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 900;'>#{s_rank}</span>
-                    <span style='font-size: 18px; font-weight: 800; margin-left: 6px;'>{s_id} {s_name}</span>
-                </div>
-                <div style='font-size: 18px; font-weight: 800; color: #1E293B;'>
-                    NT$ {s_close:,.2f}
-                </div>
+        <div class='paper-card' style='padding: 24px 22px; margin-bottom: 24px; border-radius: 18px;'>
+            <!-- 第 1 層：超大股名 -->
+            <div style='display: flex; align-items: center; margin-bottom: 12px;'>
+                <span style='background: #16A34A; color: #FFF; padding: 4px 14px; border-radius: 8px; font-size: 28px !important; font-weight: 900 !important; margin-right: 12px;'>#{s_rank}</span>
+                <span style='font-size: 38px !important; font-weight: 900 !important; color: #0F172A; line-height: 1.2;'>{s_id} {s_name}</span>
             </div>
-            <div style='margin-top: 8px;'>
+            <!-- 第 2 層：超大現價 -->
+            <div style='font-size: 32px !important; font-weight: 900 !important; color: #334155; margin-bottom: 14px;'>
+                💰 現價：{s_close:,.2f} 元
+            </div>
+            <!-- 第 3 層：大膠囊亮點 -->
+            <div style='display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px;'>
                 {tag_spans}
             </div>
+            <!-- 第 4 層：處置避雷大黃框（若有） -->
             {warning_block}
-            <div style='margin-top: 10px; padding-top: 8px; border-top: 1px dashed #E2E8F0; font-size: 13px; color: #475569; display: flex; justify-content: space-between;'>
-                <span>9 等分試算零股數：<b>{shares_calc:,} 股</b></span>
-                <span>試算預計金額：約 NT$ {approx_cost:,.0f}</span>
+            <!-- 第 5 層：巨型買進試算看板 -->
+            <div style='background: #0F172A; border-radius: 14px; padding: 18px 16px; text-align: center; margin-top: 14px;'>
+                <div style='font-size: 38px !important; font-weight: 900 !important; color: #22C55E; line-height: 1.2;'>
+                    🛒 試算：{shares_calc:,} 股
+                </div>
+                <div style='font-size: 24px !important; font-weight: 800 !important; color: #94A3B8; margin-top: 4px;'>
+                    （約 ${approx_cost:,.0f} 元）
+                </div>
             </div>
         </div>
         """
@@ -672,8 +671,9 @@ with tab_top9:
 # -------------------------------------------------------------
 with tab_buffer:
     render_html("""
-    <div class='alert-info'>
-        <b>🔵 緩衝區操作說明：</b>此區間股票表現依舊在全市場前 1% 之列。原先已持有的朋友可<b>安心續抱</b>，無需頻繁換股；若是空手的朋友，請先專注在前 9 強即可，不宜往下追買。
+    <div class='alert-info' style='padding: 20px 22px !important; border-radius: 14px; margin-bottom: 20px;'>
+        <div style='font-size: 28px !important; font-weight: 900 !important; color: #1E40AF; line-height: 1.3;'>🔵 緩衝區操作說明</div>
+        <div style='font-size: 26px !important; font-weight: 900 !important; color: #1E40AF; margin-top: 6px; line-height: 1.3;'>原持有者安心續抱！空手者專注前 9 強，不盲目追買！</div>
     </div>
     """)
 
@@ -686,18 +686,25 @@ with tab_buffer:
         tag_spans = "".join([f"<span class='badge-tag badge-blue'>{t}</span>" for t in s_tags])
 
         render_html(f"""
-        <div class='paper-card' style='padding: 14px 18px;'>
-            <div style='display: flex; justify-content: space-between; align-items: center;'>
-                <div>
-                    <span style='background: #2563EB; color: #FFF; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 800;'>#{s_rank}</span>
-                    <span style='font-size: 16px; font-weight: 800; margin-left: 6px;'>{s_id} {s_name}</span>
-                </div>
-                <div style='font-size: 16px; font-weight: 700; color: #1E293B;'>
-                    NT$ {s_close:,.2f}
-                </div>
+        <div class='paper-card' style='padding: 24px 22px; margin-bottom: 24px; border-radius: 18px;'>
+            <!-- 第 1 層：超大股名 -->
+            <div style='display: flex; align-items: center; margin-bottom: 12px;'>
+                <span style='background: #2563EB; color: #FFF; padding: 4px 14px; border-radius: 8px; font-size: 28px !important; font-weight: 900 !important; margin-right: 12px;'>#{s_rank}</span>
+                <span style='font-size: 36px !important; font-weight: 900 !important; color: #0F172A; line-height: 1.2;'>{s_id} {s_name}</span>
             </div>
-            <div style='margin-top: 8px;'>
+            <!-- 第 2 層：超大現價 -->
+            <div style='font-size: 32px !important; font-weight: 900 !important; color: #334155; margin-bottom: 14px;'>
+                💰 現價：{s_close:,.2f} 元
+            </div>
+            <!-- 第 3 層：大膠囊亮點 -->
+            <div style='display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px;'>
                 {tag_spans}
+            </div>
+            <!-- 第 4 層：說明底框 -->
+            <div style='background: #EFF6FF; border: 1.5px solid #BFDBFE; border-radius: 12px; padding: 14px; text-align: center;'>
+                <div style='font-size: 26px !important; font-weight: 900 !important; color: #1D4ED8;'>
+                    🔵 續抱即可！空手者不追！
+                </div>
             </div>
         </div>
         """)
@@ -707,13 +714,14 @@ with tab_buffer:
 # -------------------------------------------------------------
 with tab_dropped:
     render_html("""
-    <div class='alert-danger'>
-        <b>🚨 鐵血紀律提醒：</b>以下股票為對比前一交易日<b>最新跌出前 15 名之外</b>的個股。動能轉弱容易引發連續性多殺多，建議持有者於隔日開盤市價汰弱換取現金，切忌心存僥倖！
+    <div class='alert-danger' style='padding: 20px 22px !important; border-radius: 14px; margin-bottom: 20px;'>
+        <div style='font-size: 30px !important; font-weight: 900 !important; color: #991B1B; line-height: 1.3;'>🚨 鐵血紀律提醒</div>
+        <div style='font-size: 26px !important; font-weight: 900 !important; color: #991B1B; margin-top: 6px; line-height: 1.3;'>最新跌出前 15 名！建議於開盤市價汰弱換取現金！</div>
     </div>
     """)
 
     if not dropped_15:
-        render_html("<div class='paper-card' style='text-align:center; color:#64748B;'>今日名單結構穩定，無任何股票跌出前 15 名！</div>")
+        render_html("<div class='paper-card' style='text-align: center; padding: 28px;'><div style='font-size: 28px !important; font-weight: 900 !important; color: #64748B;'>今日名單結構穩定，無任何股票跌出前 15 名！</div></div>")
     else:
         for stock in dropped_15:
             d_id = stock.get("stock_id", "")
@@ -723,29 +731,32 @@ with tab_dropped:
             d_close = stock.get("close", 0.0)
             
             render_html(f"""
-            <div class='paper-card' style='border-left: 5px solid #DC2626; padding: 14px 18px;'>
-                <div style='display: flex; justify-content: space-between; align-items: center;'>
-                    <div>
-                        <span style='background: #DC2626; color: #FFF; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 800;'>轉弱退場</span>
-                        <span style='font-size: 16px; font-weight: 800; margin-left: 6px; color: #991B1B;'>{d_id} {d_name}</span>
-                    </div>
-                    <div style='font-size: 15px; font-weight: 700;'>
-                        最新價: NT$ {d_close:,.2f}
-                    </div>
+            <div class='paper-card' style='border-left: 8px solid #DC2626; padding: 24px 22px; margin-bottom: 24px; border-radius: 18px;'>
+                <div style='display: flex; align-items: center; margin-bottom: 12px;'>
+                    <span style='background: #DC2626; color: #FFF; padding: 4px 14px; border-radius: 8px; font-size: 24px !important; font-weight: 900 !important; margin-right: 12px;'>轉弱</span>
+                    <span style='font-size: 36px !important; font-weight: 900 !important; color: #991B1B; line-height: 1.2;'>{d_id} {d_name}</span>
                 </div>
-                <div style='margin-top: 8px; font-size: 13px; color: #475569;'>
-                    原前一交易日排名: <b>第 {p_rank} 名</b> ➔ 今日動向: <b style='color:#DC2626;'>{n_rank}</b>
+                <div style='font-size: 32px !important; font-weight: 900 !important; color: #334155; margin-bottom: 10px;'>
+                    💰 最新價：{d_close:,.2f} 元
+                </div>
+                <div style='font-size: 26px !important; font-weight: 900 !important; color: #64748B; margin-bottom: 14px;'>
+                    原前一交易日排名: 第 <b>{p_rank}</b> 名 ➔ 今日動向: <b style='color:#DC2626;'>{n_rank}</b>
+                </div>
+                <div style='background: #FEF2F2; border: 1.5px solid #F87171; border-radius: 12px; padding: 14px; text-align: center;'>
+                    <div style='font-size: 26px !important; font-weight: 900 !important; color: #991B1B;'>
+                        🔴 跌出榜外！找機會賣出換現金！
+                    </div>
                 </div>
             </div>
             """)
 
 
 # ============================================================
-# 區塊五：老手實戰專區 —— 處置股出關狙擊（含白話教學與鐵血警語）
+# 區塊五：老手實戰專區 —— 處置出關狙擊（巨型大字口訣卡）
 # ============================================================
-st.markdown("<h2>⚡ 老手實戰專區 —— 處置出關狙擊</h2>", unsafe_allow_html=True)
+render_html("<div style='font-size: 40px !important; font-weight: 900 !important; color: #1E293B; margin: 44px 0 20px 0;'>⚡ 老手實戰專區 —— 處置出關狙擊</div>")
 
-is_pro_confirmed = st.toggle("🔥 我具備短線交易與當沖經驗，且能嚴格執行停損紀律，點此展開【處置出關狙擊】訊號", value=False)
+is_pro_confirmed = st.toggle("🔥 展開【處置出關狙擊】實戰訊號", value=False)
 
 if is_pro_confirmed:
     core2 = data.get("core_2_disposal", {})
@@ -754,86 +765,101 @@ if is_pro_confirmed:
     imminent_pool = core2.get("imminent_pool", [])
     stats = core2.get("backtest_stats", {})
 
+    # 徹底刪除段落式說明，改為巨型 30 秒口訣卡
     render_html("""
-    <div class='paper-card' style='background: #FFFBEB; border: 1px solid #FCD34D;'>
-        <h3 style='color: #92400E; margin-top:0;'>📖 30 秒白話文戰術作戰指南</h3>
-        <div style='display: grid; grid-template-columns: 1fr; gap: 14px;'>
-            <div style='background: #FFFFFF; padding: 14px; border-radius: 8px; border: 1px solid #FDE68A;'>
-                <div style='font-weight: 800; color: #15803D; font-size: 15px;'>【戰術 B：出關前吃豆腐（T-2 搶跑買入）】</div>
-                <div style='font-size: 13px; color: #475569; margin-top: 4px; line-height: 1.5;'>
-                    • <b>白話原理：</b>股票被關禁閉（處置）時每 20 或 5 分鐘才撮合一次，很多主力不想等，會在「出關前 2 天 (T-2)」偷偷買進卡位，等出關那一天拉高倒給散戶。我們就是跟著在 T-2 收盤買進搭轎。<br>
-                    • <b>操作鐵律：</b><b>T-2 收盤買進 ➔ T-1（出關前一天）收盤先賣掉 50% 落袋為安 ➔ T 日（出關當天）一開盤 09:00 把剩下的 50% 全部市價賣光！</b> 絕不戀戰！
-                </div>
+    <div class='paper-card' style='background: #FFFBEB; border: 2.5px solid #FCD34D; padding: 26px 20px; border-radius: 18px;'>
+        <div style='font-size: 36px !important; font-weight: 900 !important; color: #92400E; text-align: center; margin-bottom: 20px;'>
+            📖 30 秒實戰大字口訣
+        </div>
+        
+        <!-- 戰術 B -->
+        <div style='background: #FFFFFF; padding: 20px 22px; border-radius: 14px; border: 2px solid #BBF7D0; margin-bottom: 18px;'>
+            <div style='font-size: 30px !important; font-weight: 900 !important; color: #15803D; margin-bottom: 10px;'>
+                🟢 戰術 B：出關前搭轎（勝率 71%）
             </div>
-            <div style='background: #FFFFFF; padding: 14px; border-radius: 8px; border: 1px solid #FDE68A;'>
-                <div style='font-weight: 800; color: #B91C1C; font-size: 15px;'>【戰術 C：出關日沖喜倒貨（開高走低當沖放空）】</div>
-                <div style='font-size: 13px; color: #475569; margin-top: 4px; line-height: 1.5;'>
-                    • <b>白話原理：</b>如果一檔股票在關禁閉期間還「漲得太誇張（超漲）」，代表裡面累積了大量想獲利了結的賣壓。出關當天早上，主力常會故意微幅開高吸引散戶追買，然後瞬間往下倒貨大跌。<br>
-                </div>
+            <div style='font-size: 26px !important; font-weight: 900 !important; color: #1E293B; line-height: 1.7;'>
+                ① 出關前 2 天 (T-2)：收盤買進<br>
+                ② 出關前 1 天 (T-1)：收盤賣一半<br>
+                ③ 出關當天 (T日)：09:00 開盤全賣光！
             </div>
         </div>
-        <div class='alert-danger' style='margin-top: 12px;'>
-            <b>🚨 戰術 C 三大鐵血保命符（缺一不可，違反者請勿執行）：</b><br>
-            1. <b>🎯 嚴格看開盤價才出手：</b>只有當出關日早上 <b>09:00 開盤漲幅介於 +1% ~ +5.2% 之間</b>（開太低沒肉吃、開太高超過 5.2% 容易直接鎖漲停被軋），且<b>台指期開盤沒有暴漲（<= +0.3%）</b>時，才用融券或現股當沖賣出！<br>
-            2. <b>🛑 鐵血 5% 停損線：</b>進場後只要股價往上衝破你的成本 <b>5%</b>（或接近漲停），代表主力還要嘎空，<b>必須無條件立刻市價回補認賠</b>！絕對禁止加碼攤平！<br>
-            3. <b>⏰ 13:25 鬧鐘強制平倉：</b>這純粹是吃早盤倒貨的當沖策略，<b>請設定手機鬧鐘 13:25，時間一到無論賺賠全數買回平倉，絕對、絕對不可以留倉過夜！</b>
+
+        <!-- 戰術 C -->
+        <div style='background: #FFFFFF; padding: 20px 22px; border-radius: 14px; border: 2px solid #FECACA; margin-bottom: 18px;'>
+            <div style='font-size: 30px !important; font-weight: 900 !important; color: #B91C1C; margin-bottom: 10px;'>
+                🔴 戰術 C：出關日沖喜放空（勝率 73%）
+            </div>
+            <div style='font-size: 26px !important; font-weight: 900 !important; color: #1E293B; line-height: 1.7;'>
+                ① 超漲處置股，出關日主力常開高倒貨！<br>
+                ② 專打早盤衝喜，當沖放空吃下跌段！
+            </div>
+        </div>
+
+        <!-- 戰術 C 三大保命鐵律 -->
+        <div class='alert-danger' style='border-left: 8px solid #DC2626 !important; padding: 20px 22px !important; border-radius: 12px;'>
+            <div style='font-size: 30px !important; font-weight: 900 !important; color: #991B1B; margin-bottom: 12px;'>
+                🚨 戰術 C 三大鐵血保命符：
+            </div>
+            <div style='font-size: 28px !important; font-weight: 900 !important; color: #991B1B; line-height: 1.7;'>
+                🎯 1. 09:00 開高 +1% ~ +5.2% 才放空！<br>
+                🛑 2. 漲破 +5% 立刻認賠回補！絕不攤平！<br>
+                ⏰ 3. 鬧鐘設 13:25 強制平倉！絕不留倉！
+            </div>
         </div>
     </div>
     """)
 
-    # 實戰今日觸發名單
-    render_html("<h3>🎯 今日實戰觸發標靶</h3>")
+    # 實戰今日觸發標靶 (36px 粗體)
+    render_html("<div style='font-size: 36px !important; font-weight: 900 !important; color: #1E293B; margin: 34px 0 16px 0;'>🎯 今日實戰觸發標靶</div>")
+    
     if not b_triggers and not c_triggers:
         render_html("""
-        <div class='alert-success'>
-            <b>🟢 今日全市場處置股暫無觸發【策略 B】或【策略 C】進場門檻</b><br>
-            處置交易首重天時地利，今日無標的完全符合嚴格量化濾網。空手觀望，靜待最佳勝率時機！
+        <div class='alert-success' style='padding: 24px !important; border-radius: 14px;'>
+            <div style='font-size: 28px !important; font-weight: 900 !important; color: #166534;'>
+                🟢 今日處置股無觸發進場門檻！空手看戲！
+            </div>
         </div>
         """)
     else:
         for r in b_triggers:
             render_html(f"""
-            <div class='paper-card' style='border-left: 6px solid #16A34A; padding: 18px 20px;'>
-                <div style='display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;'>
-                    <div>
-                        <span style='font-size:18px; font-weight:900; color:#15803D;'>🔥 策略 B 觸發 (T-2 搶跑買入)：{r['stock_id']} {r['name']}</span>
-                    </div>
-                    <span style='background:#16A34A; color:#FFF; padding:3px 10px; border-radius:6px; font-size:12px; font-weight:800;'>{r['action_timing']}</span>
+            <div class='paper-card' style='border-left: 8px solid #16A34A; padding: 24px 22px; margin-bottom: 20px; border-radius: 16px;'>
+                <div style='font-size: 32px !important; font-weight: 900 !important; color: #15803D; line-height: 1.3;'>
+                    🔥 策略 B 觸發（T-2 搶跑買入）：{r['stock_id']} {r['name']}
                 </div>
-                <div style='margin-top:8px; font-size:14px; color:#334155; line-height:1.6;'>
-                    現價: <b style='font-size:16px;'>{r['latest_price']:.2f}</b> ｜ 處置累積: <b style='color:#15803D; font-size:15px;'>{r['disp_cum_ret']:+.1f}%</b> ｜ 5MA: <b>{r['ma5']:.2f}</b> ｜ 成交金額: <b>{r['turnover_str']}</b>
+                <div style='font-size: 26px !important; font-weight: 900 !important; color: #334155; margin: 12px 0; line-height: 1.6;'>
+                    現價: <b>{r['latest_price']:.2f}</b> ｜ 累積: <b style='color:#15803D;'>{r['disp_cum_ret']:+.1f}%</b> ｜ 金額: <b>{r['turnover_str']}</b><br>
+                    執行時機: <b>{r['action_timing']}</b>
                 </div>
-                <div class='alert-success' style='margin-top:12px; font-size:13.5px !important;'>
-                    👉 <b>作戰SOP：</b>{r['entry_sop']}
+                <div class='alert-success' style='font-size: 26px !important; font-weight: 900 !important; padding: 18px !important; border-radius: 10px;'>
+                    👉 <b>SOP：</b>{r['entry_sop']}
                 </div>
             </div>
             """)
 
         for r in c_triggers:
             render_html(f"""
-            <div class='paper-card' style='border-left: 6px solid #DC2626; padding: 18px 20px;'>
-                <div style='display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;'>
-                    <div>
-                        <span style='font-size:18px; font-weight:900; color:#B91C1C;'>🎯 策略 C 警戒 (明晨開高走低做空)：{r['stock_id']} {r['name']}</span>
-                    </div>
-                    <span style='background:#DC2626; color:#FFF; padding:3px 10px; border-radius:6px; font-size:12px; font-weight:800;'>{r['action_timing']}</span>
+            <div class='paper-card' style='border-left: 8px solid #DC2626; padding: 24px 22px; margin-bottom: 20px; border-radius: 16px;'>
+                <div style='font-size: 32px !important; font-weight: 900 !important; color: #B91C1C; line-height: 1.3;'>
+                    🎯 策略 C 警戒（明晨開高走低做空）：{r['stock_id']} {r['name']}
                 </div>
-                <div style='margin-top:8px; font-size:14px; color:#334155; line-height:1.6;'>
-                    現價: <b style='font-size:16px;'>{r['latest_price']:.2f}</b> ｜ 處置超漲: <b style='color:#DC2626; font-size:15px;'>{r['disp_cum_ret']:+.1f}%</b> ｜ 量比: <b>{r['vol_ratio']:.2f}</b> ｜ 成交金額: <b>{r['turnover_str']}</b>
+                <div style='font-size: 26px !important; font-weight: 900 !important; color: #334155; margin: 12px 0; line-height: 1.6;'>
+                    現價: <b>{r['latest_price']:.2f}</b> ｜ 超漲: <b style='color:#DC2626;'>{r['disp_cum_ret']:+.1f}%</b> ｜ 量比: <b>{r['vol_ratio']:.2f}</b> ｜ 金額: <b>{r['turnover_str']}</b><br>
+                    執行時機: <b>{r['action_timing']}</b>
                 </div>
-                <div class='alert-danger' style='margin-top:12px; font-size:13.5px !important;'>
-                    👉 <b>作戰SOP：</b>{r['entry_sop']}
+                <div class='alert-danger' style='font-size: 26px !important; font-weight: 900 !important; padding: 18px !important; border-radius: 10px;'>
+                    👉 <b>SOP：</b>{r['entry_sop']}
                 </div>
             </div>
             """)
 
     # 下方蓄勢觀察名單
     with st.expander("⏳ 查看即將出關蓄勢名單 (T-1 / T-2) 與歷史回測數據"):
-        render_html(f"""
-        <div style='font-size: 13px; color: #475569; margin-bottom: 12px;'>
+        render_html("""
+        <div style='font-size: 24px !important; font-weight: 900 !important; color: #475569; margin-bottom: 14px; line-height: 1.6;'>
             <b>📊 歷史回測驗證數據：</b><br>
-            • <b>策略 B (T-2搶跑)</b>：歷史勝率 <b>71.4%</b> ｜ 獲利因子 <b>3.42</b> ｜ 平均單筆報酬 <b>+3.25%</b> ｜ 2026新制勝率 <b>80.0%</b><br>
-            • <b>策略 C (T-1出關空)</b>：蒙地卡羅最佳勝率 <b>73.3%</b> ｜ 獲利因子 <b>1.80</b> ｜ MDD <= 28.9%
+            • <b>策略 B (T-2搶跑)</b>：歷史勝率 <b>71.4%</b> ｜ 獲利因子 <b>3.42</b> ｜ 平均單筆 <b>+3.25%</b><br>
+            • <b>策略 C (T-1出關空)</b>：最佳勝率 <b>73.3%</b> ｜ 獲利因子 <b>1.80</b> ｜ MDD <= 28.9%
         </div>
         """)
 
@@ -854,11 +880,11 @@ if is_pro_confirmed:
 # ============================================================
 # 頁尾：免責聲明與版權
 # ============================================================
-render_html("<br><hr style='border: none; border-top: 1px solid #E2E8F0; margin: 30px 0;'>")
+render_html("<br><hr style='border: none; border-top: 1.5px solid #E2E8F0; margin: 36px 0;'>")
 render_html("""
-<div style='font-size: 12px; color: #94A3B8; text-align: center; line-height: 1.8;'>
+<div style='font-size: 18px !important; font-weight: 700 !important; color: #94A3B8; text-align: center; line-height: 1.8;'>
     📝 <b>免責聲明：</b>本系統僅為客觀量化統計與演算法歷史數據呈現，絕無任何特定股票推薦或個別投資諮詢之意圖。<br>
-    股票市場具備一定波動與價格風險，零股或現股交易前請依個人財務風險承受度審慎考量，自主審慎判斷。<br>
+    股票市場具備一定價格波動風險，交易前請依個人財務風險承受度審慎考量，自主獨立判斷。<br>
     © 2026 親友與老手專屬・白話文量化投資導航 ｜ Powered by Streamlit Community Cloud
 </div>
 """)
