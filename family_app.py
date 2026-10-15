@@ -149,6 +149,122 @@ p, div {
 .badge-blue  { background: #DBEAFE; color: #1D4ED8; }
 .badge-red   { background: #FEE2E2; color: #B91C1C; }
 
+/* ============================================================
+   強制全面覆蓋為亮色高易讀性主題 (徹底根絕深色底色與反白文字消失問題)
+   ============================================================ */
+
+/* 1. Tabs 頁籤樣式與高對比文字 */
+[data-testid="stTabs"] {
+    background-color: transparent !important;
+}
+
+[data-testid="stTabs"] [data-baseweb="tab-list"] {
+    background-color: #F1F5F9 !important;
+    padding: 6px !important;
+    border-radius: 12px !important;
+    gap: 6px !important;
+    border: 1px solid #CBD5E1 !important;
+}
+
+[data-testid="stTabs"] button[data-baseweb="tab"] {
+    background-color: transparent !important;
+    border-radius: 8px !important;
+    padding: 8px 16px !important;
+    border: none !important;
+}
+
+[data-testid="stTabs"] button[data-baseweb="tab"] * {
+    color: #475569 !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+}
+
+[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] {
+    background-color: #FFFFFF !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] * {
+    color: #0F172A !important;
+    font-weight: 900 !important;
+}
+
+[data-testid="stTabs"] [data-baseweb="tab-border"] {
+    display: none !important;
+}
+
+[data-testid="stTabs"] [data-baseweb="tab-highlight"] {
+    display: none !important;
+}
+
+/* 2. 輸入框全面轉為白色高易讀性 (避免黑底白字或灰底灰字) */
+[data-baseweb="input"],
+[data-testid="stTextInput"] div[data-baseweb="input"],
+[data-testid="stNumberInput"] div[data-baseweb="input"] {
+    background-color: #FFFFFF !important;
+    border: 1.5px solid #CBD5E1 !important;
+    border-radius: 10px !important;
+    color: #0F172A !important;
+}
+
+[data-baseweb="input"]:focus-within {
+    border-color: #16A34A !important;
+    box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.2) !important;
+}
+
+input, [data-baseweb="input"] input {
+    background-color: #FFFFFF !important;
+    color: #0F172A !important;
+    font-weight: 700 !important;
+    font-size: 16px !important;
+}
+
+input::placeholder {
+    color: #94A3B8 !important;
+}
+
+/* 數字輸入框加減按鈕 */
+[data-testid="stNumberInput"] button {
+    background-color: #F1F5F9 !important;
+    color: #1E293B !important;
+    border: none !important;
+}
+[data-testid="stNumberInput"] button:hover {
+    background-color: #E2E8F0 !important;
+    color: #0F172A !important;
+}
+
+/* 3. 所有 Widget 標籤與提示文字 */
+label,
+[data-testid="stWidgetLabel"] p,
+[data-testid="stWidgetLabel"] div,
+[data-testid="stWidgetLabel"] span {
+    color: #1E293B !important;
+    font-size: 15px !important;
+    font-weight: 800 !important;
+}
+
+/* 4. Expander 標題文字 */
+[data-testid="stExpander"] details summary span,
+[data-testid="stExpander"] details summary p {
+    color: #1E293B !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
+}
+[data-testid="stExpander"] details {
+    background-color: #FFFFFF !important;
+    border: 1px solid #CBD5E1 !important;
+    border-radius: 10px !important;
+}
+
+/* 5. Checkbox / Toggle 標籤文字 */
+[data-testid="stCheckbox"] label span,
+[data-testid="stToggle"] label span {
+    color: #1E293B !important;
+    font-weight: 700 !important;
+    font-size: 15px !important;
+}
+
 /* 隱藏 Streamlit 預設多餘元素 */
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
@@ -656,18 +772,17 @@ if is_pro_confirmed:
     else:
         for r in b_triggers:
             st.markdown(f"""
-            <div class='paper-card' style='border-left: 5px solid #16A34A;'>
-                <div style='display:flex; justify-content:space-between; align-items:center;'>
+            <div class='paper-card' style='border-left: 6px solid #16A34A; padding: 18px 20px;'>
+                <div style='display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;'>
                     <div>
-                        <span class='badge-tag badge-green'>策略 B 觸發 (T-2)</span>
-                        <span style='font-size:18px; font-weight:800;'>{r['stock_id']} {r['name']}</span>
+                        <span style='font-size:18px; font-weight:900; color:#15803D;'>🔥 策略 B 觸發 (T-2 搶跑買入)：{r['stock_id']} {r['name']}</span>
                     </div>
-                    <span style='color:#16A34A; font-weight:700;'>{r['action_timing']}</span>
+                    <span style='background:#16A34A; color:#FFF; padding:3px 10px; border-radius:6px; font-size:12px; font-weight:800;'>{r['action_timing']}</span>
                 </div>
-                <div style='margin-top:6px; font-size:14px; color:#475569;'>
-                    現價: <b>{r['latest_price']:.2f}</b> ｜ 處置累積: <b>{r['disp_cum_ret']:+.1f}%</b> ｜ 5MA: <b>{r['ma5']:.2f}</b> ｜ 成交金額: <b>{r['turnover_str']}</b>
+                <div style='margin-top:8px; font-size:14px; color:#334155; line-height:1.6;'>
+                    現價: <b style='font-size:16px;'>{r['latest_price']:.2f}</b> ｜ 處置累積: <b style='color:#15803D; font-size:15px;'>{r['disp_cum_ret']:+.1f}%</b> ｜ 5MA: <b>{r['ma5']:.2f}</b> ｜ 成交金額: <b>{r['turnover_str']}</b>
                 </div>
-                <div class='alert-success' style='margin-top:10px; font-size:13px !important;'>
+                <div class='alert-success' style='margin-top:12px; font-size:13.5px !important;'>
                     👉 <b>作戰SOP：</b>{r['entry_sop']}
                 </div>
             </div>
@@ -675,18 +790,17 @@ if is_pro_confirmed:
 
         for r in c_triggers:
             st.markdown(f"""
-            <div class='paper-card' style='border-left: 5px solid #DC2626;'>
-                <div style='display:flex; justify-content:space-between; align-items:center;'>
+            <div class='paper-card' style='border-left: 6px solid #DC2626; padding: 18px 20px;'>
+                <div style='display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;'>
                     <div>
-                        <span class='badge-tag badge-red'>策略 C 警戒 (明晨開高空)</span>
-                        <span style='font-size:18px; font-weight:800; color:#991B1B;'>{r['stock_id']} {r['name']}</span>
+                        <span style='font-size:18px; font-weight:900; color:#B91C1C;'>🎯 策略 C 警戒 (明晨開高走低做空)：{r['stock_id']} {r['name']}</span>
                     </div>
-                    <span style='color:#DC2626; font-weight:700;'>{r['action_timing']}</span>
+                    <span style='background:#DC2626; color:#FFF; padding:3px 10px; border-radius:6px; font-size:12px; font-weight:800;'>{r['action_timing']}</span>
                 </div>
-                <div style='margin-top:6px; font-size:14px; color:#475569;'>
-                    現價: <b>{r['latest_price']:.2f}</b> ｜ 處置超漲: <b>{r['disp_cum_ret']:+.1f}%</b> ｜ 量比: <b>{r['vol_ratio']:.2f}</b> ｜ 成交金額: <b>{r['turnover_str']}</b>
+                <div style='margin-top:8px; font-size:14px; color:#334155; line-height:1.6;'>
+                    現價: <b style='font-size:16px;'>{r['latest_price']:.2f}</b> ｜ 處置超漲: <b style='color:#DC2626; font-size:15px;'>{r['disp_cum_ret']:+.1f}%</b> ｜ 量比: <b>{r['vol_ratio']:.2f}</b> ｜ 成交金額: <b>{r['turnover_str']}</b>
                 </div>
-                <div class='alert-danger' style='margin-top:10px; font-size:13px !important;'>
+                <div class='alert-danger' style='margin-top:12px; font-size:13.5px !important;'>
                     👉 <b>作戰SOP：</b>{r['entry_sop']}
                 </div>
             </div>

@@ -351,7 +351,7 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
                     "action_timing": "今日 13:25~13:30 收盤進場",
                     "countdown_desc": str(r["countdown_desc"]),
                     "ma5": round(float(r["ma5"]), 2),
-                    "entry_sop": "今日收盤市價買進 ｜ 明日(T-1)收盤賣50% ｜ 出關日(T)09:00開盤賣50% ｜ 盤中破5MA立刻停損！"
+                    "entry_sop": "今日收盤市價買進 ｜ 明日(T-1)收盤賣出 50% ｜ 出關日(T)09:00 開盤賣出剩餘 50% ｜ 盤中跌破 5MA 即時停損！"
                 })
 
             # 策略 C 命中標的
@@ -364,9 +364,9 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
                     "disp_cum_ret": round(float(r["disp_cum_ret"]), 1),
                     "vol_ratio": round(float(r["vol_ratio"]), 2),
                     "turnover_str": str(r["turnover_str"]),
-                    "action_timing": "明晨 09:00 開盤執行",
+                    "action_timing": "明晨 09:00 執行",
                     "countdown_desc": str(r["countdown_desc"]),
-                    "entry_sop": "明晨 09:00 若個股開高 +1%~+5.2% 且台指期無暴漲(<=+0.3%)，MOO 券賣放空 ｜ 設 5% 停損 ｜ 13:25 全平絕不留倉！"
+                    "entry_sop": "明日 09:00 若個股開高 +1%~+5.2% 且台指期開盤無暴漲(<=+0.3%)，MOO 券賣放空 ｜ 設 5% 停損 ｜ 13:25 全數平倉回補，絕不留倉！"
                 })
 
             # 即將出關警戒 (T-1 / T-2) 蓄勢名單
