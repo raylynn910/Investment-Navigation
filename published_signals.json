@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-10-15 23:16:54",
+  "generated_at": "2026-10-15 23:51:56",
   "data_date": "2026-10-15",
   "market_regime": {
     "weather": "CLOUDY",
@@ -98,7 +98,7 @@
           "✨ 本業獲利穩固",
           "🚀 強勢動能領跑"
         ],
-        "warning_tag": null
+        "warning_tag": "⚠️ 處置/出關劇烈波動，新手建議跳過"
       },
       {
         "rank": 6,
@@ -203,7 +203,7 @@
           "✨ 本業獲利穩固",
           "⚡ 動能飆速衝刺"
         ],
-        "warning_tag": null
+        "warning_tag": "⚠️ 處置/出關劇烈波動，新手建議跳過"
       },
       {
         "rank": 13,
@@ -308,10 +308,153 @@
         "optimal_mdd": "<= 28.9%"
       }
     },
-    "total_active_disposals_count": 17,
+    "total_active_disposals_count": 36,
     "strategy_b_triggers": [],
-    "strategy_c_triggers": [],
+    "strategy_c_triggers": [
+      {
+        "stock_id": "4760",
+        "name": "勤凱",
+        "latest_price": 368.5,
+        "disp_cum_ret": 10.3,
+        "vol_ratio": 0.93,
+        "turnover_str": "3.68億",
+        "action_timing": "明晨 09:00 開盤執行",
+        "countdown_desc": "T-1 (10/16)",
+        "entry_sop": "明晨 09:00 若個股開高 +1%~+5.2% 且台指期無暴漲(<=+0.3%)，MOO 券賣放空 ｜ 設 5% 停損 ｜ 13:25 全平絕不留倉！"
+      },
+      {
+        "stock_id": "4174",
+        "name": "浩鼎",
+        "latest_price": 59.9,
+        "disp_cum_ret": 15.0,
+        "vol_ratio": 1.14,
+        "turnover_str": "5280萬",
+        "action_timing": "明晨 09:00 開盤執行",
+        "countdown_desc": "T-1 (10/16)",
+        "entry_sop": "明晨 09:00 若個股開高 +1%~+5.2% 且台指期無暴漲(<=+0.3%)，MOO 券賣放空 ｜ 設 5% 停損 ｜ 13:25 全平絕不留倉！"
+      }
+    ],
     "imminent_pool": [
+      {
+        "stock_id": "4760",
+        "name": "勤凱",
+        "countdown_desc": "T-1 (10/16)",
+        "td_to_exit": 1,
+        "latest_price": 368.5,
+        "disp_cum_ret": 10.3,
+        "turnover_str": "3.68億",
+        "vol_ratio": 0.93,
+        "status": "🎯 策略 C 警戒 (明晨開高空)",
+        "entry_sop": "明晨 09:00 若開高 +1%~+5.2% 且台指期無大漲，MOO 券賣放空 ｜ 停損+5% ｜ 13:25 全平"
+      },
+      {
+        "stock_id": "4174",
+        "name": "浩鼎",
+        "countdown_desc": "T-1 (10/16)",
+        "td_to_exit": 1,
+        "latest_price": 59.9,
+        "disp_cum_ret": 15.0,
+        "turnover_str": "5280萬",
+        "vol_ratio": 1.14,
+        "status": "🎯 策略 C 警戒 (明晨開高空)",
+        "entry_sop": "明晨 09:00 若開高 +1%~+5.2% 且台指期無大漲，MOO 券賣放空 ｜ 停損+5% ｜ 13:25 全平"
+      },
+      {
+        "stock_id": "8358",
+        "name": "金居",
+        "countdown_desc": "T-1 (10/16)",
+        "td_to_exit": 1,
+        "latest_price": 461.5,
+        "disp_cum_ret": -15.9,
+        "turnover_str": "17.79億",
+        "vol_ratio": 1.92,
+        "status": "⏳ 處置出關前夕 (T-1)",
+        "entry_sop": "未達標 (處置累積-15.9%未超漲、量比1.92非0.8~1.8)"
+      },
+      {
+        "stock_id": "1709",
+        "name": "和益",
+        "countdown_desc": "T-1 (10/16)",
+        "td_to_exit": 1,
+        "latest_price": 58.8,
+        "disp_cum_ret": -2.3,
+        "turnover_str": "6.03億",
+        "vol_ratio": 1.01,
+        "status": "⏳ 處置出關前夕 (T-1)",
+        "entry_sop": "未達標 (處置累積-2.3%未超漲)"
+      },
+      {
+        "stock_id": "3701",
+        "name": "大眾控",
+        "countdown_desc": "T-1 (10/16)",
+        "td_to_exit": 1,
+        "latest_price": 60.1,
+        "disp_cum_ret": -1.6,
+        "turnover_str": "1.48億",
+        "vol_ratio": 0.82,
+        "status": "⏳ 處置出關前夕 (T-1)",
+        "entry_sop": "未達標 (處置累積-1.6%未超漲)"
+      },
+      {
+        "stock_id": "6957",
+        "name": "裕慶-KY",
+        "countdown_desc": "T-1 (10/16)",
+        "td_to_exit": 1,
+        "latest_price": 463.0,
+        "disp_cum_ret": 4.3,
+        "turnover_str": "1.02億",
+        "vol_ratio": 0.64,
+        "status": "⏳ 處置出關前夕 (T-1)",
+        "entry_sop": "未達標 (處置累積+4.3%未超漲、量比0.64非0.8~1.8)"
+      },
+      {
+        "stock_id": "6672",
+        "name": "騰輝電子-KY",
+        "countdown_desc": "T-2 (10/19)",
+        "td_to_exit": 2,
+        "latest_price": 570.0,
+        "disp_cum_ret": 2.7,
+        "turnover_str": "9.29億",
+        "vol_ratio": 0.92,
+        "status": "⏳ 處置蓄勢 (T-2)",
+        "entry_sop": "未達標 (未站上5MA)"
+      },
+      {
+        "stock_id": "8021",
+        "name": "尖點",
+        "countdown_desc": "T-2 (10/19)",
+        "td_to_exit": 2,
+        "latest_price": 506.0,
+        "disp_cum_ret": -9.2,
+        "turnover_str": "5.84億",
+        "vol_ratio": 1.2,
+        "status": "⏳ 處置蓄勢 (T-2)",
+        "entry_sop": "未達標 (漲跌-9.2%非-5%~+12%、未站上5MA)"
+      },
+      {
+        "stock_id": "5475",
+        "name": "德宏",
+        "countdown_desc": "T-2 (10/19)",
+        "td_to_exit": 2,
+        "latest_price": 193.0,
+        "disp_cum_ret": -4.9,
+        "turnover_str": "4.75億",
+        "vol_ratio": 0.91,
+        "status": "⏳ 處置蓄勢 (T-2)",
+        "entry_sop": "未達標 (未站上5MA)"
+      },
+      {
+        "stock_id": "6708",
+        "name": "天擎",
+        "countdown_desc": "T-2 (10/19)",
+        "td_to_exit": 2,
+        "latest_price": 58.2,
+        "disp_cum_ret": -15.9,
+        "turnover_str": "990萬",
+        "vol_ratio": 1.51,
+        "status": "⏳ 處置蓄勢 (T-2)",
+        "entry_sop": "未達標 (漲跌-15.9%非-5%~+12%、未站上5MA、成交990萬<3000萬)"
+      },
       {
         "stock_id": "3094",
         "name": "聯傑",
@@ -357,18 +500,6 @@
         "disp_cum_ret": -17.0,
         "turnover_str": "2652萬",
         "vol_ratio": 1.06,
-        "status": "⚪ 今日出關 (觀望)",
-        "entry_sop": "處置期未超漲或開盤重挫，嚴禁接刀做多，全日觀望"
-      },
-      {
-        "stock_id": "8084",
-        "name": "巨虹",
-        "countdown_desc": "T-0 (10/15)",
-        "td_to_exit": 0,
-        "latest_price": 13.45,
-        "disp_cum_ret": -24.0,
-        "turnover_str": "514萬",
-        "vol_ratio": 0.37,
         "status": "⚪ 今日出關 (觀望)",
         "entry_sop": "處置期未超漲或開盤重挫，嚴禁接刀做多，全日觀望"
       }
