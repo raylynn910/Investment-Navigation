@@ -1,0 +1,48 @@
+# ==========================================
+# Git Ignore for Lightweight Cloud Deployment
+# ==========================================
+
+# Virtual environment & Python cache
+.venv/
+env/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.log
+
+# Sensitive credentials & environment
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+
+# Heavy database & binary files (Excluded from cloud git)
+*.duckdb
+*.duckdb.wal
+*.db
+*.sqlite
+*.sqlite3
+*.parquet
+*.parquet.*
+
+# Data exports and heavy CSVs
+*.csv
+data/
+data/*
+
+# HTML dumps and scenario outputs
+scenario*.html
+*.html
+
+# OS and IDE caches
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.bak
+
+# Ensure signal JSON files are tracked for cloud deployment
+!published_signals.json
+!history_snapshots.json

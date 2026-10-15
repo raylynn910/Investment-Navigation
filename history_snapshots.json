@@ -1,0 +1,229 @@
+{
+  "version": "1.0",
+  "snapshots": {
+    "2026-10-14": {
+      "date": "2026-10-14",
+      "stock_ids": [
+        "6672",
+        "6187",
+        "6834",
+        "4760",
+        "3147",
+        "6213",
+        "6505",
+        "6199",
+        "1303",
+        "6957",
+        "1714",
+        "4973",
+        "6811",
+        "5475",
+        "3564"
+      ],
+      "top15": [
+        {
+          "rank": 1,
+          "stock_id": "6672",
+          "stock_name": "騰輝電子-KY",
+          "latest_close": 0.0
+        },
+        {
+          "rank": 2,
+          "stock_id": "6187",
+          "stock_name": "萬潤",
+          "latest_close": 0.0
+        },
+        {
+          "rank": 3,
+          "stock_id": "6834",
+          "stock_name": "天二科技",
+          "latest_close": 0.0
+        },
+        {
+          "rank": 4,
+          "stock_id": "4760",
+          "stock_name": "勤凱科技",
+          "latest_close": 0.0
+        },
+        {
+          "rank": 5,
+          "stock_id": "3147",
+          "stock_name": "大綜",
+          "latest_close": 0.0
+        },
+        {
+          "rank": 6,
+          "stock_id": "6213",
+          "stock_name": "聯茂",
+          "latest_close": 0.0
+        },
+        {
+          "rank": 7,
+          "stock_id": "6505",
+          "stock_name": "台塑化",
+          "latest_close": 0.0
+        },
+        {
+          "rank": 8,
+          "stock_id": "6199",
+          "stock_name": "天品",
+          "latest_close": 0.0
+        },
+        {
+          "rank": 9,
+          "stock_id": "1303",
+          "stock_name": "南亞",
+          "latest_close": 0.0
+        },
+        {
+          "rank": 10,
+          "stock_id": "6957",
+          "stock_name": "裕慶-KY",
+          "latest_close": 0.0
+        },
+        {
+          "rank": 11,
+          "stock_id": "1714",
+          "stock_name": "和桐",
+          "latest_close": 0.0
+        },
+        {
+          "rank": 12,
+          "stock_id": "4973",
+          "stock_name": "廣穎電通",
+          "latest_close": 0.0
+        },
+        {
+          "rank": 13,
+          "stock_id": "6811",
+          "stock_name": "宏碁資訊",
+          "latest_close": 0.0
+        },
+        {
+          "rank": 14,
+          "stock_id": "5475",
+          "stock_name": "德宏",
+          "latest_close": 0.0
+        },
+        {
+          "rank": 15,
+          "stock_id": "3564",
+          "stock_name": "其陽",
+          "latest_close": 0.0
+        }
+      ]
+    },
+    "2026-10-15": {
+      "date": "2026-10-15",
+      "stock_ids": [
+        "6672",
+        "3147",
+        "4760",
+        "6834",
+        "6213",
+        "3287",
+        "6811",
+        "3311",
+        "1303",
+        "2480",
+        "6199",
+        "2492",
+        "6933",
+        "1714",
+        "3564"
+      ],
+      "top15": [
+        {
+          "rank": 1,
+          "stock_id": "6672",
+          "stock_name": "騰輝電子-KY",
+          "latest_close": 570.0
+        },
+        {
+          "rank": 2,
+          "stock_id": "3147",
+          "stock_name": "大綜",
+          "latest_close": 294.0
+        },
+        {
+          "rank": 3,
+          "stock_id": "4760",
+          "stock_name": "勤凱科技",
+          "latest_close": 368.5
+        },
+        {
+          "rank": 4,
+          "stock_id": "6834",
+          "stock_name": "天二科技",
+          "latest_close": 146.5
+        },
+        {
+          "rank": 5,
+          "stock_id": "6213",
+          "stock_name": "聯茂",
+          "latest_close": 799.0
+        },
+        {
+          "rank": 6,
+          "stock_id": "3287",
+          "stock_name": "廣寰科",
+          "latest_close": 58.7
+        },
+        {
+          "rank": 7,
+          "stock_id": "6811",
+          "stock_name": "宏碁資訊",
+          "latest_close": 274.0
+        },
+        {
+          "rank": 8,
+          "stock_id": "3311",
+          "stock_name": "閎暉",
+          "latest_close": 50.7
+        },
+        {
+          "rank": 9,
+          "stock_id": "1303",
+          "stock_name": "南亞",
+          "latest_close": 314.5
+        },
+        {
+          "rank": 10,
+          "stock_id": "2480",
+          "stock_name": "敦陽科",
+          "latest_close": 190.0
+        },
+        {
+          "rank": 11,
+          "stock_id": "6199",
+          "stock_name": "天品",
+          "latest_close": 142.0
+        },
+        {
+          "rank": 12,
+          "stock_id": "2492",
+          "stock_name": "華新科",
+          "latest_close": 405.5
+        },
+        {
+          "rank": 13,
+          "stock_id": "6933",
+          "stock_name": "AMAX-KY",
+          "latest_close": 410.5
+        },
+        {
+          "rank": 14,
+          "stock_id": "1714",
+          "stock_name": "和桐",
+          "latest_close": 18.9
+        },
+        {
+          "rank": 15,
+          "stock_id": "3564",
+          "stock_name": "其陽",
+          "latest_close": 71.3
+        }
+      ]
+    }
+  }
+}
