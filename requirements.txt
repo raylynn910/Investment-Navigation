@@ -1,0 +1,4 @@
+# Streamlit Community Cloud 親友前台專用極輕量相依套件 (family_app.py)
+# 絕不載入 DuckDB, SQLite 或爬蟲套件，確保秒級零錯誤秒速啟動部署
+streamlit>=1.35.0
+pandas>=2.0.0
