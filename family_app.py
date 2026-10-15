@@ -27,6 +27,14 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
+def render_html(html_str: str):
+    """
+    安全渲染 HTML，去除每行多餘縮排與空行，徹底防止 CommonMark 觸發 4-space 縮排程式碼區塊 (<pre><code>)
+    """
+    cleaned = " ".join(line.strip() for line in html_str.splitlines() if line.strip())
+    st.markdown(cleaned, unsafe_allow_html=True)
+
+
 CUSTOM_CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
@@ -153,40 +161,53 @@ p, div {
    強制全面覆蓋為亮色高易讀性主題 (徹底根絕深色底色與反白文字消失問題)
    ============================================================ */
 
-/* 1. Tabs 頁籤樣式與高對比文字 */
+/* 1. Tabs 頁籤樣式與超高對比實體按鈕 (徹底根絕手機上文字過淡或反白消失問題) */
 [data-testid="stTabs"] {
     background-color: transparent !important;
 }
 
 [data-testid="stTabs"] [data-baseweb="tab-list"] {
-    background-color: #F1F5F9 !important;
+    background-color: #E2E8F0 !important;
     padding: 6px !important;
     border-radius: 12px !important;
-    gap: 6px !important;
-    border: 1px solid #CBD5E1 !important;
+    gap: 8px !important;
+    border: 1.5px solid #CBD5E1 !important;
 }
 
+/* 未選中之頁籤：實體純白按鈕底色、清晰深岩灰粗體字、不透明度 100% 絕不淡化 */
 [data-testid="stTabs"] button[data-baseweb="tab"] {
-    background-color: transparent !important;
-    border-radius: 8px !important;
-    padding: 8px 16px !important;
-    border: none !important;
-}
-
-[data-testid="stTabs"] button[data-baseweb="tab"] * {
-    color: #475569 !important;
-    font-size: 15px !important;
-    font-weight: 700 !important;
-}
-
-[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] {
     background-color: #FFFFFF !important;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+    border-radius: 8px !important;
+    padding: 8px 14px !important;
+    border: 1px solid #CBD5E1 !important;
+    opacity: 1 !important;
 }
 
-[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] * {
-    color: #0F172A !important;
+[data-testid="stTabs"] button[data-baseweb="tab"] *,
+[data-testid="stTabs"] button[data-baseweb="tab"] p,
+[data-testid="stTabs"] button[data-baseweb="tab"] span,
+[data-testid="stTabs"] button[data-baseweb="tab"] div {
+    color: #1E293B !important;
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    opacity: 1 !important;
+}
+
+/* 選中之當前頁籤：深黑深邃底色、純白醒目字體、立體陰影 */
+[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] {
+    background-color: #0F172A !important;
+    border: 1px solid #0F172A !important;
+    box-shadow: 0 3px 8px rgba(15, 23, 42, 0.25) !important;
+    opacity: 1 !important;
+}
+
+[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] *,
+[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] p,
+[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] span,
+[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] div {
+    color: #FFFFFF !important;
     font-weight: 900 !important;
+    opacity: 1 !important;
 }
 
 [data-testid="stTabs"] [data-baseweb="tab-border"] {
@@ -290,8 +311,8 @@ if "family_authenticated" not in st.session_state:
     st.session_state.family_authenticated = False
 
 if not st.session_state.family_authenticated:
-    st.markdown("<div style='height: 40px;'></div>", unsafe_allow_html=True)
-    st.markdown("""
+    render_html("<div style='height: 40px;'></div>")
+    render_html("""
     <div class='paper-card' style='text-align: center; padding: 32px 24px;'>
         <div style='font-size: 42px; margin-bottom: 12px;'>🧭</div>
         <h1 style='margin-bottom: 8px;'>親友專屬・白話投資參考導航</h1>
@@ -299,7 +320,7 @@ if not st.session_state.family_authenticated:
             本站專供親友與老手交流使用，請輸入通關密語以解鎖今日最新訊號。
         </div>
     </div>
-    """, unsafe_allow_html=True)
+    """)
 
     c_left, c_mid, c_right = st.columns([1, 2, 1])
     with c_mid:
@@ -321,23 +342,23 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SIGNALS_FILE = os.path.join(PROJECT_ROOT, "published_signals.json")
 
 if not os.path.exists(SIGNALS_FILE):
-    st.markdown("""
+    render_html("""
     <div class='alert-danger'>
         <b>🚧 尚未找到 published_signals.json 信號檔</b><br>
         版主目前尚未在本地指揮官後台點擊「📤 匯出並發布親友版最新訊號」，請稍候再重新整理頁面！
     </div>
-    """, unsafe_allow_html=True)
+    """)
     st.stop()
 
 try:
     with open(SIGNALS_FILE, "r", encoding="utf-8") as f:
         data = json.load(f)
 except Exception as e:
-    st.markdown(f"""
+    render_html(f"""
     <div class='alert-danger'>
         <b>❌ 讀取信號檔失敗:</b> {str(e)}
     </div>
-    """, unsafe_allow_html=True)
+    """)
     st.stop()
 
 
@@ -387,17 +408,17 @@ is_fresh, freshness_msg = check_freshness(data_date_str)
 
 # 若資料過期，最頂部強制深紅高對比防呆框
 if not is_fresh:
-    st.markdown(f"""
+    render_html(f"""
     <div class='alert-danger'>
         <b>🚨 🚧 注意：{freshness_msg}</b>
     </div>
-    """, unsafe_allow_html=True)
+    """)
 
 
 # ============================================================
 # 5. 頂部導航列與版頭 (親切白話風)
 # ============================================================
-st.markdown(f"""
+render_html(f"""
 <div style='display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 14px;'>
     <div>
         <h1 style='margin: 0;'>🧭 親友與老手・白話投資導航</h1>
@@ -410,7 +431,7 @@ st.markdown(f"""
         <div style='color: #94A3B8; font-size: 12px; margin-top: 2px;'>發布: {generated_at[5:16] if len(generated_at)>=16 else generated_at}</div>
     </div>
 </div>
-""", unsafe_allow_html=True)
+""")
 
 
 # ============================================================
@@ -435,7 +456,7 @@ else:
     weather_border = "#DC2626"
     weather_badge = "badge-red"
 
-st.markdown(f"""
+render_html(f"""
 <div class='paper-card' style='border-top: 5px solid {weather_border};'>
     <div style='display: flex; justify-content: space-between; align-items: center;'>
         <div style='font-size: 20px; font-weight: 800; color: #1E293B;'>
@@ -457,13 +478,13 @@ st.markdown(f"""
         </div>
     </div>
 </div>
-""", unsafe_allow_html=True)
+""")
 
 
 # ============================================================
 # 區塊二：傻瓜零股配資試算機（含小資防呆）
 # ============================================================
-st.markdown("<h2>💰 傻瓜零股配資試算機</h2>", unsafe_allow_html=True)
+render_html("<h2>💰 傻瓜零股配資試算機</h2>")
 
 with st.container():
     col_cap1, col_cap2 = st.columns([1.5, 2.5])
@@ -476,11 +497,10 @@ with st.container():
             step=10000
         )
     with col_cap2:
-        st.markdown(
+        render_html(
             f"<div style='font-size: 13px; color: #64748B; margin-top: 28px;'>"
             f"系統將依今日大盤天氣（上限 <b>{rec_equity}%</b>）與 <b>9 等分</b> 模式，自動計算每檔股票可買進之金額與安全防守現金。"
-            f"</div>",
-            unsafe_allow_html=True
+            f"</div>"
         )
 
     # 運算金額
@@ -488,7 +508,7 @@ with st.container():
     cash_reserve = user_capital - investable_total
     single_stock_budget = investable_total / 9.0
 
-    st.markdown(f"""
+    render_html(f"""
     <div class='paper-card' style='background: #F8FAFC; border: 1px dashed #CBD5E1;'>
         <div style='display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center;'>
             <div>
@@ -505,21 +525,21 @@ with st.container():
             </div>
         </div>
     </div>
-    """, unsafe_allow_html=True)
+    """)
 
     # 小額本金防呆
     if single_stock_budget < 10000:
-        st.markdown("""
+        render_html("""
         <div class='alert-warning'>
             <b>💡 貼心提醒：</b>由於單檔分配金額較小（未滿 10,000 元），為避免零股最低手續費與價差耗損，建議只挑選前 3~5 名集中參考即可（請確認您的券商具備零股 1 元手續費優惠）。
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
 
 # ============================================================
 # 區塊三：「我手上的股票怎麼辦？」一鍵健檢（含心理建設）
 # ============================================================
-st.markdown("<h2>🔍 「我手上的股票怎麼辦？」一鍵健檢</h2>", unsafe_allow_html=True)
+render_html("<h2>🔍 「我手上的股票怎麼辦？」一鍵健檢</h2>")
 
 all_search_dict = data.get("all_searchable_stocks", {})
 c_search, c_btn = st.columns([3, 1])
@@ -536,35 +556,35 @@ if search_query:
         t_close = target_info.get("close", 0.0)
 
         if isinstance(t_rank, int) and t_rank <= 9:
-            st.markdown(f"""
+            render_html(f"""
             <div class='alert-success'>
                 <b>🟢 動能強勢（前 9 強 - 第 {t_rank} 名）：{search_query} {t_name}</b><br>
                 目前最新收盤價: {t_close:,.2f} 元 ｜ 綜合分數排名前 9 強，表現優異，基本面與動能雙全，可安心續抱。
             </div>
-            """, unsafe_allow_html=True)
+            """)
         elif isinstance(t_rank, int) and t_rank <= 15:
-            st.markdown(f"""
+            render_html(f"""
             <div class='alert-info'>
                 <b>🔵 安全緩衝區（第 {t_rank} 名）：{search_query} {t_name}</b><br>
                 目前最新收盤價: {t_close:,.2f} 元 ｜ 表現平穩，原本已持有的朋友可繼續安心續抱；但空手者不建議盲目追高。
             </div>
-            """, unsafe_allow_html=True)
+            """)
         else:
-            st.markdown(f"""
+            render_html(f"""
             <div class='alert-danger'>
                 <b>🔴 動能轉弱（已跌出前 15 名）：{search_query} {t_name}</b><br>
                 目前排名: 第 {t_rank} 名 ｜ 已不符合強勢標準，參考紀律為適時汰弱換取現金。<br><br>
                 <b>💡 系統小叮嚀：</b>量化篩選就像果農挑水果，發現不甜就換下一顆。小幅調整換回現金是為了保護本金，千萬別因為捨不得而抱著弱勢股喔！
             </div>
-            """, unsafe_allow_html=True)
+            """)
     else:
-        st.markdown(f"""
+        render_html(f"""
         <div class='alert-danger'>
             <b>🔴 動能轉弱（未進入全市場前段班）：{search_query}</b><br>
             此檔股票目前未通過流動性濾網（5日均成交值 >= 2億元）或近 20 日動能偏弱，不在強勢觀察池內。建議優先保留現金或換入具備高動能之資優生！<br><br>
             <b>💡 系統小叮嚀：</b>量化篩選就像果農挑水果，發現不甜就換下一顆。小幅調整換回現金是為了保護本金，千萬別因為捨不得而抱著弱勢股喔！
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
 
 # ============================================================
@@ -589,17 +609,17 @@ tab_top9, tab_buffer, tab_dropped = st.tabs([
 with tab_top9:
     # 大盤連動鎖
     if halt_buys:
-        st.markdown("""
+        render_html("""
         <div class='alert-warning'>
             <b>🟡 目前大盤處於跌破月線震盪警戒中！以下名單僅供觀察，空手者建議先看戲、暫緩建立新部位！</b>
         </div>
-        """, unsafe_allow_html=True)
+        """)
     else:
-        st.markdown("""
+        render_html("""
         <div class='alert-success'>
             <b>🟢 大盤結構穩健，動能強勢名單具備良好攻擊力道！</b>
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
     for stock in top_9:
         s_rank = stock.get("rank", 1)
@@ -617,14 +637,14 @@ with tab_top9:
 
         warning_block = ""
         if s_warn:
-            warning_block = f"""
-            <div class='alert-warning' style='margin: 8px 0; padding: 10px 14px !important; font-size: 13px !important;'>
-                <b>{s_warn}</b><br>
-                此檔目前關禁閉（處置）或剛出關，波動極度劇烈，一般投資人請直接跳過！（跳過之預算額度請直接留現金，不必往下遞補第 10 名）。
-            </div>
-            """
+            warning_block = (
+                f"<div class='alert-warning' style='margin: 8px 0; padding: 10px 14px !important; font-size: 13px !important;'>"
+                f"<b>{s_warn}</b><br>"
+                f"此檔目前關禁閉（處置）或剛出關，波動極度劇烈，一般投資人請直接跳過！（跳過之預算額度請直接留現金，不必往下遞補第 10 名）。"
+                f"</div>"
+            )
 
-        st.markdown(f"""
+        card_html = f"""
         <div class='paper-card' style='padding: 16px 18px;'>
             <div style='display: flex; justify-content: space-between; align-items: center;'>
                 <div>
@@ -644,17 +664,18 @@ with tab_top9:
                 <span>試算預計金額：約 NT$ {approx_cost:,.0f}</span>
             </div>
         </div>
-        """, unsafe_allow_html=True)
+        """
+        render_html(card_html)
 
 # -------------------------------------------------------------
 # Tab 2: 安穩緩衝區 (10~15名)
 # -------------------------------------------------------------
 with tab_buffer:
-    st.markdown("""
+    render_html("""
     <div class='alert-info'>
         <b>🔵 緩衝區操作說明：</b>此區間股票表現依舊在全市場前 1% 之列。原先已持有的朋友可<b>安心續抱</b>，無需頻繁換股；若是空手的朋友，請先專注在前 9 強即可，不宜往下追買。
     </div>
-    """, unsafe_allow_html=True)
+    """)
 
     for stock in buffer_15:
         s_rank = stock.get("rank", 10)
@@ -664,7 +685,7 @@ with tab_buffer:
         s_tags = stock.get("highlights", [])
         tag_spans = "".join([f"<span class='badge-tag badge-blue'>{t}</span>" for t in s_tags])
 
-        st.markdown(f"""
+        render_html(f"""
         <div class='paper-card' style='padding: 14px 18px;'>
             <div style='display: flex; justify-content: space-between; align-items: center;'>
                 <div>
@@ -679,20 +700,20 @@ with tab_buffer:
                 {tag_spans}
             </div>
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
 # -------------------------------------------------------------
 # Tab 3: 動能轉弱區 (最新跌出 15 名外)
 # -------------------------------------------------------------
 with tab_dropped:
-    st.markdown("""
+    render_html("""
     <div class='alert-danger'>
         <b>🚨 鐵血紀律提醒：</b>以下股票為對比前一交易日<b>最新跌出前 15 名之外</b>的個股。動能轉弱容易引發連續性多殺多，建議持有者於隔日開盤市價汰弱換取現金，切忌心存僥倖！
     </div>
-    """, unsafe_allow_html=True)
+    """)
 
     if not dropped_15:
-        st.markdown("<div class='paper-card' style='text-align:center; color:#64748B;'>今日名單結構穩定，無任何股票跌出前 15 名！</div>", unsafe_allow_html=True)
+        render_html("<div class='paper-card' style='text-align:center; color:#64748B;'>今日名單結構穩定，無任何股票跌出前 15 名！</div>")
     else:
         for stock in dropped_15:
             d_id = stock.get("stock_id", "")
@@ -701,7 +722,7 @@ with tab_dropped:
             n_rank = stock.get("new_rank", "外")
             d_close = stock.get("close", 0.0)
             
-            st.markdown(f"""
+            render_html(f"""
             <div class='paper-card' style='border-left: 5px solid #DC2626; padding: 14px 18px;'>
                 <div style='display: flex; justify-content: space-between; align-items: center;'>
                     <div>
@@ -716,7 +737,7 @@ with tab_dropped:
                     原前一交易日排名: <b>第 {p_rank} 名</b> ➔ 今日動向: <b style='color:#DC2626;'>{n_rank}</b>
                 </div>
             </div>
-            """, unsafe_allow_html=True)
+            """)
 
 
 # ============================================================
@@ -733,7 +754,7 @@ if is_pro_confirmed:
     imminent_pool = core2.get("imminent_pool", [])
     stats = core2.get("backtest_stats", {})
 
-    st.markdown("""
+    render_html("""
     <div class='paper-card' style='background: #FFFBEB; border: 1px solid #FCD34D;'>
         <h3 style='color: #92400E; margin-top:0;'>📖 30 秒白話文戰術作戰指南</h3>
         <div style='display: grid; grid-template-columns: 1fr; gap: 14px;'>
@@ -758,20 +779,20 @@ if is_pro_confirmed:
             3. <b>⏰ 13:25 鬧鐘強制平倉：</b>這純粹是吃早盤倒貨的當沖策略，<b>請設定手機鬧鐘 13:25，時間一到無論賺賠全數買回平倉，絕對、絕對不可以留倉過夜！</b>
         </div>
     </div>
-    """, unsafe_allow_html=True)
+    """)
 
     # 實戰今日觸發名單
-    st.markdown("<h3>🎯 今日實戰觸發標靶</h3>", unsafe_allow_html=True)
+    render_html("<h3>🎯 今日實戰觸發標靶</h3>")
     if not b_triggers and not c_triggers:
-        st.markdown("""
+        render_html("""
         <div class='alert-success'>
             <b>🟢 今日全市場處置股暫無觸發【策略 B】或【策略 C】進場門檻</b><br>
             處置交易首重天時地利，今日無標的完全符合嚴格量化濾網。空手觀望，靜待最佳勝率時機！
         </div>
-        """, unsafe_allow_html=True)
+        """)
     else:
         for r in b_triggers:
-            st.markdown(f"""
+            render_html(f"""
             <div class='paper-card' style='border-left: 6px solid #16A34A; padding: 18px 20px;'>
                 <div style='display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;'>
                     <div>
@@ -786,10 +807,10 @@ if is_pro_confirmed:
                     👉 <b>作戰SOP：</b>{r['entry_sop']}
                 </div>
             </div>
-            """, unsafe_allow_html=True)
+            """)
 
         for r in c_triggers:
-            st.markdown(f"""
+            render_html(f"""
             <div class='paper-card' style='border-left: 6px solid #DC2626; padding: 18px 20px;'>
                 <div style='display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;'>
                     <div>
@@ -804,17 +825,17 @@ if is_pro_confirmed:
                     👉 <b>作戰SOP：</b>{r['entry_sop']}
                 </div>
             </div>
-            """, unsafe_allow_html=True)
+            """)
 
     # 下方蓄勢觀察名單
     with st.expander("⏳ 查看即將出關蓄勢名單 (T-1 / T-2) 與歷史回測數據"):
-        st.markdown(f"""
+        render_html(f"""
         <div style='font-size: 13px; color: #475569; margin-bottom: 12px;'>
             <b>📊 歷史回測驗證數據：</b><br>
             • <b>策略 B (T-2搶跑)</b>：歷史勝率 <b>71.4%</b> ｜ 獲利因子 <b>3.42</b> ｜ 平均單筆報酬 <b>+3.25%</b> ｜ 2026新制勝率 <b>80.0%</b><br>
             • <b>策略 C (T-1出關空)</b>：蒙地卡羅最佳勝率 <b>73.3%</b> ｜ 獲利因子 <b>1.80</b> ｜ MDD <= 28.9%
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
         if imminent_pool:
             df_imm = pd.DataFrame(imminent_pool)
@@ -833,11 +854,11 @@ if is_pro_confirmed:
 # ============================================================
 # 頁尾：免責聲明與版權
 # ============================================================
-st.markdown("<br><hr style='border: none; border-top: 1px solid #E2E8F0; margin: 30px 0;'>", unsafe_allow_html=True)
-st.markdown("""
+render_html("<br><hr style='border: none; border-top: 1px solid #E2E8F0; margin: 30px 0;'>")
+render_html("""
 <div style='font-size: 12px; color: #94A3B8; text-align: center; line-height: 1.8;'>
     📝 <b>免責聲明：</b>本系統僅為客觀量化統計與演算法歷史數據呈現，絕無任何特定股票推薦或個別投資諮詢之意圖。<br>
     股票市場具備一定波動與價格風險，零股或現股交易前請依個人財務風險承受度審慎考量，自主審慎判斷。<br>
     © 2026 親友與老手專屬・白話文量化投資導航 ｜ Powered by Streamlit Community Cloud
 </div>
-""", unsafe_allow_html=True)
+""")
