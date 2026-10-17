@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-10-17 13:30:08",
+  "generated_at": "2026-10-17 21:42:40",
   "data_date": "2026-10-16",
   "market_regime": {
     "weather": "CLOUDY",
@@ -42,6 +42,66 @@
       },
       {
         "rank": 2,
+        "stock_id": "3287",
+        "name": "廣寰科",
+        "close": 59.6,
+        "momentum_pct": 43.1,
+        "revenue_yoy_pct": 34.5,
+        "roe_pct": 17.0,
+        "highlights": [
+          "📈 營收穩健成長",
+          "💎 獲利體質極佳",
+          "⚡ 動能飆速衝刺"
+        ],
+        "warning_tag": null
+      },
+      {
+        "rank": 3,
+        "stock_id": "3265",
+        "name": "台星科",
+        "close": 269.0,
+        "momentum_pct": 45.4,
+        "revenue_yoy_pct": 11.5,
+        "roe_pct": 4.2,
+        "highlights": [
+          "📈 營收穩健成長",
+          "✨ 本業獲利穩固",
+          "⚡ 動能飆速衝刺"
+        ],
+        "warning_tag": "⚠️ 處置/出關劇烈波動，新手建議跳過"
+      },
+      {
+        "rank": 4,
+        "stock_id": "6278",
+        "name": "台表科",
+        "close": 298.5,
+        "momentum_pct": 37.9,
+        "revenue_yoy_pct": 15.9,
+        "roe_pct": 3.1,
+        "highlights": [
+          "📈 營收穩健成長",
+          "✨ 本業獲利穩固",
+          "⚡ 動能飆速衝刺"
+        ],
+        "warning_tag": null
+      },
+      {
+        "rank": 5,
+        "stock_id": "3564",
+        "name": "其陽",
+        "close": 68.4,
+        "momentum_pct": 34.1,
+        "revenue_yoy_pct": 54.2,
+        "roe_pct": 0.1,
+        "highlights": [
+          "🔥 營收強勁高成長",
+          "✨ 本業獲利穩固",
+          "🚀 強勢動能領跑"
+        ],
+        "warning_tag": null
+      },
+      {
+        "rank": 6,
         "stock_id": "4760",
         "name": "勤凱科技",
         "close": 375.0,
@@ -56,113 +116,7 @@
         "warning_tag": "⚠️ 處置/出關劇烈波動，新手建議跳過"
       },
       {
-        "rank": 3,
-        "stock_id": "6505",
-        "name": "台塑化",
-        "close": 122.5,
-        "momentum_pct": 30.0,
-        "revenue_yoy_pct": 65.6,
-        "roe_pct": 4.2,
-        "highlights": [
-          "🔥 營收強勁高成長",
-          "✨ 本業獲利穩固",
-          "🚀 強勢動能領跑"
-        ],
-        "warning_tag": null
-      },
-      {
-        "rank": 4,
-        "stock_id": "6834",
-        "name": "天二科技",
-        "close": 142.5,
-        "momentum_pct": 19.2,
-        "revenue_yoy_pct": 132.4,
-        "roe_pct": 4.6,
-        "highlights": [
-          "🔥 營收翻倍暴增",
-          "✨ 本業獲利穩固",
-          "🚀 強勢動能領跑"
-        ],
-        "warning_tag": null
-      },
-      {
-        "rank": 5,
-        "stock_id": "3287",
-        "name": "廣寰科",
-        "close": 59.6,
-        "momentum_pct": 43.1,
-        "revenue_yoy_pct": 34.5,
-        "roe_pct": 17.0,
-        "highlights": [
-          "📈 營收穩健成長",
-          "💎 獲利體質極佳",
-          "⚡ 動能飆速衝刺"
-        ],
-        "warning_tag": "⚠️ 處置/出關劇烈波動，新手建議跳過"
-      },
-      {
-        "rank": 6,
-        "stock_id": "1815",
-        "name": "富喬",
-        "close": 140.0,
-        "momentum_pct": 20.7,
-        "revenue_yoy_pct": 82.1,
-        "roe_pct": 4.7,
-        "highlights": [
-          "🔥 營收強勁高成長",
-          "✨ 本業獲利穩固",
-          "🚀 強勢動能領跑"
-        ],
-        "warning_tag": null
-      },
-      {
         "rank": 7,
-        "stock_id": "6933",
-        "name": "AMAX-KY",
-        "close": 451.5,
-        "momentum_pct": 14.4,
-        "revenue_yoy_pct": 228.9,
-        "roe_pct": 5.4,
-        "highlights": [
-          "🔥 營收翻倍暴增",
-          "💎 高ROE優等生"
-        ],
-        "warning_tag": null
-      },
-      {
-        "rank": 8,
-        "stock_id": "6213",
-        "name": "聯茂",
-        "close": 774.0,
-        "momentum_pct": 20.6,
-        "revenue_yoy_pct": 110.7,
-        "roe_pct": 3.5,
-        "highlights": [
-          "🔥 營收翻倍暴增",
-          "✨ 本業獲利穩固",
-          "🚀 強勢動能領跑"
-        ],
-        "warning_tag": "⚠️ 處置/出關劇烈波動，新手建議跳過"
-      },
-      {
-        "rank": 9,
-        "stock_id": "6209",
-        "name": "今國光",
-        "close": 100.5,
-        "momentum_pct": 21.5,
-        "revenue_yoy_pct": 81.6,
-        "roe_pct": 3.7,
-        "highlights": [
-          "🔥 營收強勁高成長",
-          "✨ 本業獲利穩固",
-          "🚀 強勢動能領跑"
-        ],
-        "warning_tag": null
-      }
-    ],
-    "buffer_10_15": [
-      {
-        "rank": 10,
         "stock_id": "4903",
         "name": "聯光通",
         "close": 58.0,
@@ -177,56 +131,13 @@
         "warning_tag": null
       },
       {
-        "rank": 11,
-        "stock_id": "6199",
-        "name": "天品",
-        "close": 144.0,
-        "momentum_pct": 12.5,
-        "revenue_yoy_pct": 146.6,
-        "roe_pct": 6.4,
-        "highlights": [
-          "🔥 營收翻倍暴增",
-          "💎 高ROE優等生"
-        ],
-        "warning_tag": null
-      },
-      {
-        "rank": 12,
-        "stock_id": "1714",
-        "name": "和桐",
-        "close": 19.25,
-        "momentum_pct": 18.8,
-        "revenue_yoy_pct": 57.4,
-        "roe_pct": 5.8,
-        "highlights": [
-          "🔥 營收強勁高成長",
-          "💎 高ROE優等生",
-          "🚀 強勢動能領跑"
-        ],
-        "warning_tag": null
-      },
-      {
-        "rank": 13,
-        "stock_id": "5475",
-        "name": "德宏",
-        "close": 198.5,
-        "momentum_pct": 11.5,
-        "revenue_yoy_pct": 227.6,
-        "roe_pct": 7.0,
-        "highlights": [
-          "🔥 營收翻倍暴增",
-          "💎 高ROE優等生"
-        ],
-        "warning_tag": "⚠️ 處置/出關劇烈波動，新手建議跳過"
-      },
-      {
-        "rank": 14,
-        "stock_id": "1303",
-        "name": "南亞",
-        "close": 307.0,
-        "momentum_pct": 20.9,
-        "revenue_yoy_pct": 55.3,
-        "roe_pct": 4.4,
+        "rank": 8,
+        "stock_id": "6505",
+        "name": "台塑化",
+        "close": 122.5,
+        "momentum_pct": 30.0,
+        "revenue_yoy_pct": 65.6,
+        "roe_pct": 4.2,
         "highlights": [
           "🔥 營收強勁高成長",
           "✨ 本業獲利穩固",
@@ -235,7 +146,39 @@
         "warning_tag": null
       },
       {
-        "rank": 15,
+        "rank": 9,
+        "stock_id": "4720",
+        "name": "德淵",
+        "close": 25.25,
+        "momentum_pct": 32.6,
+        "revenue_yoy_pct": 33.0,
+        "roe_pct": 0.5,
+        "highlights": [
+          "📈 營收穩健成長",
+          "✨ 本業獲利穩固",
+          "🚀 強勢動能領跑"
+        ],
+        "warning_tag": null
+      }
+    ],
+    "buffer_10_15": [
+      {
+        "rank": 10,
+        "stock_id": "2355",
+        "name": "敬鵬",
+        "close": 51.9,
+        "momentum_pct": 25.7,
+        "revenue_yoy_pct": 44.3,
+        "roe_pct": 1.2,
+        "highlights": [
+          "🔥 營收強勁高成長",
+          "✨ 本業獲利穩固",
+          "🚀 強勢動能領跑"
+        ],
+        "warning_tag": null
+      },
+      {
+        "rank": 11,
         "stock_id": "6234",
         "name": "高僑",
         "close": 48.1,
@@ -248,6 +191,65 @@
           "🚀 強勢動能領跑"
         ],
         "warning_tag": null
+      },
+      {
+        "rank": 12,
+        "stock_id": "6834",
+        "name": "天二科技",
+        "close": 142.5,
+        "momentum_pct": 19.2,
+        "revenue_yoy_pct": 132.4,
+        "roe_pct": 4.6,
+        "highlights": [
+          "🔥 營收翻倍暴增",
+          "✨ 本業獲利穩固",
+          "🚀 強勢動能領跑"
+        ],
+        "warning_tag": null
+      },
+      {
+        "rank": 13,
+        "stock_id": "6213",
+        "name": "聯茂",
+        "close": 774.0,
+        "momentum_pct": 20.6,
+        "revenue_yoy_pct": 110.7,
+        "roe_pct": 3.5,
+        "highlights": [
+          "🔥 營收翻倍暴增",
+          "✨ 本業獲利穩固",
+          "🚀 強勢動能領跑"
+        ],
+        "warning_tag": "⚠️ 處置/出關劇烈波動，新手建議跳過"
+      },
+      {
+        "rank": 14,
+        "stock_id": "6209",
+        "name": "今國光",
+        "close": 100.5,
+        "momentum_pct": 21.5,
+        "revenue_yoy_pct": 81.6,
+        "roe_pct": 3.7,
+        "highlights": [
+          "🔥 營收強勁高成長",
+          "✨ 本業獲利穩固",
+          "🚀 強勢動能領跑"
+        ],
+        "warning_tag": null
+      },
+      {
+        "rank": 15,
+        "stock_id": "6933",
+        "name": "AMAX-KY",
+        "close": 451.5,
+        "momentum_pct": 14.4,
+        "revenue_yoy_pct": 228.9,
+        "roe_pct": 5.4,
+        "highlights": [
+          "🔥 營收翻倍暴增",
+          "💎 高ROE優等生"
+        ],
+        "warning_tag": null
       }
     ],
     "dropped_from_top15": [
@@ -255,7 +257,7 @@
         "stock_id": "3147",
         "name": "大綜",
         "prev_rank": 2,
-        "new_rank": 18,
+        "new_rank": 17,
         "close": 291.0,
         "reason": "動能轉弱跌出前15名，參考紀律為汰弱換取現金"
       },
@@ -271,32 +273,48 @@
         "stock_id": "3311",
         "name": "閎暉",
         "prev_rank": 8,
-        "new_rank": 50,
+        "new_rank": 33,
         "close": 48.4,
+        "reason": "動能轉弱跌出前15名，參考紀律為汰弱換取現金"
+      },
+      {
+        "stock_id": "1303",
+        "name": "南亞",
+        "prev_rank": 9,
+        "new_rank": 18,
+        "close": 307.0,
         "reason": "動能轉弱跌出前15名，參考紀律為汰弱換取現金"
       },
       {
         "stock_id": "2480",
         "name": "敦陽科",
         "prev_rank": 10,
-        "new_rank": 16,
+        "new_rank": 25,
         "close": 187.0,
+        "reason": "動能轉弱跌出前15名，參考紀律為汰弱換取現金"
+      },
+      {
+        "stock_id": "6199",
+        "name": "天品",
+        "prev_rank": 11,
+        "new_rank": 29,
+        "close": 144.0,
         "reason": "動能轉弱跌出前15名，參考紀律為汰弱換取現金"
       },
       {
         "stock_id": "2492",
         "name": "華新科",
         "prev_rank": 12,
-        "new_rank": 21,
+        "new_rank": 23,
         "close": 395.0,
         "reason": "動能轉弱跌出前15名，參考紀律為汰弱換取現金"
       },
       {
-        "stock_id": "3564",
-        "name": "其陽",
-        "prev_rank": 15,
-        "new_rank": 20,
-        "close": 68.4,
+        "stock_id": "1714",
+        "name": "和桐",
+        "prev_rank": 14,
+        "new_rank": 22,
+        "close": 19.25,
         "reason": "動能轉弱跌出前15名，參考紀律為汰弱換取現金"
       }
     ],
@@ -308,7 +326,7 @@
           "stock_id": "3147",
           "name": "大綜",
           "prev_rank": 2,
-          "current_rank": 18,
+          "current_rank": 17,
           "close": 291.0,
           "action_sop": "明日 09:00 開盤以市價單 (MOO) 無條件賣出換現金"
         },
@@ -324,42 +342,130 @@
           "stock_id": "3311",
           "name": "閎暉",
           "prev_rank": 8,
-          "current_rank": 50,
+          "current_rank": 33,
           "close": 48.4,
+          "action_sop": "明日 09:00 開盤以市價單 (MOO) 無條件賣出換現金"
+        },
+        {
+          "stock_id": "1303",
+          "name": "南亞",
+          "prev_rank": 9,
+          "current_rank": 18,
+          "close": 307.0,
           "action_sop": "明日 09:00 開盤以市價單 (MOO) 無條件賣出換現金"
         },
         {
           "stock_id": "2480",
           "name": "敦陽科",
           "prev_rank": 10,
-          "current_rank": 16,
+          "current_rank": 25,
           "close": 187.0,
+          "action_sop": "明日 09:00 開盤以市價單 (MOO) 無條件賣出換現金"
+        },
+        {
+          "stock_id": "6199",
+          "name": "天品",
+          "prev_rank": 11,
+          "current_rank": 29,
+          "close": 144.0,
           "action_sop": "明日 09:00 開盤以市價單 (MOO) 無條件賣出換現金"
         },
         {
           "stock_id": "2492",
           "name": "華新科",
           "prev_rank": 12,
-          "current_rank": 21,
+          "current_rank": 23,
           "close": 395.0,
           "action_sop": "明日 09:00 開盤以市價單 (MOO) 無條件賣出換現金"
         },
         {
-          "stock_id": "3564",
-          "name": "其陽",
-          "prev_rank": 15,
-          "current_rank": 20,
-          "close": 68.4,
+          "stock_id": "1714",
+          "name": "和桐",
+          "prev_rank": 14,
+          "current_rank": 22,
+          "close": 19.25,
           "action_sop": "明日 09:00 開盤以市價單 (MOO) 無條件賣出換現金"
         }
       ],
       "buys": [
         {
+          "stock_id": "3265",
+          "name": "台星科",
+          "prev_rank": "不在名單內",
+          "prev_rank_raw": 999,
+          "current_rank": 3,
+          "close": 269.0,
+          "momentum_pct": 45.4,
+          "revenue_yoy_pct": 11.5,
+          "roe_pct": 4.2,
+          "highlights": [
+            "📈 營收穩健成長",
+            "✨ 本業獲利穩固",
+            "⚡ 動能飆速衝刺"
+          ],
+          "warning_tag": "⚠️ 處置/出關劇烈波動，新手建議跳過",
+          "action_sop": "開高跳空等待 13:25 尾盤市價買 / 平低盤 09:00 開盤市價買"
+        },
+        {
+          "stock_id": "6278",
+          "name": "台表科",
+          "prev_rank": "不在名單內",
+          "prev_rank_raw": 999,
+          "current_rank": 4,
+          "close": 298.5,
+          "momentum_pct": 37.9,
+          "revenue_yoy_pct": 15.9,
+          "roe_pct": 3.1,
+          "highlights": [
+            "📈 營收穩健成長",
+            "✨ 本業獲利穩固",
+            "⚡ 動能飆速衝刺"
+          ],
+          "warning_tag": null,
+          "action_sop": "開高跳空等待 13:25 尾盤市價買 / 平低盤 09:00 開盤市價買"
+        },
+        {
+          "stock_id": "3564",
+          "name": "其陽",
+          "prev_rank": "第 15 名",
+          "prev_rank_raw": 15,
+          "current_rank": 5,
+          "close": 68.4,
+          "momentum_pct": 34.1,
+          "revenue_yoy_pct": 54.2,
+          "roe_pct": 0.1,
+          "highlights": [
+            "🔥 營收強勁高成長",
+            "✨ 本業獲利穩固",
+            "🚀 強勢動能領跑"
+          ],
+          "warning_tag": null,
+          "action_sop": "開高跳空等待 13:25 尾盤市價買 / 平低盤 09:00 開盤市價買"
+        },
+        {
+          "stock_id": "4903",
+          "name": "聯光通",
+          "prev_rank": "不在名單內",
+          "prev_rank_raw": 999,
+          "current_rank": 7,
+          "close": 58.0,
+          "momentum_pct": 30.8,
+          "revenue_yoy_pct": 93.8,
+          "roe_pct": 1.2,
+          "highlights": [
+            "🔥 營收強勁高成長",
+            "✨ 本業獲利穩固",
+            "🚀 強勢動能領跑"
+          ],
+          "warning_tag": null,
+          "action_sop": "開高跳空等待 13:25 尾盤市價買 / 平低盤 09:00 開盤市價買"
+        },
+        {
           "stock_id": "6505",
           "name": "台塑化",
           "prev_rank": "不在名單內",
           "prev_rank_raw": 999,
-          "current_rank": 3,
+          "current_rank": 8,
           "close": 122.5,
           "momentum_pct": 30.0,
           "revenue_yoy_pct": 65.6,
@@ -373,52 +479,17 @@
           "action_sop": "開高跳空等待 13:25 尾盤市價買 / 平低盤 09:00 開盤市價買"
         },
         {
-          "stock_id": "1815",
-          "name": "富喬",
-          "prev_rank": "不在名單內",
-          "prev_rank_raw": 999,
-          "current_rank": 6,
-          "close": 140.0,
-          "momentum_pct": 20.7,
-          "revenue_yoy_pct": 82.1,
-          "roe_pct": 4.7,
-          "highlights": [
-            "🔥 營收強勁高成長",
-            "✨ 本業獲利穩固",
-            "🚀 強勢動能領跑"
-          ],
-          "warning_tag": null,
-          "action_sop": "開高跳空等待 13:25 尾盤市價買 / 平低盤 09:00 開盤市價買"
-        },
-        {
-          "stock_id": "6933",
-          "name": "AMAX-KY",
-          "prev_rank": "第 13 名",
-          "prev_rank_raw": 13,
-          "current_rank": 7,
-          "close": 451.5,
-          "momentum_pct": 14.4,
-          "revenue_yoy_pct": 228.9,
-          "roe_pct": 5.4,
-          "highlights": [
-            "🔥 營收翻倍暴增",
-            "💎 高ROE優等生"
-          ],
-          "warning_tag": null,
-          "action_sop": "開高跳空等待 13:25 尾盤市價買 / 平低盤 09:00 開盤市價買"
-        },
-        {
-          "stock_id": "6209",
-          "name": "今國光",
+          "stock_id": "4720",
+          "name": "德淵",
           "prev_rank": "不在名單內",
           "prev_rank_raw": 999,
           "current_rank": 9,
-          "close": 100.5,
-          "momentum_pct": 21.5,
-          "revenue_yoy_pct": 81.6,
-          "roe_pct": 3.7,
+          "close": 25.25,
+          "momentum_pct": 32.6,
+          "revenue_yoy_pct": 33.0,
+          "roe_pct": 0.5,
           "highlights": [
-            "🔥 營收強勁高成長",
+            "📈 營收穩健成長",
             "✨ 本業獲利穩固",
             "🚀 強勢動能領跑"
           ],
@@ -428,45 +499,45 @@
       ],
       "holds": [
         {
-          "stock_id": "6199",
-          "name": "天品",
-          "prev_rank": "第 11 名",
-          "prev_rank_raw": 11,
-          "current_rank": 11,
-          "close": 144.0,
+          "stock_id": "6834",
+          "name": "天二科技",
+          "prev_rank": "第 4 名",
+          "prev_rank_raw": 4,
+          "current_rank": 12,
+          "close": 142.5,
+          "highlights": [
+            "🔥 營收翻倍暴增",
+            "✨ 本業獲利穩固",
+            "🚀 強勢動能領跑"
+          ],
+          "warning_tag": null,
+          "action_sop": "安穩續抱！不必賣出換股，亦無須追高加碼"
+        },
+        {
+          "stock_id": "6213",
+          "name": "聯茂",
+          "prev_rank": "第 5 名",
+          "prev_rank_raw": 5,
+          "current_rank": 13,
+          "close": 774.0,
+          "highlights": [
+            "🔥 營收翻倍暴增",
+            "✨ 本業獲利穩固",
+            "🚀 強勢動能領跑"
+          ],
+          "warning_tag": "⚠️ 處置/出關劇烈波動，新手建議跳過",
+          "action_sop": "安穩續抱！不必賣出換股，亦無須追高加碼"
+        },
+        {
+          "stock_id": "6933",
+          "name": "AMAX-KY",
+          "prev_rank": "第 13 名",
+          "prev_rank_raw": 13,
+          "current_rank": 15,
+          "close": 451.5,
           "highlights": [
             "🔥 營收翻倍暴增",
             "💎 高ROE優等生"
-          ],
-          "warning_tag": null,
-          "action_sop": "安穩續抱！不必賣出換股，亦無須追高加碼"
-        },
-        {
-          "stock_id": "1714",
-          "name": "和桐",
-          "prev_rank": "第 14 名",
-          "prev_rank_raw": 14,
-          "current_rank": 12,
-          "close": 19.25,
-          "highlights": [
-            "🔥 營收強勁高成長",
-            "💎 高ROE優等生",
-            "🚀 強勢動能領跑"
-          ],
-          "warning_tag": null,
-          "action_sop": "安穩續抱！不必賣出換股，亦無須追高加碼"
-        },
-        {
-          "stock_id": "1303",
-          "name": "南亞",
-          "prev_rank": "第 9 名",
-          "prev_rank_raw": 9,
-          "current_rank": 14,
-          "close": 307.0,
-          "highlights": [
-            "🔥 營收強勁高成長",
-            "✨ 本業獲利穩固",
-            "🚀 強勢動能領跑"
           ],
           "warning_tag": null,
           "action_sop": "安穩續抱！不必賣出換股，亦無須追高加碼"
@@ -490,7 +561,7 @@
         "optimal_mdd": "<= 28.9%"
       }
     },
-    "total_active_disposals_count": 33,
+    "total_active_disposals_count": 29,
     "strategy_b_triggers": [
       {
         "stock_id": "3441",
@@ -673,803 +744,803 @@
       "status": "TOP_9",
       "close": 591.0
     },
-    "4760": {
-      "stock_id": "4760",
-      "name": "勤凱科技",
-      "rank": 2,
-      "status": "TOP_9",
-      "close": 375.0
-    },
-    "6505": {
-      "stock_id": "6505",
-      "name": "台塑化",
-      "rank": 3,
-      "status": "TOP_9",
-      "close": 122.5
-    },
-    "6834": {
-      "stock_id": "6834",
-      "name": "天二科技",
-      "rank": 4,
-      "status": "TOP_9",
-      "close": 142.5
-    },
     "3287": {
       "stock_id": "3287",
       "name": "廣寰科",
-      "rank": 5,
+      "rank": 2,
       "status": "TOP_9",
       "close": 59.6
-    },
-    "1815": {
-      "stock_id": "1815",
-      "name": "富喬",
-      "rank": 6,
-      "status": "TOP_9",
-      "close": 140.0
-    },
-    "6933": {
-      "stock_id": "6933",
-      "name": "AMAX-KY",
-      "rank": 7,
-      "status": "TOP_9",
-      "close": 451.5
-    },
-    "6213": {
-      "stock_id": "6213",
-      "name": "聯茂",
-      "rank": 8,
-      "status": "TOP_9",
-      "close": 774.0
-    },
-    "6209": {
-      "stock_id": "6209",
-      "name": "今國光",
-      "rank": 9,
-      "status": "TOP_9",
-      "close": 100.5
-    },
-    "4903": {
-      "stock_id": "4903",
-      "name": "聯光通",
-      "rank": 10,
-      "status": "BUFFER_10_15",
-      "close": 58.0
-    },
-    "6199": {
-      "stock_id": "6199",
-      "name": "天品",
-      "rank": 11,
-      "status": "BUFFER_10_15",
-      "close": 144.0
-    },
-    "1714": {
-      "stock_id": "1714",
-      "name": "和桐",
-      "rank": 12,
-      "status": "BUFFER_10_15",
-      "close": 19.25
-    },
-    "5475": {
-      "stock_id": "5475",
-      "name": "德宏",
-      "rank": 13,
-      "status": "BUFFER_10_15",
-      "close": 198.5
-    },
-    "1303": {
-      "stock_id": "1303",
-      "name": "南亞",
-      "rank": 14,
-      "status": "BUFFER_10_15",
-      "close": 307.0
-    },
-    "6234": {
-      "stock_id": "6234",
-      "name": "高僑",
-      "rank": 15,
-      "status": "BUFFER_10_15",
-      "close": 48.1
-    },
-    "2480": {
-      "stock_id": "2480",
-      "name": "敦陽科",
-      "rank": 16,
-      "status": "DROPPED",
-      "close": 187.0
-    },
-    "2368": {
-      "stock_id": "2368",
-      "name": "金像電",
-      "rank": 17,
-      "status": "OUTSIDE",
-      "close": 1245.0
-    },
-    "3147": {
-      "stock_id": "3147",
-      "name": "大綜",
-      "rank": 18,
-      "status": "DROPPED",
-      "close": 291.0
-    },
-    "6187": {
-      "stock_id": "6187",
-      "name": "萬潤",
-      "rank": 19,
-      "status": "OUTSIDE",
-      "close": 1410.0
-    },
-    "3564": {
-      "stock_id": "3564",
-      "name": "其陽",
-      "rank": 20,
-      "status": "DROPPED",
-      "close": 68.4
-    },
-    "2492": {
-      "stock_id": "2492",
-      "name": "華新科",
-      "rank": 21,
-      "status": "DROPPED",
-      "close": 395.0
-    },
-    "3167": {
-      "stock_id": "3167",
-      "name": "大量",
-      "rank": 22,
-      "status": "OUTSIDE",
-      "close": 1055.0
-    },
-    "6415": {
-      "stock_id": "6415",
-      "name": "矽力*-KY",
-      "rank": 23,
-      "status": "OUTSIDE",
-      "close": 489.0
-    },
-    "5498": {
-      "stock_id": "5498",
-      "name": "凱崴",
-      "rank": 24,
-      "status": "OUTSIDE",
-      "close": 59.8
-    },
-    "6548": {
-      "stock_id": "6548",
-      "name": "長科*",
-      "rank": 25,
-      "status": "OUTSIDE",
-      "close": 83.4
-    },
-    "2355": {
-      "stock_id": "2355",
-      "name": "敬鵬",
-      "rank": 26,
-      "status": "OUTSIDE",
-      "close": 51.9
-    },
-    "5340": {
-      "stock_id": "5340",
-      "name": "建榮",
-      "rank": 27,
-      "status": "OUTSIDE",
-      "close": 93.0
-    },
-    "2468": {
-      "stock_id": "2468",
-      "name": "華經",
-      "rank": 28,
-      "status": "OUTSIDE",
-      "close": 51.1
-    },
-    "4938": {
-      "stock_id": "4938",
-      "name": "和碩",
-      "rank": 29,
-      "status": "OUTSIDE",
-      "close": 102.0
-    },
-    "8042": {
-      "stock_id": "8042",
-      "name": "金山電",
-      "rank": 30,
-      "status": "OUTSIDE",
-      "close": 144.0
-    },
-    "4720": {
-      "stock_id": "4720",
-      "name": "德淵",
-      "rank": 31,
-      "status": "OUTSIDE",
-      "close": 25.25
     },
     "3265": {
       "stock_id": "3265",
       "name": "台星科",
-      "rank": 32,
-      "status": "OUTSIDE",
+      "rank": 3,
+      "status": "TOP_9",
       "close": 269.0
     },
     "6278": {
       "stock_id": "6278",
       "name": "台表科",
-      "rank": 33,
-      "status": "OUTSIDE",
+      "rank": 4,
+      "status": "TOP_9",
       "close": 298.5
     },
-    "3044": {
-      "stock_id": "3044",
-      "name": "健鼎",
-      "rank": 34,
-      "status": "OUTSIDE",
-      "close": 584.0
+    "3564": {
+      "stock_id": "3564",
+      "name": "其陽",
+      "rank": 5,
+      "status": "TOP_9",
+      "close": 68.4
     },
-    "3498": {
-      "stock_id": "3498",
-      "name": "陽程",
-      "rank": 35,
-      "status": "OUTSIDE",
-      "close": 237.5
+    "4760": {
+      "stock_id": "4760",
+      "name": "勤凱科技",
+      "rank": 6,
+      "status": "TOP_9",
+      "close": 375.0
     },
-    "3580": {
-      "stock_id": "3580",
-      "name": "友威科",
-      "rank": 36,
-      "status": "OUTSIDE",
-      "close": 121.5
+    "4903": {
+      "stock_id": "4903",
+      "name": "聯光通",
+      "rank": 7,
+      "status": "TOP_9",
+      "close": 58.0
     },
-    "2603": {
-      "stock_id": "2603",
-      "name": "長榮",
-      "rank": 37,
-      "status": "OUTSIDE",
-      "close": 265.5
-    },
-    "1326": {
-      "stock_id": "1326",
-      "name": "台化",
-      "rank": 38,
-      "status": "OUTSIDE",
-      "close": 78.7
-    },
-    "2615": {
-      "stock_id": "2615",
-      "name": "萬海",
-      "rank": 39,
-      "status": "OUTSIDE",
+    "6505": {
+      "stock_id": "6505",
+      "name": "台塑化",
+      "rank": 8,
+      "status": "TOP_9",
       "close": 122.5
     },
-    "2347": {
-      "stock_id": "2347",
-      "name": "聯強",
-      "rank": 40,
-      "status": "OUTSIDE",
-      "close": 103.0
+    "4720": {
+      "stock_id": "4720",
+      "name": "德淵",
+      "rank": 9,
+      "status": "TOP_9",
+      "close": 25.25
     },
-    "1476": {
-      "stock_id": "1476",
-      "name": "儒鴻",
-      "rank": 41,
-      "status": "OUTSIDE",
-      "close": 329.5
+    "2355": {
+      "stock_id": "2355",
+      "name": "敬鵬",
+      "rank": 10,
+      "status": "BUFFER_10_15",
+      "close": 51.9
     },
-    "3693": {
-      "stock_id": "3693",
-      "name": "營邦",
-      "rank": 42,
-      "status": "OUTSIDE",
-      "close": 715.0
+    "6234": {
+      "stock_id": "6234",
+      "name": "高僑",
+      "rank": 11,
+      "status": "BUFFER_10_15",
+      "close": 48.1
     },
-    "6285": {
-      "stock_id": "6285",
-      "name": "啟碁",
-      "rank": 43,
-      "status": "OUTSIDE",
-      "close": 255.0
+    "6834": {
+      "stock_id": "6834",
+      "name": "天二科技",
+      "rank": 12,
+      "status": "BUFFER_10_15",
+      "close": 142.5
     },
-    "2609": {
-      "stock_id": "2609",
-      "name": "陽明",
-      "rank": 44,
-      "status": "OUTSIDE",
-      "close": 64.7
+    "6213": {
+      "stock_id": "6213",
+      "name": "聯茂",
+      "rank": 13,
+      "status": "BUFFER_10_15",
+      "close": 774.0
     },
-    "1802": {
-      "stock_id": "1802",
-      "name": "台玻",
-      "rank": 45,
-      "status": "OUTSIDE",
-      "close": 66.9
+    "6209": {
+      "stock_id": "6209",
+      "name": "今國光",
+      "rank": 14,
+      "status": "BUFFER_10_15",
+      "close": 100.5
     },
-    "1477": {
-      "stock_id": "1477",
-      "name": "聚陽",
-      "rank": 46,
-      "status": "OUTSIDE",
-      "close": 211.0
+    "6933": {
+      "stock_id": "6933",
+      "name": "AMAX-KY",
+      "rank": 15,
+      "status": "BUFFER_10_15",
+      "close": 451.5
     },
-    "6446": {
-      "stock_id": "6446",
-      "name": "藥華藥",
-      "rank": 47,
+    "1815": {
+      "stock_id": "1815",
+      "name": "富喬",
+      "rank": 16,
       "status": "OUTSIDE",
-      "close": 1245.0
+      "close": 140.0
     },
-    "5469": {
-      "stock_id": "5469",
-      "name": "瀚宇博",
-      "rank": 48,
-      "status": "OUTSIDE",
-      "close": 83.5
-    },
-    "4977": {
-      "stock_id": "4977",
-      "name": "眾達-KY",
-      "rank": 49,
-      "status": "OUTSIDE",
-      "close": 184.0
-    },
-    "3311": {
-      "stock_id": "3311",
-      "name": "閎暉",
-      "rank": 50,
+    "3147": {
+      "stock_id": "3147",
+      "name": "大綜",
+      "rank": 17,
       "status": "DROPPED",
-      "close": 48.4
+      "close": 291.0
     },
-    "1718": {
-      "stock_id": "1718",
-      "name": "中纖",
-      "rank": 51,
-      "status": "OUTSIDE",
-      "close": 12.0
+    "1303": {
+      "stock_id": "1303",
+      "name": "南亞",
+      "rank": 18,
+      "status": "DROPPED",
+      "close": 307.0
     },
-    "6727": {
-      "stock_id": "6727",
-      "name": "亞泰金屬",
-      "rank": 52,
+    "8042": {
+      "stock_id": "8042",
+      "name": "金山電",
+      "rank": 19,
       "status": "OUTSIDE",
-      "close": 524.0
+      "close": 144.0
+    },
+    "5475": {
+      "stock_id": "5475",
+      "name": "德宏",
+      "rank": 20,
+      "status": "OUTSIDE",
+      "close": 198.5
     },
     "1301": {
       "stock_id": "1301",
       "name": "台塑",
-      "rank": 53,
+      "rank": 21,
       "status": "OUTSIDE",
       "close": 82.1
     },
-    "3441": {
-      "stock_id": "3441",
-      "name": "聯一光電",
-      "rank": 54,
+    "1714": {
+      "stock_id": "1714",
+      "name": "和桐",
+      "rank": 22,
+      "status": "DROPPED",
+      "close": 19.25
+    },
+    "2492": {
+      "stock_id": "2492",
+      "name": "華新科",
+      "rank": 23,
+      "status": "DROPPED",
+      "close": 395.0
+    },
+    "1476": {
+      "stock_id": "1476",
+      "name": "儒鴻",
+      "rank": 24,
+      "status": "OUTSIDE",
+      "close": 329.5
+    },
+    "2480": {
+      "stock_id": "2480",
+      "name": "敦陽科",
+      "rank": 25,
+      "status": "DROPPED",
+      "close": 187.0
+    },
+    "5498": {
+      "stock_id": "5498",
+      "name": "凱崴",
+      "rank": 26,
+      "status": "OUTSIDE",
+      "close": 59.8
+    },
+    "3498": {
+      "stock_id": "3498",
+      "name": "陽程",
+      "rank": 27,
       "status": "OUTSIDE",
       "close": 237.5
     },
-    "6274": {
-      "stock_id": "6274",
-      "name": "台燿",
-      "rank": 55,
+    "6415": {
+      "stock_id": "6415",
+      "name": "矽力*-KY",
+      "rank": 28,
       "status": "OUTSIDE",
-      "close": 1615.0
+      "close": 489.0
+    },
+    "6199": {
+      "stock_id": "6199",
+      "name": "天品",
+      "rank": 29,
+      "status": "DROPPED",
+      "close": 144.0
     },
     "4973": {
       "stock_id": "4973",
       "name": "廣穎電通",
-      "rank": 56,
+      "rank": 30,
       "status": "OUTSIDE",
       "close": 142.0
+    },
+    "6548": {
+      "stock_id": "6548",
+      "name": "長科*",
+      "rank": 31,
+      "status": "OUTSIDE",
+      "close": 83.4
+    },
+    "2368": {
+      "stock_id": "2368",
+      "name": "金像電",
+      "rank": 32,
+      "status": "OUTSIDE",
+      "close": 1245.0
+    },
+    "3311": {
+      "stock_id": "3311",
+      "name": "閎暉",
+      "rank": 33,
+      "status": "DROPPED",
+      "close": 48.4
+    },
+    "3167": {
+      "stock_id": "3167",
+      "name": "大量",
+      "rank": 34,
+      "status": "OUTSIDE",
+      "close": 1055.0
+    },
+    "5340": {
+      "stock_id": "5340",
+      "name": "建榮",
+      "rank": 35,
+      "status": "OUTSIDE",
+      "close": 93.0
+    },
+    "3441": {
+      "stock_id": "3441",
+      "name": "聯一光電",
+      "rank": 36,
+      "status": "OUTSIDE",
+      "close": 237.5
+    },
+    "1326": {
+      "stock_id": "1326",
+      "name": "台化",
+      "rank": 37,
+      "status": "OUTSIDE",
+      "close": 78.7
+    },
+    "2468": {
+      "stock_id": "2468",
+      "name": "華經",
+      "rank": 38,
+      "status": "OUTSIDE",
+      "close": 51.1
+    },
+    "6187": {
+      "stock_id": "6187",
+      "name": "萬潤",
+      "rank": 39,
+      "status": "OUTSIDE",
+      "close": 1410.0
+    },
+    "4938": {
+      "stock_id": "4938",
+      "name": "和碩",
+      "rank": 40,
+      "status": "OUTSIDE",
+      "close": 102.0
+    },
+    "3580": {
+      "stock_id": "3580",
+      "name": "友威科",
+      "rank": 41,
+      "status": "OUTSIDE",
+      "close": 121.5
+    },
+    "2347": {
+      "stock_id": "2347",
+      "name": "聯強",
+      "rank": 42,
+      "status": "OUTSIDE",
+      "close": 103.0
     },
     "2383": {
       "stock_id": "2383",
       "name": "台光電",
-      "rank": 57,
+      "rank": 43,
       "status": "OUTSIDE",
       "close": 5165.0
     },
-    "6715": {
-      "stock_id": "6715",
-      "name": "嘉基",
-      "rank": 58,
+    "1802": {
+      "stock_id": "1802",
+      "name": "台玻",
+      "rank": 44,
       "status": "OUTSIDE",
-      "close": 500.0
+      "close": 66.9
     },
     "8086": {
       "stock_id": "8086",
       "name": "宏捷科",
-      "rank": 59,
+      "rank": 45,
       "status": "OUTSIDE",
       "close": 131.0
-    },
-    "4958": {
-      "stock_id": "4958",
-      "name": "臻鼎-KY",
-      "rank": 60,
-      "status": "OUTSIDE",
-      "close": 557.0
-    },
-    "6191": {
-      "stock_id": "6191",
-      "name": "精成科",
-      "rank": 61,
-      "status": "OUTSIDE",
-      "close": 92.3
-    },
-    "3236": {
-      "stock_id": "3236",
-      "name": "千如",
-      "rank": 62,
-      "status": "OUTSIDE",
-      "close": 54.3
-    },
-    "2885": {
-      "stock_id": "2885",
-      "name": "元大金",
-      "rank": 63,
-      "status": "OUTSIDE",
-      "close": 72.9
-    },
-    "4566": {
-      "stock_id": "4566",
-      "name": "時碩工業",
-      "rank": 64,
-      "status": "OUTSIDE",
-      "close": 81.8
     },
     "3406": {
       "stock_id": "3406",
       "name": "玉晶光",
-      "rank": 65,
+      "rank": 46,
       "status": "OUTSIDE",
       "close": 1085.0
     },
-    "6903": {
-      "stock_id": "6903",
-      "name": "巨漢",
-      "rank": 66,
+    "3044": {
+      "stock_id": "3044",
+      "name": "健鼎",
+      "rank": 47,
       "status": "OUTSIDE",
-      "close": 326.5
+      "close": 584.0
     },
-    "2345": {
-      "stock_id": "2345",
-      "name": "智邦",
-      "rank": 67,
+    "2603": {
+      "stock_id": "2603",
+      "name": "長榮",
+      "rank": 48,
       "status": "OUTSIDE",
-      "close": 1980.0
+      "close": 265.5
     },
-    "2313": {
-      "stock_id": "2313",
-      "name": "華通",
-      "rank": 68,
+    "3693": {
+      "stock_id": "3693",
+      "name": "營邦",
+      "rank": 49,
       "status": "OUTSIDE",
-      "close": 248.0
-    },
-    "6449": {
-      "stock_id": "6449",
-      "name": "鈺邦",
-      "rank": 69,
-      "status": "OUTSIDE",
-      "close": 250.5
-    },
-    "3617": {
-      "stock_id": "3617",
-      "name": "碩天",
-      "rank": 70,
-      "status": "OUTSIDE",
-      "close": 264.5
-    },
-    "2027": {
-      "stock_id": "2027",
-      "name": "大成鋼",
-      "rank": 71,
-      "status": "OUTSIDE",
-      "close": 50.9
-    },
-    "1711": {
-      "stock_id": "1711",
-      "name": "永光",
-      "rank": 72,
-      "status": "OUTSIDE",
-      "close": 44.45
-    },
-    "5904": {
-      "stock_id": "5904",
-      "name": "寶雅",
-      "rank": 73,
-      "status": "OUTSIDE",
-      "close": 73.9
-    },
-    "5876": {
-      "stock_id": "5876",
-      "name": "上海商銀",
-      "rank": 74,
-      "status": "OUTSIDE",
-      "close": 54.3
-    },
-    "3264": {
-      "stock_id": "3264",
-      "name": "欣銓",
-      "rank": 75,
-      "status": "OUTSIDE",
-      "close": 258.5
-    },
-    "6214": {
-      "stock_id": "6214",
-      "name": "精誠",
-      "rank": 76,
-      "status": "OUTSIDE",
-      "close": 197.5
-    },
-    "6197": {
-      "stock_id": "6197",
-      "name": "佳必琪",
-      "rank": 77,
-      "status": "OUTSIDE",
-      "close": 349.0
-    },
-    "2886": {
-      "stock_id": "2886",
-      "name": "兆豐金",
-      "rank": 78,
-      "status": "OUTSIDE",
-      "close": 53.7
-    },
-    "1216": {
-      "stock_id": "1216",
-      "name": "統一",
-      "rank": 79,
-      "status": "OUTSIDE",
-      "close": 79.6
-    },
-    "4904": {
-      "stock_id": "4904",
-      "name": "遠傳",
-      "rank": 80,
-      "status": "OUTSIDE",
-      "close": 113.5
-    },
-    "3592": {
-      "stock_id": "3592",
-      "name": "瑞鼎",
-      "rank": 81,
-      "status": "OUTSIDE",
-      "close": 255.0
-    },
-    "8069": {
-      "stock_id": "8069",
-      "name": "元太",
-      "rank": 82,
-      "status": "OUTSIDE",
-      "close": 155.0
-    },
-    "2478": {
-      "stock_id": "2478",
-      "name": "大毅",
-      "rank": 83,
-      "status": "OUTSIDE",
-      "close": 133.0
-    },
-    "8050": {
-      "stock_id": "8050",
-      "name": "廣積",
-      "rank": 84,
-      "status": "OUTSIDE",
-      "close": 65.4
+      "close": 715.0
     },
     "8112": {
       "stock_id": "8112",
       "name": "至上",
-      "rank": 85,
+      "rank": 50,
       "status": "OUTSIDE",
       "close": 84.1
     },
-    "2884": {
-      "stock_id": "2884",
-      "name": "玉山金",
-      "rank": 86,
+    "1477": {
+      "stock_id": "1477",
+      "name": "聚陽",
+      "rank": 51,
       "status": "OUTSIDE",
-      "close": 49.15
+      "close": 211.0
     },
-    "3033": {
-      "stock_id": "3033",
-      "name": "威健",
-      "rank": 87,
+    "1718": {
+      "stock_id": "1718",
+      "name": "中纖",
+      "rank": 52,
       "status": "OUTSIDE",
-      "close": 43.15
+      "close": 12.0
     },
-    "6196": {
-      "stock_id": "6196",
-      "name": "帆宣",
-      "rank": 88,
+    "2615": {
+      "stock_id": "2615",
+      "name": "萬海",
+      "rank": 53,
       "status": "OUTSIDE",
-      "close": 609.0
+      "close": 122.5
     },
-    "3034": {
-      "stock_id": "3034",
-      "name": "聯詠",
-      "rank": 89,
+    "5469": {
+      "stock_id": "5469",
+      "name": "瀚宇博",
+      "rank": 54,
       "status": "OUTSIDE",
-      "close": 577.0
+      "close": 83.5
+    },
+    "5876": {
+      "stock_id": "5876",
+      "name": "上海商銀",
+      "rank": 55,
+      "status": "OUTSIDE",
+      "close": 54.3
+    },
+    "4977": {
+      "stock_id": "4977",
+      "name": "眾達-KY",
+      "rank": 56,
+      "status": "OUTSIDE",
+      "close": 184.0
+    },
+    "2609": {
+      "stock_id": "2609",
+      "name": "陽明",
+      "rank": 57,
+      "status": "OUTSIDE",
+      "close": 64.7
+    },
+    "3236": {
+      "stock_id": "3236",
+      "name": "千如",
+      "rank": 58,
+      "status": "OUTSIDE",
+      "close": 54.3
+    },
+    "6446": {
+      "stock_id": "6446",
+      "name": "藥華藥",
+      "rank": 59,
+      "status": "OUTSIDE",
+      "close": 1245.0
+    },
+    "6903": {
+      "stock_id": "6903",
+      "name": "巨漢",
+      "rank": 60,
+      "status": "OUTSIDE",
+      "close": 326.5
+    },
+    "6274": {
+      "stock_id": "6274",
+      "name": "台燿",
+      "rank": 61,
+      "status": "OUTSIDE",
+      "close": 1615.0
+    },
+    "5904": {
+      "stock_id": "5904",
+      "name": "寶雅",
+      "rank": 62,
+      "status": "OUTSIDE",
+      "close": 73.9
+    },
+    "2345": {
+      "stock_id": "2345",
+      "name": "智邦",
+      "rank": 63,
+      "status": "OUTSIDE",
+      "close": 1980.0
+    },
+    "6285": {
+      "stock_id": "6285",
+      "name": "啟碁",
+      "rank": 64,
+      "status": "OUTSIDE",
+      "close": 255.0
+    },
+    "2313": {
+      "stock_id": "2313",
+      "name": "華通",
+      "rank": 65,
+      "status": "OUTSIDE",
+      "close": 248.0
+    },
+    "6715": {
+      "stock_id": "6715",
+      "name": "嘉基",
+      "rank": 66,
+      "status": "OUTSIDE",
+      "close": 500.0
+    },
+    "6727": {
+      "stock_id": "6727",
+      "name": "亞泰金屬",
+      "rank": 67,
+      "status": "OUTSIDE",
+      "close": 524.0
+    },
+    "3617": {
+      "stock_id": "3617",
+      "name": "碩天",
+      "rank": 68,
+      "status": "OUTSIDE",
+      "close": 264.5
+    },
+    "6191": {
+      "stock_id": "6191",
+      "name": "精成科",
+      "rank": 69,
+      "status": "OUTSIDE",
+      "close": 92.3
+    },
+    "4958": {
+      "stock_id": "4958",
+      "name": "臻鼎-KY",
+      "rank": 70,
+      "status": "OUTSIDE",
+      "close": 557.0
+    },
+    "1216": {
+      "stock_id": "1216",
+      "name": "統一",
+      "rank": 71,
+      "status": "OUTSIDE",
+      "close": 79.6
+    },
+    "4566": {
+      "stock_id": "4566",
+      "name": "時碩工業",
+      "rank": 72,
+      "status": "OUTSIDE",
+      "close": 81.8
+    },
+    "6449": {
+      "stock_id": "6449",
+      "name": "鈺邦",
+      "rank": 73,
+      "status": "OUTSIDE",
+      "close": 250.5
+    },
+    "8050": {
+      "stock_id": "8050",
+      "name": "廣積",
+      "rank": 74,
+      "status": "OUTSIDE",
+      "close": 65.4
+    },
+    "1711": {
+      "stock_id": "1711",
+      "name": "永光",
+      "rank": 75,
+      "status": "OUTSIDE",
+      "close": 44.45
+    },
+    "2885": {
+      "stock_id": "2885",
+      "name": "元大金",
+      "rank": 76,
+      "status": "OUTSIDE",
+      "close": 72.9
+    },
+    "2886": {
+      "stock_id": "2886",
+      "name": "兆豐金",
+      "rank": 77,
+      "status": "OUTSIDE",
+      "close": 53.7
+    },
+    "6148": {
+      "stock_id": "6148",
+      "name": "驊宏資",
+      "rank": 78,
+      "status": "OUTSIDE",
+      "close": 41.95
+    },
+    "2542": {
+      "stock_id": "2542",
+      "name": "興富發",
+      "rank": 79,
+      "status": "OUTSIDE",
+      "close": 39.65
+    },
+    "6223": {
+      "stock_id": "6223",
+      "name": "旺矽",
+      "rank": 80,
+      "status": "OUTSIDE",
+      "close": 5205.0
+    },
+    "4904": {
+      "stock_id": "4904",
+      "name": "遠傳",
+      "rank": 81,
+      "status": "OUTSIDE",
+      "close": 113.5
+    },
+    "6197": {
+      "stock_id": "6197",
+      "name": "佳必琪",
+      "rank": 82,
+      "status": "OUTSIDE",
+      "close": 349.0
+    },
+    "8996": {
+      "stock_id": "8996",
+      "name": "高力",
+      "rank": 83,
+      "status": "OUTSIDE",
+      "close": 1570.0
+    },
+    "8069": {
+      "stock_id": "8069",
+      "name": "元太",
+      "rank": 84,
+      "status": "OUTSIDE",
+      "close": 155.0
+    },
+    "2027": {
+      "stock_id": "2027",
+      "name": "大成鋼",
+      "rank": 85,
+      "status": "OUTSIDE",
+      "close": 50.9
     },
     "6179": {
       "stock_id": "6179",
       "name": "亞通",
-      "rank": 90,
+      "rank": 86,
       "status": "OUTSIDE",
       "close": 37.05
     },
     "3045": {
       "stock_id": "3045",
       "name": "台灣大",
-      "rank": 91,
+      "rank": 87,
       "status": "OUTSIDE",
       "close": 130.5
     },
-    "6667": {
-      "stock_id": "6667",
-      "name": "信紘科",
-      "rank": 92,
+    "3034": {
+      "stock_id": "3034",
+      "name": "聯詠",
+      "rank": 88,
       "status": "OUTSIDE",
-      "close": 264.0
+      "close": 577.0
     },
-    "6148": {
-      "stock_id": "6148",
-      "name": "驊宏資",
-      "rank": 93,
+    "2884": {
+      "stock_id": "2884",
+      "name": "玉山金",
+      "rank": 89,
       "status": "OUTSIDE",
-      "close": 41.95
+      "close": 49.15
     },
-    "2637": {
-      "stock_id": "2637",
-      "name": "慧洋-KY",
-      "rank": 94,
+    "3264": {
+      "stock_id": "3264",
+      "name": "欣銓",
+      "rank": 90,
       "status": "OUTSIDE",
-      "close": 101.5
-    },
-    "3048": {
-      "stock_id": "3048",
-      "name": "益登",
-      "rank": 95,
-      "status": "OUTSIDE",
-      "close": 54.5
-    },
-    "2605": {
-      "stock_id": "2605",
-      "name": "新興",
-      "rank": 96,
-      "status": "OUTSIDE",
-      "close": 36.15
-    },
-    "8996": {
-      "stock_id": "8996",
-      "name": "高力",
-      "rank": 97,
-      "status": "OUTSIDE",
-      "close": 1570.0
-    },
-    "8016": {
-      "stock_id": "8016",
-      "name": "矽創",
-      "rank": 98,
-      "status": "OUTSIDE",
-      "close": 302.0
-    },
-    "2618": {
-      "stock_id": "2618",
-      "name": "長榮航",
-      "rank": 99,
-      "status": "OUTSIDE",
-      "close": 43.7
+      "close": 258.5
     },
     "2912": {
       "stock_id": "2912",
       "name": "統一超",
-      "rank": 100,
+      "rank": 91,
       "status": "OUTSIDE",
       "close": 224.0
     },
-    "2610": {
-      "stock_id": "2610",
-      "name": "華航",
-      "rank": 101,
+    "3592": {
+      "stock_id": "3592",
+      "name": "瑞鼎",
+      "rank": 92,
       "status": "OUTSIDE",
-      "close": 21.05
+      "close": 255.0
     },
-    "2377": {
-      "stock_id": "2377",
-      "name": "微星",
-      "rank": 102,
+    "2478": {
+      "stock_id": "2478",
+      "name": "大毅",
+      "rank": 93,
       "status": "OUTSIDE",
-      "close": 161.5
+      "close": 133.0
+    },
+    "6214": {
+      "stock_id": "6214",
+      "name": "精誠",
+      "rank": 94,
+      "status": "OUTSIDE",
+      "close": 197.5
+    },
+    "2637": {
+      "stock_id": "2637",
+      "name": "慧洋-KY",
+      "rank": 95,
+      "status": "OUTSIDE",
+      "close": 101.5
     },
     "2880": {
       "stock_id": "2880",
       "name": "華南金",
-      "rank": 103,
+      "rank": 96,
       "status": "OUTSIDE",
       "close": 48.9
-    },
-    "4961": {
-      "stock_id": "4961",
-      "name": "天鈺",
-      "rank": 104,
-      "status": "OUTSIDE",
-      "close": 190.0
-    },
-    "5243": {
-      "stock_id": "5243",
-      "name": "乙盛-KY",
-      "rank": 105,
-      "status": "OUTSIDE",
-      "close": 95.5
-    },
-    "3005": {
-      "stock_id": "3005",
-      "name": "神基",
-      "rank": 106,
-      "status": "OUTSIDE",
-      "close": 122.5
-    },
-    "1102": {
-      "stock_id": "1102",
-      "name": "亞泥",
-      "rank": 107,
-      "status": "OUTSIDE",
-      "close": 38.2
-    },
-    "1319": {
-      "stock_id": "1319",
-      "name": "東陽",
-      "rank": 108,
-      "status": "OUTSIDE",
-      "close": 83.5
-    },
-    "9904": {
-      "stock_id": "9904",
-      "name": "寶成",
-      "rank": 109,
-      "status": "OUTSIDE",
-      "close": 26.5
     },
     "2801": {
       "stock_id": "2801",
       "name": "彰銀",
-      "rank": 110,
+      "rank": 97,
       "status": "OUTSIDE",
       "close": 29.5
     },
-    "3596": {
-      "stock_id": "3596",
-      "name": "智易",
-      "rank": 111,
+    "2377": {
+      "stock_id": "2377",
+      "name": "微星",
+      "rank": 98,
       "status": "OUTSIDE",
       "close": 161.5
+    },
+    "6196": {
+      "stock_id": "6196",
+      "name": "帆宣",
+      "rank": 99,
+      "status": "OUTSIDE",
+      "close": 609.0
+    },
+    "8016": {
+      "stock_id": "8016",
+      "name": "矽創",
+      "rank": 100,
+      "status": "OUTSIDE",
+      "close": 302.0
+    },
+    "1102": {
+      "stock_id": "1102",
+      "name": "亞泥",
+      "rank": 101,
+      "status": "OUTSIDE",
+      "close": 38.2
+    },
+    "6667": {
+      "stock_id": "6667",
+      "name": "信紘科",
+      "rank": 102,
+      "status": "OUTSIDE",
+      "close": 264.0
+    },
+    "6442": {
+      "stock_id": "6442",
+      "name": "光聖",
+      "rank": 103,
+      "status": "OUTSIDE",
+      "close": 1505.0
+    },
+    "6510": {
+      "stock_id": "6510",
+      "name": "精測",
+      "rank": 104,
+      "status": "OUTSIDE",
+      "close": 3120.0
+    },
+    "9904": {
+      "stock_id": "9904",
+      "name": "寶成",
+      "rank": 105,
+      "status": "OUTSIDE",
+      "close": 26.5
+    },
+    "1319": {
+      "stock_id": "1319",
+      "name": "東陽",
+      "rank": 106,
+      "status": "OUTSIDE",
+      "close": 83.5
+    },
+    "3033": {
+      "stock_id": "3033",
+      "name": "威健",
+      "rank": 107,
+      "status": "OUTSIDE",
+      "close": 43.15
     },
     "2105": {
       "stock_id": "2105",
       "name": "正新",
-      "rank": 112,
+      "rank": 108,
       "status": "OUTSIDE",
       "close": 32.5
     },
-    "6414": {
-      "stock_id": "6414",
-      "name": "樺漢",
-      "rank": 113,
+    "3596": {
+      "stock_id": "3596",
+      "name": "智易",
+      "rank": 109,
       "status": "OUTSIDE",
-      "close": 404.5
+      "close": 161.5
     },
-    "3030": {
-      "stock_id": "3030",
-      "name": "德律",
-      "rank": 114,
+    "1101": {
+      "stock_id": "1101",
+      "name": "台泥",
+      "rank": 110,
       "status": "OUTSIDE",
-      "close": 289.5
+      "close": 27.3
+    },
+    "8111": {
+      "stock_id": "8111",
+      "name": "立碁",
+      "rank": 111,
+      "status": "OUTSIDE",
+      "close": 83.2
+    },
+    "3048": {
+      "stock_id": "3048",
+      "name": "益登",
+      "rank": 112,
+      "status": "OUTSIDE",
+      "close": 54.5
     },
     "2412": {
       "stock_id": "2412",
       "name": "中華電",
-      "rank": 115,
+      "rank": 113,
       "status": "OUTSIDE",
       "close": 153.0
+    },
+    "3005": {
+      "stock_id": "3005",
+      "name": "神基",
+      "rank": 114,
+      "status": "OUTSIDE",
+      "close": 122.5
+    },
+    "2312": {
+      "stock_id": "2312",
+      "name": "金寶",
+      "rank": 115,
+      "status": "OUTSIDE",
+      "close": 32.65
     },
     "4939": {
       "stock_id": "4939",
@@ -1478,89 +1549,89 @@
       "status": "OUTSIDE",
       "close": 83.3
     },
-    "4916": {
-      "stock_id": "4916",
-      "name": "事欣科",
+    "2605": {
+      "stock_id": "2605",
+      "name": "新興",
       "rank": 117,
       "status": "OUTSIDE",
-      "close": 102.0
-    },
-    "6438": {
-      "stock_id": "6438",
-      "name": "迅得",
-      "rank": 118,
-      "status": "OUTSIDE",
-      "close": 170.5
-    },
-    "2312": {
-      "stock_id": "2312",
-      "name": "金寶",
-      "rank": 119,
-      "status": "OUTSIDE",
-      "close": 32.65
-    },
-    "1101": {
-      "stock_id": "1101",
-      "name": "台泥",
-      "rank": 120,
-      "status": "OUTSIDE",
-      "close": 27.3
-    },
-    "2890": {
-      "stock_id": "2890",
-      "name": "永豐金",
-      "rank": 121,
-      "status": "OUTSIDE",
-      "close": 45.75
-    },
-    "8111": {
-      "stock_id": "8111",
-      "name": "立碁",
-      "rank": 122,
-      "status": "OUTSIDE",
-      "close": 83.2
-    },
-    "2379": {
-      "stock_id": "2379",
-      "name": "瑞昱",
-      "rank": 123,
-      "status": "OUTSIDE",
-      "close": 778.0
-    },
-    "2402": {
-      "stock_id": "2402",
-      "name": "毅嘉",
-      "rank": 124,
-      "status": "OUTSIDE",
-      "close": 60.4
-    },
-    "5434": {
-      "stock_id": "5434",
-      "name": "崇越",
-      "rank": 125,
-      "status": "OUTSIDE",
-      "close": 576.0
-    },
-    "6532": {
-      "stock_id": "6532",
-      "name": "瑞耘",
-      "rank": 126,
-      "status": "OUTSIDE",
-      "close": 123.0
+      "close": 36.15
     },
     "3014": {
       "stock_id": "3014",
       "name": "聯陽",
-      "rank": 127,
+      "rank": 118,
       "status": "OUTSIDE",
       "close": 148.0
     },
-    "3702": {
-      "stock_id": "3702",
-      "name": "大聯大",
+    "2618": {
+      "stock_id": "2618",
+      "name": "長榮航",
+      "rank": 119,
+      "status": "OUTSIDE",
+      "close": 43.7
+    },
+    "2402": {
+      "stock_id": "2402",
+      "name": "毅嘉",
+      "rank": 120,
+      "status": "OUTSIDE",
+      "close": 60.4
+    },
+    "2610": {
+      "stock_id": "2610",
+      "name": "華航",
+      "rank": 121,
+      "status": "OUTSIDE",
+      "close": 21.05
+    },
+    "1409": {
+      "stock_id": "1409",
+      "name": "新纖",
+      "rank": 122,
+      "status": "OUTSIDE",
+      "close": 25.75
+    },
+    "1402": {
+      "stock_id": "1402",
+      "name": "遠東新",
+      "rank": 123,
+      "status": "OUTSIDE",
+      "close": 29.4
+    },
+    "2379": {
+      "stock_id": "2379",
+      "name": "瑞昱",
+      "rank": 124,
+      "status": "OUTSIDE",
+      "close": 778.0
+    },
+    "4908": {
+      "stock_id": "4908",
+      "name": "前鼎",
+      "rank": 125,
+      "status": "OUTSIDE",
+      "close": 213.5
+    },
+    "2890": {
+      "stock_id": "2890",
+      "name": "永豐金",
+      "rank": 126,
+      "status": "OUTSIDE",
+      "close": 45.75
+    },
+    "3030": {
+      "stock_id": "3030",
+      "name": "德律",
+      "rank": 127,
+      "status": "OUTSIDE",
+      "close": 289.5
+    },
+    "6438": {
+      "stock_id": "6438",
+      "name": "迅得",
       "rank": 128,
       "status": "OUTSIDE",
-      "close": 116.5
+      "close": 170.5
     },
     "2357": {
       "stock_id": "2357",
@@ -1569,831 +1640,194 @@
       "status": "OUTSIDE",
       "close": 994.0
     },
-    "1409": {
-      "stock_id": "1409",
-      "name": "新纖",
+    "6414": {
+      "stock_id": "6414",
+      "name": "樺漢",
       "rank": 130,
       "status": "OUTSIDE",
-      "close": 25.75
+      "close": 404.5
     },
-    "5351": {
-      "stock_id": "5351",
-      "name": "鈺創",
+    "5243": {
+      "stock_id": "5243",
+      "name": "乙盛-KY",
       "rank": 131,
       "status": "OUTSIDE",
-      "close": 105.0
+      "close": 95.5
+    },
+    "4961": {
+      "stock_id": "4961",
+      "name": "天鈺",
+      "rank": 132,
+      "status": "OUTSIDE",
+      "close": 190.0
+    },
+    "3023": {
+      "stock_id": "3023",
+      "name": "信邦",
+      "rank": 133,
+      "status": "OUTSIDE",
+      "close": 315.5
+    },
+    "5434": {
+      "stock_id": "5434",
+      "name": "崇越",
+      "rank": 134,
+      "status": "OUTSIDE",
+      "close": 576.0
+    },
+    "4763": {
+      "stock_id": "4763",
+      "name": "材料*-KY",
+      "rank": 135,
+      "status": "OUTSIDE",
+      "close": 47.65
     },
     "2606": {
       "stock_id": "2606",
       "name": "裕民",
-      "rank": 132,
-      "status": "OUTSIDE",
-      "close": 75.2
-    },
-    "2451": {
-      "stock_id": "2451",
-      "name": "創見",
-      "rank": 133,
-      "status": "OUTSIDE",
-      "close": 277.5
-    },
-    "3036": {
-      "stock_id": "3036",
-      "name": "文曄",
-      "rank": 134,
-      "status": "OUTSIDE",
-      "close": 210.0
-    },
-    "3706": {
-      "stock_id": "3706",
-      "name": "神達",
-      "rank": 135,
-      "status": "OUTSIDE",
-      "close": 81.4
-    },
-    "1402": {
-      "stock_id": "1402",
-      "name": "遠東新",
       "rank": 136,
       "status": "OUTSIDE",
-      "close": 29.4
-    },
-    "3653": {
-      "stock_id": "3653",
-      "name": "健策",
-      "rank": 137,
-      "status": "OUTSIDE",
-      "close": 6730.0
+      "close": 75.2
     },
     "2421": {
       "stock_id": "2421",
       "name": "建準",
-      "rank": 138,
+      "rank": 137,
       "status": "OUTSIDE",
       "close": 166.0
     },
-    "2376": {
-      "stock_id": "2376",
-      "name": "技嘉",
-      "rank": 139,
+    "8464": {
+      "stock_id": "8464",
+      "name": "億豐",
+      "rank": 138,
       "status": "OUTSIDE",
-      "close": 357.5
-    },
-    "2428": {
-      "stock_id": "2428",
-      "name": "興勤",
-      "rank": 140,
-      "status": "OUTSIDE",
-      "close": 261.5
-    },
-    "2002": {
-      "stock_id": "2002",
-      "name": "中鋼",
-      "rank": 141,
-      "status": "OUTSIDE",
-      "close": 19.55
-    },
-    "3090": {
-      "stock_id": "3090",
-      "name": "日電貿",
-      "rank": 142,
-      "status": "OUTSIDE",
-      "close": 170.5
-    },
-    "8131": {
-      "stock_id": "8131",
-      "name": "福懋科",
-      "rank": 143,
-      "status": "OUTSIDE",
-      "close": 63.5
-    },
-    "2472": {
-      "stock_id": "2472",
-      "name": "立隆電",
-      "rank": 144,
-      "status": "OUTSIDE",
-      "close": 226.0
-    },
-    "8021": {
-      "stock_id": "8021",
-      "name": "尖點",
-      "rank": 145,
-      "status": "OUTSIDE",
-      "close": 494.0
-    },
-    "3624": {
-      "stock_id": "3624",
-      "name": "光頡",
-      "rank": 146,
-      "status": "OUTSIDE",
-      "close": 149.5
+      "close": 368.5
     },
     "3717": {
       "stock_id": "3717",
       "name": "聯嘉投控",
-      "rank": 147,
+      "rank": 139,
       "status": "OUTSIDE",
       "close": 28.0
     },
-    "6691": {
-      "stock_id": "6691",
-      "name": "洋基工程",
-      "rank": 148,
+    "2002": {
+      "stock_id": "2002",
+      "name": "中鋼",
+      "rank": 140,
       "status": "OUTSIDE",
-      "close": 700.0
-    },
-    "1785": {
-      "stock_id": "1785",
-      "name": "光洋科",
-      "rank": 149,
-      "status": "OUTSIDE",
-      "close": 99.5
-    },
-    "3661": {
-      "stock_id": "3661",
-      "name": "世芯-KY",
-      "rank": 150,
-      "status": "OUTSIDE",
-      "close": 3685.0
-    },
-    "6944": {
-      "stock_id": "6944",
-      "name": "兆聯實業",
-      "rank": 151,
-      "status": "OUTSIDE",
-      "close": 792.0
-    },
-    "1609": {
-      "stock_id": "1609",
-      "name": "大亞",
-      "rank": 152,
-      "status": "OUTSIDE",
-      "close": 38.65
-    },
-    "4770": {
-      "stock_id": "4770",
-      "name": "上品",
-      "rank": 153,
-      "status": "OUTSIDE",
-      "close": 271.5
-    },
-    "2375": {
-      "stock_id": "2375",
-      "name": "凱美",
-      "rank": 154,
-      "status": "OUTSIDE",
-      "close": 125.5
-    },
-    "2353": {
-      "stock_id": "2353",
-      "name": "宏碁",
-      "rank": 155,
-      "status": "OUTSIDE",
-      "close": 32.25
-    },
-    "3443": {
-      "stock_id": "3443",
-      "name": "創意",
-      "rank": 156,
-      "status": "OUTSIDE",
-      "close": 7480.0
-    },
-    "8043": {
-      "stock_id": "8043",
-      "name": "蜜望實",
-      "rank": 157,
-      "status": "OUTSIDE",
-      "close": 141.5
-    },
-    "2330": {
-      "stock_id": "2330",
-      "name": "台積電",
-      "rank": 158,
-      "status": "OUTSIDE",
-      "close": 2420.0
-    },
-    "3189": {
-      "stock_id": "3189",
-      "name": "景碩",
-      "rank": 159,
-      "status": "OUTSIDE",
-      "close": 1000.0
-    },
-    "2493": {
-      "stock_id": "2493",
-      "name": "揚博",
-      "rank": 160,
-      "status": "OUTSIDE",
-      "close": 193.5
-    },
-    "3491": {
-      "stock_id": "3491",
-      "name": "昇達科",
-      "rank": 161,
-      "status": "OUTSIDE",
-      "close": 1455.0
-    },
-    "6409": {
-      "stock_id": "6409",
-      "name": "旭隼",
-      "rank": 162,
-      "status": "OUTSIDE",
-      "close": 897.0
-    },
-    "3013": {
-      "stock_id": "3013",
-      "name": "晟銘電",
-      "rank": 163,
-      "status": "OUTSIDE",
-      "close": 95.0
-    },
-    "2489": {
-      "stock_id": "2489",
-      "name": "瑞軒",
-      "rank": 164,
-      "status": "OUTSIDE",
-      "close": 40.85
-    },
-    "6155": {
-      "stock_id": "6155",
-      "name": "鈞寶",
-      "rank": 165,
-      "status": "OUTSIDE",
-      "close": 69.0
-    },
-    "7751": {
-      "stock_id": "7751",
-      "name": "竑騰",
-      "rank": 166,
-      "status": "OUTSIDE",
-      "close": 1550.0
-    },
-    "3357": {
-      "stock_id": "3357",
-      "name": "臺慶科",
-      "rank": 167,
-      "status": "OUTSIDE",
-      "close": 208.5
+      "close": 19.55
     },
     "2834": {
       "stock_id": "2834",
       "name": "臺企銀",
-      "rank": 168,
+      "rank": 141,
       "status": "OUTSIDE",
       "close": 18.05
     },
-    "6426": {
-      "stock_id": "6426",
-      "name": "統新",
-      "rank": 169,
+    "6532": {
+      "stock_id": "6532",
+      "name": "瑞耘",
+      "rank": 142,
       "status": "OUTSIDE",
-      "close": 325.5
+      "close": 123.0
     },
-    "6472": {
-      "stock_id": "6472",
-      "name": "保瑞",
-      "rank": 170,
+    "6409": {
+      "stock_id": "6409",
+      "name": "旭隼",
+      "rank": 143,
       "status": "OUTSIDE",
-      "close": 425.5
+      "close": 897.0
     },
-    "1504": {
-      "stock_id": "1504",
-      "name": "東元",
-      "rank": 171,
+    "3090": {
+      "stock_id": "3090",
+      "name": "日電貿",
+      "rank": 144,
       "status": "OUTSIDE",
-      "close": 69.7
+      "close": 170.5
     },
-    "6261": {
-      "stock_id": "6261",
-      "name": "久元",
-      "rank": 172,
+    "8043": {
+      "stock_id": "8043",
+      "name": "蜜望實",
+      "rank": 145,
       "status": "OUTSIDE",
-      "close": 78.2
+      "close": 141.5
+    },
+    "8131": {
+      "stock_id": "8131",
+      "name": "福懋科",
+      "rank": 146,
+      "status": "OUTSIDE",
+      "close": 63.5
+    },
+    "2428": {
+      "stock_id": "2428",
+      "name": "興勤",
+      "rank": 147,
+      "status": "OUTSIDE",
+      "close": 261.5
+    },
+    "3013": {
+      "stock_id": "3013",
+      "name": "晟銘電",
+      "rank": 148,
+      "status": "OUTSIDE",
+      "close": 95.0
+    },
+    "2353": {
+      "stock_id": "2353",
+      "name": "宏碁",
+      "rank": 149,
+      "status": "OUTSIDE",
+      "close": 32.25
+    },
+    "2375": {
+      "stock_id": "2375",
+      "name": "凱美",
+      "rank": 150,
+      "status": "OUTSIDE",
+      "close": 125.5
+    },
+    "2324": {
+      "stock_id": "2324",
+      "name": "仁寶",
+      "rank": 151,
+      "status": "OUTSIDE",
+      "close": 36.7
     },
     "1503": {
       "stock_id": "1503",
       "name": "士電",
-      "rank": 173,
+      "rank": 152,
       "status": "OUTSIDE",
       "close": 198.5
     },
-    "3293": {
-      "stock_id": "3293",
-      "name": "鈊象",
-      "rank": 174,
+    "1504": {
+      "stock_id": "1504",
+      "name": "東元",
+      "rank": 153,
       "status": "OUTSIDE",
-      "close": 795.0
+      "close": 69.7
     },
-    "6257": {
-      "stock_id": "6257",
-      "name": "矽格",
-      "rank": 175,
+    "2489": {
+      "stock_id": "2489",
+      "name": "瑞軒",
+      "rank": 154,
       "status": "OUTSIDE",
-      "close": 252.0
+      "close": 40.85
     },
-    "1513": {
-      "stock_id": "1513",
-      "name": "中興電",
-      "rank": 176,
+    "5871": {
+      "stock_id": "5871",
+      "name": "中租-KY",
+      "rank": 155,
       "status": "OUTSIDE",
-      "close": 165.0
-    },
-    "8046": {
-      "stock_id": "8046",
-      "name": "南電",
-      "rank": 177,
-      "status": "OUTSIDE",
-      "close": 1355.0
-    },
-    "3017": {
-      "stock_id": "3017",
-      "name": "奇鋐",
-      "rank": 178,
-      "status": "OUTSIDE",
-      "close": 3315.0
-    },
-    "1717": {
-      "stock_id": "1717",
-      "name": "長興",
-      "rank": 179,
-      "status": "OUTSIDE",
-      "close": 72.7
-    },
-    "4979": {
-      "stock_id": "4979",
-      "name": "華星光",
-      "rank": 180,
-      "status": "OUTSIDE",
-      "close": 520.0
-    },
-    "6271": {
-      "stock_id": "6271",
-      "name": "同欣電",
-      "rank": 181,
-      "status": "OUTSIDE",
-      "close": 229.0
-    },
-    "2344": {
-      "stock_id": "2344",
-      "name": "華邦電",
-      "rank": 182,
-      "status": "OUTSIDE",
-      "close": 161.5
-    },
-    "6282": {
-      "stock_id": "6282",
-      "name": "康舒",
-      "rank": 183,
-      "status": "OUTSIDE",
-      "close": 43.15
-    },
-    "1605": {
-      "stock_id": "1605",
-      "name": "華新",
-      "rank": 184,
-      "status": "OUTSIDE",
-      "close": 38.5
-    },
-    "2441": {
-      "stock_id": "2441",
-      "name": "超豐",
-      "rank": 185,
-      "status": "OUTSIDE",
-      "close": 121.0
+      "close": 108.0
     },
     "3376": {
       "stock_id": "3376",
       "name": "新日興",
-      "rank": 186,
+      "rank": 156,
       "status": "OUTSIDE",
       "close": 176.0
-    },
-    "3711": {
-      "stock_id": "3711",
-      "name": "日月光投控",
-      "rank": 187,
-      "status": "OUTSIDE",
-      "close": 671.0
-    },
-    "2316": {
-      "stock_id": "2316",
-      "name": "楠梓電",
-      "rank": 188,
-      "status": "OUTSIDE",
-      "close": 162.5
-    },
-    "2305": {
-      "stock_id": "2305",
-      "name": "全友",
-      "rank": 189,
-      "status": "OUTSIDE",
-      "close": 56.6
-    },
-    "2327": {
-      "stock_id": "2327",
-      "name": "國巨*",
-      "rank": 190,
-      "status": "OUTSIDE",
-      "close": 567.0
-    },
-    "7711": {
-      "stock_id": "7711",
-      "name": "永擎",
-      "rank": 191,
-      "status": "OUTSIDE",
-      "close": 573.0
-    },
-    "6770": {
-      "stock_id": "6770",
-      "name": "力積電",
-      "rank": 192,
-      "status": "OUTSIDE",
-      "close": 67.3
-    },
-    "3680": {
-      "stock_id": "3680",
-      "name": "家登",
-      "rank": 193,
-      "status": "OUTSIDE",
-      "close": 513.0
-    },
-    "6805": {
-      "stock_id": "6805",
-      "name": "富世達",
-      "rank": 194,
-      "status": "OUTSIDE",
-      "close": 2250.0
-    },
-    "3533": {
-      "stock_id": "3533",
-      "name": "嘉澤",
-      "rank": 195,
-      "status": "OUTSIDE",
-      "close": 1805.0
-    },
-    "3219": {
-      "stock_id": "3219",
-      "name": "倚強科",
-      "rank": 196,
-      "status": "OUTSIDE",
-      "close": 116.5
-    },
-    "4749": {
-      "stock_id": "4749",
-      "name": "新應材",
-      "rank": 197,
-      "status": "OUTSIDE",
-      "close": 744.0
-    },
-    "4991": {
-      "stock_id": "4991",
-      "name": "環宇-KY",
-      "rank": 198,
-      "status": "OUTSIDE",
-      "close": 443.0
-    },
-    "2484": {
-      "stock_id": "2484",
-      "name": "希華",
-      "rank": 199,
-      "status": "OUTSIDE",
-      "close": 83.0
-    },
-    "3037": {
-      "stock_id": "3037",
-      "name": "欣興",
-      "rank": 200,
-      "status": "OUTSIDE",
-      "close": 1090.0
-    },
-    "1597": {
-      "stock_id": "1597",
-      "name": "直得",
-      "rank": 201,
-      "status": "OUTSIDE",
-      "close": 144.0
-    },
-    "3026": {
-      "stock_id": "3026",
-      "name": "禾伸堂",
-      "rank": 202,
-      "status": "OUTSIDE",
-      "close": 806.0
-    },
-    "3605": {
-      "stock_id": "3605",
-      "name": "宏致",
-      "rank": 203,
-      "status": "OUTSIDE",
-      "close": 174.0
-    },
-    "3673": {
-      "stock_id": "3673",
-      "name": "TPK-KY",
-      "rank": 204,
-      "status": "OUTSIDE",
-      "close": 71.2
-    },
-    "3563": {
-      "stock_id": "3563",
-      "name": "牧德",
-      "rank": 205,
-      "status": "OUTSIDE",
-      "close": 680.0
-    },
-    "5443": {
-      "stock_id": "5443",
-      "name": "均豪",
-      "rank": 206,
-      "status": "OUTSIDE",
-      "close": 105.5
-    },
-    "7717": {
-      "stock_id": "7717",
-      "name": "萊德光電-KY",
-      "rank": 207,
-      "status": "OUTSIDE",
-      "close": 492.5
-    },
-    "6290": {
-      "stock_id": "6290",
-      "name": "良維",
-      "rank": 208,
-      "status": "OUTSIDE",
-      "close": 265.0
-    },
-    "6526": {
-      "stock_id": "6526",
-      "name": "達發",
-      "rank": 209,
-      "status": "OUTSIDE",
-      "close": 783.0
-    },
-    "3324": {
-      "stock_id": "3324",
-      "name": "雙鴻",
-      "rank": 210,
-      "status": "OUTSIDE",
-      "close": 1425.0
-    },
-    "2302": {
-      "stock_id": "2302",
-      "name": "麗正",
-      "rank": 211,
-      "status": "OUTSIDE",
-      "close": 43.75
-    },
-    "3374": {
-      "stock_id": "3374",
-      "name": "精材",
-      "rank": 212,
-      "status": "OUTSIDE",
-      "close": 433.5
-    },
-    "6239": {
-      "stock_id": "6239",
-      "name": "力成",
-      "rank": 213,
-      "status": "OUTSIDE",
-      "close": 274.0
-    },
-    "3016": {
-      "stock_id": "3016",
-      "name": "嘉晶",
-      "rank": 214,
-      "status": "OUTSIDE",
-      "close": 154.0
-    },
-    "4722": {
-      "stock_id": "4722",
-      "name": "國精化",
-      "rank": 215,
-      "status": "OUTSIDE",
-      "close": 198.0
-    },
-    "5425": {
-      "stock_id": "5425",
-      "name": "台半",
-      "rank": 216,
-      "status": "OUTSIDE",
-      "close": 92.6
-    },
-    "5536": {
-      "stock_id": "5536",
-      "name": "聖暉*",
-      "rank": 217,
-      "status": "OUTSIDE",
-      "close": 857.0
-    },
-    "4551": {
-      "stock_id": "4551",
-      "name": "智伸科",
-      "rank": 218,
-      "status": "OUTSIDE",
-      "close": 164.0
-    },
-    "3504": {
-      "stock_id": "3504",
-      "name": "揚明光",
-      "rank": 219,
-      "status": "OUTSIDE",
-      "close": 79.0
-    },
-    "6861": {
-      "stock_id": "6861",
-      "name": "睿生光電",
-      "rank": 220,
-      "status": "OUTSIDE",
-      "close": 247.0
-    },
-    "6173": {
-      "stock_id": "6173",
-      "name": "信昌電",
-      "rank": 221,
-      "status": "OUTSIDE",
-      "close": 284.0
-    },
-    "7792": {
-      "stock_id": "7792",
-      "name": "安葆",
-      "rank": 222,
-      "status": "OUTSIDE",
-      "close": 364.0
-    },
-    "2449": {
-      "stock_id": "2449",
-      "name": "京元電子",
-      "rank": 223,
-      "status": "OUTSIDE",
-      "close": 275.0
-    },
-    "3105": {
-      "stock_id": "3105",
-      "name": "穩懋",
-      "rank": 224,
-      "status": "OUTSIDE",
-      "close": 501.0
-    },
-    "8150": {
-      "stock_id": "8150",
-      "name": "南茂",
-      "rank": 225,
-      "status": "OUTSIDE",
-      "close": 105.5
-    },
-    "3094": {
-      "stock_id": "3094",
-      "name": "聯傑",
-      "rank": 226,
-      "status": "OUTSIDE",
-      "close": 57.4
-    },
-    "2426": {
-      "stock_id": "2426",
-      "name": "鼎元",
-      "rank": 227,
-      "status": "OUTSIDE",
-      "close": 94.3
-    },
-    "8028": {
-      "stock_id": "8028",
-      "name": "昇陽半導體",
-      "rank": 228,
-      "status": "OUTSIDE",
-      "close": 254.0
-    },
-    "1560": {
-      "stock_id": "1560",
-      "name": "中砂",
-      "rank": 229,
-      "status": "OUTSIDE",
-      "close": 874.0
-    },
-    "6207": {
-      "stock_id": "6207",
-      "name": "雷科",
-      "rank": 230,
-      "status": "OUTSIDE",
-      "close": 131.5
-    },
-    "6147": {
-      "stock_id": "6147",
-      "name": "頎邦",
-      "rank": 231,
-      "status": "OUTSIDE",
-      "close": 207.5
-    },
-    "2481": {
-      "stock_id": "2481",
-      "name": "強茂",
-      "rank": 232,
-      "status": "OUTSIDE",
-      "close": 158.5
-    },
-    "3665": {
-      "stock_id": "3665",
-      "name": "貿聯-KY",
-      "rank": 233,
-      "status": "OUTSIDE",
-      "close": 2015.0
-    },
-    "5347": {
-      "stock_id": "5347",
-      "name": "世界",
-      "rank": 234,
-      "status": "OUTSIDE",
-      "close": 167.5
-    },
-    "2221": {
-      "stock_id": "2221",
-      "name": "大甲",
-      "rank": 235,
-      "status": "OUTSIDE",
-      "close": 122.0
-    },
-    "3714": {
-      "stock_id": "3714",
-      "name": "富采",
-      "rank": 236,
-      "status": "OUTSIDE",
-      "close": 63.4
-    },
-    "3675": {
-      "stock_id": "3675",
-      "name": "德微",
-      "rank": 237,
-      "status": "OUTSIDE",
-      "close": 295.0
-    },
-    "2404": {
-      "stock_id": "2404",
-      "name": "漢唐",
-      "rank": 238,
-      "status": "OUTSIDE",
-      "close": 1110.0
-    },
-    "1727": {
-      "stock_id": "1727",
-      "name": "中華化",
-      "rank": 239,
-      "status": "OUTSIDE",
-      "close": 98.6
-    },
-    "3035": {
-      "stock_id": "3035",
-      "name": "智原",
-      "rank": 240,
-      "status": "OUTSIDE",
-      "close": 197.5
-    },
-    "2030": {
-      "stock_id": "2030",
-      "name": "彰源",
-      "rank": 241,
-      "status": "OUTSIDE",
-      "close": 29.3
-    },
-    "3481": {
-      "stock_id": "3481",
-      "name": "群創",
-      "rank": 242,
-      "status": "OUTSIDE",
-      "close": 48.25
-    },
-    "6789": {
-      "stock_id": "6789",
-      "name": "采鈺",
-      "rank": 243,
-      "status": "OUTSIDE",
-      "close": 438.0
-    },
-    "3042": {
-      "stock_id": "3042",
-      "name": "晶技",
-      "rank": 244,
-      "status": "OUTSIDE",
-      "close": 188.0
-    },
-    "6226": {
-      "stock_id": "6226",
-      "name": "光鼎",
-      "rank": 245,
-      "status": "OUTSIDE",
-      "close": 40.5
-    },
-    "6182": {
-      "stock_id": "6182",
-      "name": "合晶",
-      "rank": 246,
-      "status": "OUTSIDE",
-      "close": 110.5
-    },
-    "6168": {
-      "stock_id": "6168",
-      "name": "宏齊",
-      "rank": 247,
-      "status": "OUTSIDE",
-      "close": 35.8
     },
     "6811": {
       "stock_id": "6811",
