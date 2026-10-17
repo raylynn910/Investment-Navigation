@@ -516,6 +516,67 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
     }
     save_snapshots(snapshots)
 
+    # 組合無狀態跨界追蹤比對 (十方極速陣換股對比清單)
+    # 1. 必須賣出 (Sells): 昨日 <= 15, 今日 > 15 (即 dropped_from_top15)
+    tracking_sells = []
+    for d in dropped_from_top15:
+        tracking_sells.append({
+            "stock_id": d["stock_id"],
+            "name": d["name"],
+            "prev_rank": d["prev_rank"],
+            "current_rank": d["new_rank"],
+            "close": d["close"],
+            "action_sop": "明日 09:00 開盤以市價單 (MOO) 無條件賣出換現金"
+        })
+
+    # 2. 必須買入 (Buys): 今日 <= 9, 昨日 > 9 或不在名單
+    tracking_buys = []
+    for s in top_9_list:
+        sid = s["stock_id"]
+        prev_r = prev_top15_map.get(sid, {}).get("rank", 999) if prev_top15_map else 999
+        if prev_r > 9:
+            prev_r_str = "不在名單內" if prev_r == 999 else f"第 {prev_r} 名"
+            tracking_buys.append({
+                "stock_id": sid,
+                "name": s["name"],
+                "prev_rank": prev_r_str,
+                "prev_rank_raw": prev_r,
+                "current_rank": s["rank"],
+                "close": s["close"],
+                "momentum_pct": s["momentum_pct"],
+                "revenue_yoy_pct": s["revenue_yoy_pct"],
+                "roe_pct": s["roe_pct"],
+                "highlights": s["highlights"],
+                "warning_tag": s["warning_tag"],
+                "action_sop": "開高跳空等待 13:25 尾盤市價買 / 平低盤 09:00 開盤市價買"
+            })
+
+    # 3. 緩衝區續抱 (Holds): 今日 10~15, 昨日 <= 15
+    tracking_holds = []
+    for s in buffer_10_15_list:
+        sid = s["stock_id"]
+        prev_r = prev_top15_map.get(sid, {}).get("rank", 999) if prev_top15_map else 999
+        if prev_r <= 15:
+            tracking_holds.append({
+                "stock_id": sid,
+                "name": s["name"],
+                "prev_rank": f"第 {prev_r} 名",
+                "prev_rank_raw": prev_r,
+                "current_rank": s["rank"],
+                "close": s["close"],
+                "highlights": s["highlights"],
+                "warning_tag": s["warning_tag"],
+                "action_sop": "安穩續抱！不必賣出換股，亦無須追高加碼"
+            })
+
+    boundary_tracking = {
+        "date_t": data_date,
+        "date_t1": prev_date if past_dates else "前一交易日",
+        "sells": tracking_sells,
+        "buys": tracking_buys,
+        "holds": tracking_holds
+    }
+
     # -------------------------------------------------------------
     # 5. 組合 published_signals.json
     # -------------------------------------------------------------
@@ -527,7 +588,8 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
         "core_1_swing": {
             "top_9": top_9_list,
             "buffer_10_15": buffer_10_15_list,
-            "dropped_from_top15": dropped_from_top15
+            "dropped_from_top15": dropped_from_top15,
+            "boundary_tracking": boundary_tracking
         },
         "core_2_disposal": {
             "backtest_stats": {

@@ -655,11 +655,300 @@ top_9 = core1.get("top_9", [])
 buffer_15 = core1.get("buffer_10_15", [])
 dropped_15 = core1.get("dropped_from_top15", [])
 
-tab_top9, tab_buffer, tab_dropped = st.tabs([
+# 讀取或回溯組裝十方極速陣換股對比資料 (Boundary Tracking)
+boundary_data = core1.get("boundary_tracking") or {}
+tracking_sells = boundary_data.get("sells", [])
+tracking_buys = boundary_data.get("buys", [])
+tracking_holds = boundary_data.get("holds", [])
+date_t = boundary_data.get("date_t", data_date)
+date_t1 = boundary_data.get("date_t1", "前一交易日")
+
+# 容錯回溯機制 (若 JSON 暫時無 boundary_tracking 則以 dropped_15 自動補足 sells)
+if not tracking_sells and dropped_15:
+    for d in dropped_15:
+        tracking_sells.append({
+            "stock_id": d.get("stock_id", ""),
+            "name": d.get("name", ""),
+            "prev_rank": d.get("prev_rank", "-"),
+            "current_rank": d.get("new_rank", "跌出前15名"),
+            "close": d.get("close", 0.0),
+            "action_sop": "明日 09:00 開盤以市價單 (MOO) 無條件賣出換現金"
+        })
+
+total_actions = len(tracking_sells) + len(tracking_buys)
+
+tab_compare, tab_top9, tab_buffer, tab_dropped = st.tabs([
+    f"🔄 今日換股對比 ({total_actions})",
     f"🟢 前 9 強 ({len(top_9)})",
     f"🔵 緩衝區 ({len(buffer_15)})",
     f"🔴 轉弱 ({len(dropped_15)})"
 ])
+
+# -------------------------------------------------------------
+# Tab 0: 🔄 今日換股對比 (十方極速陣・一鍵看買賣)
+# -------------------------------------------------------------
+with tab_compare:
+    # 頂部比對說明卡
+    render_html(f"""
+    <div class='paper-card' style='padding: 20px 22px; margin-bottom: 22px; border-left: 8px solid #2563EB;'>
+        <div style='font-size: 28px !important; font-weight: 900; color: #1E293B;'>
+            🔍 十方極速陣・無狀態換股對比
+        </div>
+        <div class='mega-subtext' style='font-size: 22px !important; margin-top: 8px; color: #475569;'>
+            自動比對最新兩日紀錄檔：<b>今日 (T日) {date_t}</b> ↔ <b>昨日 (T-1日) {date_t1}</b>
+        </div>
+        <div style='font-size: 20px !important; color: #64748B; margin-top: 6px;'>
+            📌 <b>親友持股鐵律</b>：永遠持有前 9 強，跌入緩衝區 (10~15名) 安心續抱，跌出 15 名立刻汰弱變現！
+        </div>
+    </div>
+    """)
+
+    # 大盤風控雙向提醒
+    if halt_buys:
+        render_html("""
+        <div class='mega-warning-box alert-warning' style='border-left: 8px solid #DC2626 !important; background: #FEF2F2 !important;'>
+            <div style='color: #991B1B; font-size: 30px !important; font-weight: 900;'>🚨 大盤防守警戒中！今日嚴格控制風險！</div>
+            <div style='color: #B91C1C; margin-top: 8px; font-size: 24px !important; line-height: 1.45 !important;'>
+                【賣出執行】：跌出 15 名的股票<b>明日 09:00 開盤市價賣出</b>換現金！<br>
+                【買進暫緩】：大盤跌破月線震盪中，<b>新進前 9 名的新血暫不買進</b>，空手留現金！
+            </div>
+        </div>
+        """)
+    else:
+        render_html("""
+        <div class='mega-warning-box alert-success' style='border-left: 8px solid #16A34A !important; background: #F0FDF4 !important;'>
+            <div style='color: #166534; font-size: 30px !important; font-weight: 900;'>🟢 大盤結構穩健多頭！照表執行換股！</div>
+            <div style='color: #15803D; margin-top: 8px; font-size: 24px !important;'>
+                【換股紀律】：賣出轉弱股，騰出資金依試算買進今日新進前 9 名的新血飆股！
+            </div>
+        </div>
+        """)
+
+    # ---------------------------------------------------------
+    # 區塊 1: ❌ 必須賣出 (Sells)
+    # ---------------------------------------------------------
+    render_html(f"""
+    <div style='margin-top: 28px; margin-bottom: 16px;'>
+        <span style='font-size: 34px !important; font-weight: 900; color: #DC2626;'>
+            ❌ 必須賣出 ({len(tracking_sells)})
+        </span>
+        <div class='mega-subtext' style='font-size: 22px !important; color: #64748B; margin-top: 4px;'>
+            跌出 15 名外，明日 09:00 開盤以市價賣出
+        </div>
+    </div>
+    """)
+
+    if not tracking_sells:
+        render_html("""
+        <div class='paper-card' style='padding: 24px; text-align: center; border-radius: 16px; background: #F0FDF4; border: 2px dashed #86EFAC;'>
+            <div style='font-size: 40px !important;'>🎉</div>
+            <div style='font-size: 28px !important; font-weight: 900; color: #166534; margin-top: 6px;'>
+                今日無跌出名單！
+            </div>
+            <div style='font-size: 22px !important; color: #15803D; margin-top: 4px;'>
+                手中既有持股均在前 15 名安全線內，無須賣出任何股票。
+            </div>
+        </div>
+        """)
+    else:
+        for s in tracking_sells:
+            sid = s.get("stock_id", "")
+            sname = s.get("name", "")
+            prev_r = s.get("prev_rank", "-")
+            cur_r = s.get("current_rank", "已移出觀察池")
+            c_price = s.get("close", 0.0)
+
+            cur_r_str = f"第 {cur_r} 名" if isinstance(cur_r, int) or (isinstance(cur_r, str) and str(cur_r).isdigit()) else str(cur_r)
+
+            render_html(f"""
+            <div class='paper-card' style='padding: 24px 22px; margin-bottom: 22px; border-radius: 18px; border-left: 8px solid #DC2626;'>
+                <!-- 第 1 層：大紅標籤 + 股號股名 -->
+                <div style='display: flex; align-items: center; margin-bottom: 12px;'>
+                    <span class='mega-badge' style='background: #DC2626; color: #FFF; margin-right: 12px;'>❌ 賣出</span>
+                    <span class='mega-card-title'>{sid} {sname}</span>
+                </div>
+                <!-- 第 2 層：名次變動大字 (昨日:第X名 ➔ 今日:跌出前15名) -->
+                <div style='background: #FEF2F2; padding: 12px 16px; border-radius: 12px; margin-bottom: 12px;'>
+                    <div style='font-size: 24px !important; font-weight: 900; color: #991B1B;'>
+                        昨日：第 {prev_r} 名 ➔ 今日：跌出前15名 ({cur_r_str})
+                    </div>
+                </div>
+                <!-- 第 3 層：收盤價 -->
+                <span class='mega-price' style='margin: 8px 0 !important;'>
+                    💰 最新收盤價：{c_price:,.2f} 元
+                </span>
+                <!-- 第 4 層：巨型執行 SOP 行動指示框 -->
+                <div style='background: #7F1D1D; border-radius: 14px; padding: 18px 16px; text-align: center; margin-top: 14px;'>
+                    <div style='font-size: 28px !important; font-weight: 900; color: #FEF2F2;'>
+                        🚨 明日 09:00 開盤以市價單 (MOO) 無條件賣出！
+                    </div>
+                    <div style='font-size: 20px !important; color: #FECACA; margin-top: 6px;'>
+                        （不論大盤開高開低，汰弱換現絕不等待反彈）
+                    </div>
+                </div>
+            </div>
+            """)
+
+    # ---------------------------------------------------------
+    # 區塊 2: 🎯 必須買入 (Buys)
+    # ---------------------------------------------------------
+    render_html(f"""
+    <div style='margin-top: 36px; margin-bottom: 16px;'>
+        <span style='font-size: 34px !important; font-weight: 900; color: #16A34A;'>
+            🎯 必須買入 ({len(tracking_buys)})
+        </span>
+        <div class='mega-subtext' style='font-size: 22px !important; color: #64748B; margin-top: 4px;'>
+            進入前 9 名的新血，明日市價買入
+        </div>
+    </div>
+    """)
+
+    if not tracking_buys:
+        render_html("""
+        <div class='paper-card' style='padding: 24px; text-align: center; border-radius: 16px; background: #F8FAFC; border: 2px dashed #CBD5E1;'>
+            <div style='font-size: 40px !important;'>👍</div>
+            <div style='font-size: 28px !important; font-weight: 900; color: #334155; margin-top: 6px;'>
+                前 9 強無新血變動！
+            </div>
+            <div style='font-size: 22px !important; color: #64748B; margin-top: 4px;'>
+                前 9 名皆由昨日原有標的續抱，今日無須買進新股票。
+            </div>
+        </div>
+        """)
+    else:
+        for s in tracking_buys:
+            sid = s.get("stock_id", "")
+            sname = s.get("name", "")
+            prev_r_str = s.get("prev_rank", "不在名單內")
+            cur_rank = s.get("current_rank", 1)
+            s_close = s.get("close", 0.0)
+            s_tags = s.get("highlights", [])
+            s_warn = s.get("warning_tag")
+
+            # 試算零股數
+            shares_calc = math.floor(single_stock_budget / s_close) if s_close > 0 else 0
+            approx_cost = shares_calc * s_close
+
+            tag_spans = "".join([f"<span class='mega-tag badge-green'>{t}</span>" for t in s_tags])
+
+            warning_block = ""
+            if s_warn:
+                warning_block = f"""
+                <div class='mega-warning-box alert-warning' style='border-left: 8px solid #D97706 !important;'>
+                    <div style='color: #92400E; font-size: 24px !important;'>⚠️ 關禁閉劇烈波動！新手建議直接跳過！</div>
+                    <div style='color: #92400E; margin-top: 4px; font-size: 20px !important;'>👉 這筆錢請直接留現金，別買第 10 名</div>
+                </div>
+                """
+
+            halt_block = ""
+            if halt_buys:
+                halt_block = """
+                <div class='mega-warning-box alert-warning' style='background: #FFFBEB !important; border-left: 8px solid #F59E0B !important;'>
+                    <div style='color: #B45309; font-size: 24px !important; font-weight: 900;'>⛔ 大盤防守中，空手者暫緩進場！</div>
+                    <div style='color: #B45309; margin-top: 4px; font-size: 20px !important;'>目前僅供觀察，待大盤轉晴再開新倉。</div>
+                </div>
+                """
+
+            render_html(f"""
+            <div class='paper-card' style='padding: 24px 22px; margin-bottom: 22px; border-radius: 18px; border-left: 8px solid #16A34A;'>
+                <!-- 第 1 層：大綠標籤 + 股號股名 -->
+                <div style='display: flex; align-items: center; margin-bottom: 12px;'>
+                    <span class='mega-badge' style='background: #16A34A; color: #FFF; margin-right: 12px;'>🎯 買入 #{cur_rank}</span>
+                    <span class='mega-card-title'>{sid} {sname}</span>
+                </div>
+                <!-- 第 2 層：名次變動大字 -->
+                <div style='background: #F0FDF4; padding: 12px 16px; border-radius: 12px; margin-bottom: 12px;'>
+                    <div style='font-size: 24px !important; font-weight: 900; color: #166534;'>
+                        昨日：{prev_r_str} ➔ 今日：第 {cur_rank} 名（新晉前9強）
+                    </div>
+                </div>
+                <!-- 第 3 層：現價 -->
+                <span class='mega-price' style='margin: 8px 0 !important;'>
+                    💰 最新現價：{s_close:,.2f} 元
+                </span>
+                <!-- 第 4 層：亮點標籤 -->
+                <div style='display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;'>
+                    {tag_spans}
+                </div>
+                <!-- 處置避雷提示 (若有) -->
+                {warning_block}
+                <!-- 大盤風控提示 (若 halt_buys) -->
+                {halt_block}
+                <!-- 第 5 層：巨型買進零股試算看板 -->
+                <div style='background: #0F172A; border-radius: 16px; padding: 20px 16px; text-align: center; margin-top: 14px;'>
+                    <span class='mega-buy-shares'>
+                        🛒 試算買進：{shares_calc:,} 股
+                    </span>
+                    <span class='mega-buy-amount'>
+                        （約 ${approx_cost:,.0f} 元，依 1/9 預算配置）
+                    </span>
+                </div>
+                <!-- 第 6 層：實戰進場 SOP 指示框 -->
+                <div style='background: #1E293B; border-radius: 14px; padding: 16px 16px; text-align: center; margin-top: 12px;'>
+                    <div style='font-size: 24px !important; font-weight: 900; color: #FCD34D;'>
+                        ⚡ 進場 SOP 紀律：
+                    </div>
+                    <div style='font-size: 22px !important; font-weight: 700; color: #F8FAFC; margin-top: 6px; line-height: 1.4 !important;'>
+                        開高跳空等待 <b>13:25 尾盤市價買 (MOC)</b><br>
+                        平低盤趁恐慌 <b>09:00 開盤市價買 (MOO)</b>
+                    </div>
+                </div>
+            </div>
+            """)
+
+    # ---------------------------------------------------------
+    # 區塊 3: 🛡️ 緩衝區續抱 (Hold)
+    # ---------------------------------------------------------
+    render_html(f"""
+    <div style='margin-top: 36px; margin-bottom: 16px;'>
+        <span style='font-size: 34px !important; font-weight: 900; color: #2563EB;'>
+            🛡️ 緩衝區續抱 ({len(tracking_holds)})
+        </span>
+        <div class='mega-subtext' style='font-size: 22px !important; color: #64748B; margin-top: 4px;'>
+            落在 10~15 名內，原持股續抱不賣
+        </div>
+    </div>
+    """)
+
+    if not tracking_holds:
+        render_html("""
+        <div class='paper-card' style='padding: 24px; text-align: center; border-radius: 16px; background: #F8FAFC; border: 2px dashed #CBD5E1;'>
+            <div style='font-size: 24px !important; color: #64748B;'>今日無緩衝區個股</div>
+        </div>
+        """)
+    else:
+        for s in tracking_holds:
+            sid = s.get("stock_id", "")
+            sname = s.get("name", "")
+            prev_r_str = s.get("prev_rank", "-")
+            cur_rank = s.get("current_rank", 10)
+            s_close = s.get("close", 0.0)
+
+            render_html(f"""
+            <div class='paper-card' style='padding: 22px 20px; margin-bottom: 20px; border-radius: 18px; border-left: 8px solid #2563EB;'>
+                <!-- 第 1 層：大藍標籤 + 股號股名 -->
+                <div style='display: flex; align-items: center; margin-bottom: 10px;'>
+                    <span class='mega-badge' style='background: #2563EB; color: #FFF; margin-right: 12px;'>🛡️ 續抱 #{cur_rank}</span>
+                    <span class='mega-card-title'>{sid} {sname}</span>
+                </div>
+                <!-- 第 2 層：名次變動 -->
+                <div style='background: #EFF6FF; padding: 10px 14px; border-radius: 12px; margin-bottom: 10px;'>
+                    <div style='font-size: 22px !important; font-weight: 900; color: #1E40AF;'>
+                        昨日：{prev_r_str} ➔ 今日：第 {cur_rank} 名（落入 10~15 緩衝區）
+                    </div>
+                </div>
+                <!-- 第 3 層：現價 -->
+                <span class='mega-price' style='margin: 6px 0 !important; font-size: 28px !important;'>
+                    💰 最新收盤價：{s_close:,.2f} 元
+                </span>
+                <!-- 第 4 層：安穩提示框 -->
+                <div style='background: #DBEAFE; border-radius: 12px; padding: 14px 16px; text-align: center; margin-top: 10px;'>
+                    <div style='font-size: 22px !important; font-weight: 900; color: #1E40AF;'>
+                        🛡️ 享受波段主升段！安心續抱不賣，亦無須加碼
+                    </div>
+                </div>
+            </div>
+            """)
 
 # -------------------------------------------------------------
 # Tab 1: 前 9 強名單

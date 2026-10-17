@@ -299,7 +299,180 @@
         "close": 68.4,
         "reason": "動能轉弱跌出前15名，參考紀律為汰弱換取現金"
       }
-    ]
+    ],
+    "boundary_tracking": {
+      "date_t": "2026-10-16",
+      "date_t1": "2026-10-15",
+      "sells": [
+        {
+          "stock_id": "3147",
+          "name": "大綜",
+          "prev_rank": 2,
+          "current_rank": 18,
+          "close": 291.0,
+          "action_sop": "明日 09:00 開盤以市價單 (MOO) 無條件賣出換現金"
+        },
+        {
+          "stock_id": "6811",
+          "name": "宏碁資訊",
+          "prev_rank": 7,
+          "current_rank": "已移出觀察池",
+          "close": 274.0,
+          "action_sop": "明日 09:00 開盤以市價單 (MOO) 無條件賣出換現金"
+        },
+        {
+          "stock_id": "3311",
+          "name": "閎暉",
+          "prev_rank": 8,
+          "current_rank": 50,
+          "close": 48.4,
+          "action_sop": "明日 09:00 開盤以市價單 (MOO) 無條件賣出換現金"
+        },
+        {
+          "stock_id": "2480",
+          "name": "敦陽科",
+          "prev_rank": 10,
+          "current_rank": 16,
+          "close": 187.0,
+          "action_sop": "明日 09:00 開盤以市價單 (MOO) 無條件賣出換現金"
+        },
+        {
+          "stock_id": "2492",
+          "name": "華新科",
+          "prev_rank": 12,
+          "current_rank": 21,
+          "close": 395.0,
+          "action_sop": "明日 09:00 開盤以市價單 (MOO) 無條件賣出換現金"
+        },
+        {
+          "stock_id": "3564",
+          "name": "其陽",
+          "prev_rank": 15,
+          "current_rank": 20,
+          "close": 68.4,
+          "action_sop": "明日 09:00 開盤以市價單 (MOO) 無條件賣出換現金"
+        }
+      ],
+      "buys": [
+        {
+          "stock_id": "6505",
+          "name": "台塑化",
+          "prev_rank": "不在名單內",
+          "prev_rank_raw": 999,
+          "current_rank": 3,
+          "close": 122.5,
+          "momentum_pct": 30.0,
+          "revenue_yoy_pct": 65.6,
+          "roe_pct": 4.2,
+          "highlights": [
+            "🔥 營收強勁高成長",
+            "✨ 本業獲利穩固",
+            "🚀 強勢動能領跑"
+          ],
+          "warning_tag": null,
+          "action_sop": "開高跳空等待 13:25 尾盤市價買 / 平低盤 09:00 開盤市價買"
+        },
+        {
+          "stock_id": "1815",
+          "name": "富喬",
+          "prev_rank": "不在名單內",
+          "prev_rank_raw": 999,
+          "current_rank": 6,
+          "close": 140.0,
+          "momentum_pct": 20.7,
+          "revenue_yoy_pct": 82.1,
+          "roe_pct": 4.7,
+          "highlights": [
+            "🔥 營收強勁高成長",
+            "✨ 本業獲利穩固",
+            "🚀 強勢動能領跑"
+          ],
+          "warning_tag": null,
+          "action_sop": "開高跳空等待 13:25 尾盤市價買 / 平低盤 09:00 開盤市價買"
+        },
+        {
+          "stock_id": "6933",
+          "name": "AMAX-KY",
+          "prev_rank": "第 13 名",
+          "prev_rank_raw": 13,
+          "current_rank": 7,
+          "close": 451.5,
+          "momentum_pct": 14.4,
+          "revenue_yoy_pct": 228.9,
+          "roe_pct": 5.4,
+          "highlights": [
+            "🔥 營收翻倍暴增",
+            "💎 高ROE優等生"
+          ],
+          "warning_tag": null,
+          "action_sop": "開高跳空等待 13:25 尾盤市價買 / 平低盤 09:00 開盤市價買"
+        },
+        {
+          "stock_id": "6209",
+          "name": "今國光",
+          "prev_rank": "不在名單內",
+          "prev_rank_raw": 999,
+          "current_rank": 9,
+          "close": 100.5,
+          "momentum_pct": 21.5,
+          "revenue_yoy_pct": 81.6,
+          "roe_pct": 3.7,
+          "highlights": [
+            "🔥 營收強勁高成長",
+            "✨ 本業獲利穩固",
+            "🚀 強勢動能領跑"
+          ],
+          "warning_tag": null,
+          "action_sop": "開高跳空等待 13:25 尾盤市價買 / 平低盤 09:00 開盤市價買"
+        }
+      ],
+      "holds": [
+        {
+          "stock_id": "6199",
+          "name": "天品",
+          "prev_rank": "第 11 名",
+          "prev_rank_raw": 11,
+          "current_rank": 11,
+          "close": 144.0,
+          "highlights": [
+            "🔥 營收翻倍暴增",
+            "💎 高ROE優等生"
+          ],
+          "warning_tag": null,
+          "action_sop": "安穩續抱！不必賣出換股，亦無須追高加碼"
+        },
+        {
+          "stock_id": "1714",
+          "name": "和桐",
+          "prev_rank": "第 14 名",
+          "prev_rank_raw": 14,
+          "current_rank": 12,
+          "close": 19.25,
+          "highlights": [
+            "🔥 營收強勁高成長",
+            "💎 高ROE優等生",
+            "🚀 強勢動能領跑"
+          ],
+          "warning_tag": null,
+          "action_sop": "安穩續抱！不必賣出換股，亦無須追高加碼"
+        },
+        {
+          "stock_id": "1303",
+          "name": "南亞",
+          "prev_rank": "第 9 名",
+          "prev_rank_raw": 9,
+          "current_rank": 14,
+          "close": 307.0,
+          "highlights": [
+            "🔥 營收強勁高成長",
+            "✨ 本業獲利穩固",
+            "🚀 強勢動能領跑"
+          ],
+          "warning_tag": null,
+          "action_sop": "安穩續抱！不必賣出換股，亦無須追高加碼"
+        }
+      ]
+    }
   },
   "core_2_disposal": {
     "backtest_stats": {
