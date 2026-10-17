@@ -660,7 +660,7 @@ boundary_data = core1.get("boundary_tracking") or {}
 tracking_sells = boundary_data.get("sells", [])
 tracking_buys = boundary_data.get("buys", [])
 tracking_holds = boundary_data.get("holds", [])
-date_t = boundary_data.get("date_t", data_date)
+date_t = boundary_data.get("date_t", data_date_str)
 date_t1 = boundary_data.get("date_t1", "前一交易日")
 
 # 容錯回溯機制 (若 JSON 暫時無 boundary_tracking 則以 dropped_15 自動補足 sells)
