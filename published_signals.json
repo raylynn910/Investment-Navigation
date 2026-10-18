@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-10-18 16:50:32",
+  "generated_at": "2026-10-18 18:58:20",
   "data_date": "2026-10-16",
   "market_regime": {
     "weather": "STORMY",
@@ -577,200 +577,176 @@
         "optimal_mdd": "<= 28.9%"
       }
     },
-    "total_active_disposals_count": 26,
+    "total_active_disposals_count": 29,
     "strategy_b_triggers": [
-      {
-        "stock_id": "3597",
-        "name": "映興",
-        "latest_price": 51.2,
-        "disp_cum_ret": 5.3,
-        "vol_ratio": 1.01,
-        "turnover_str": "7786萬",
-        "action_timing": "今日 13:25~13:30 收盤進場",
-        "countdown_desc": "T-2 (10/21)",
-        "ma5": 49.1,
-        "entry_sop": "今日收盤市價買進 ｜ 明日(T-1)收盤賣出 50% ｜ 出關日(T)09:00 開盤賣出剩餘 50% ｜ 盤中跌破 5MA 即時停損！"
-      }
-    ],
-    "strategy_c_triggers": [],
-    "imminent_pool": [
-      {
-        "stock_id": "3597",
-        "name": "映興",
-        "countdown_desc": "T-2 (10/21)",
-        "td_to_exit": 2,
-        "latest_price": 51.2,
-        "disp_cum_ret": 5.3,
-        "turnover_str": "7786萬",
-        "vol_ratio": 1.01,
-        "status": "🔥 策略 B (T-2 搶跑買入)",
-        "entry_sop": "今日收盤買進 ｜ 明日(T-1)收盤賣50% ｜ 出關日(T)開盤賣50% ｜ 破5MA停損"
-      },
-      {
-        "stock_id": "6213",
-        "name": "聯茂",
-        "countdown_desc": "T-1 (10/20)",
-        "td_to_exit": 1,
-        "latest_price": 774.0,
-        "disp_cum_ret": -2.8,
-        "turnover_str": "38.30億",
-        "vol_ratio": 0.72,
-        "status": "⏳ 處置出關前夕 (T-1)",
-        "entry_sop": "未達標 (處置累積-2.8%未超漲、量比0.72非0.8~1.8)"
-      },
-      {
-        "stock_id": "2492",
-        "name": "華新科",
-        "countdown_desc": "T-1 (10/20)",
-        "td_to_exit": 1,
-        "latest_price": 395.0,
-        "disp_cum_ret": -5.5,
-        "turnover_str": "28.66億",
-        "vol_ratio": 0.73,
-        "status": "⏳ 處置出關前夕 (T-1)",
-        "entry_sop": "未達標 (處置累積-5.5%未超漲、量比0.73非0.8~1.8)"
-      },
       {
         "stock_id": "3441",
         "name": "聯一光",
-        "countdown_desc": "T-1 (10/20)",
-        "td_to_exit": 1,
+        "latest_price": 237.5,
+        "disp_cum_ret": -4.6,
+        "vol_ratio": 0.85,
+        "turnover_str": "1.95億",
+        "action_timing": "今日 13:25~13:30 收盤進場",
+        "countdown_desc": "T-2 (10/20)",
+        "ma5": 234.6,
+        "entry_sop": "今日收盤市價買進 ｜ 明日(T-1)收盤賣出 50% ｜ 出關日(T)09:00 開盤賣出剩餘 50% ｜ 盤中跌破 5MA 即時停損！"
+      }
+    ],
+    "strategy_c_triggers": [
+      {
+        "stock_id": "3701",
+        "name": "大眾控",
+        "latest_price": 66.1,
+        "disp_cum_ret": 8.2,
+        "vol_ratio": 2.59,
+        "turnover_str": "4.22億",
+        "action_timing": "明晨 09:00 執行",
+        "countdown_desc": "T-0 (10/16)",
+        "entry_sop": "明日 09:00 若個股開高 +1%~+5.2% 且台指期開盤無暴漲(<=+0.3%)，MOO 券賣放空 ｜ 設 5% 停損 ｜ 13:25 全數平倉回補，絕不留倉！"
+      }
+    ],
+    "imminent_pool": [
+      {
+        "stock_id": "3441",
+        "name": "聯一光",
+        "countdown_desc": "T-2 (10/20)",
+        "td_to_exit": 2,
         "latest_price": 237.5,
         "disp_cum_ret": -4.6,
         "turnover_str": "1.95億",
         "vol_ratio": 0.85,
-        "status": "⏳ 處置出關前夕 (T-1)",
-        "entry_sop": "未達標 (處置累積-4.6%未超漲)"
+        "status": "🔥 策略 B (T-2 搶跑買入)",
+        "entry_sop": "週五收盤已觸發買進 ｜ 持有續抱 ｜ 下週一(T-1)收盤賣50% ｜ 出關日(T)開盤賣50% ｜ 破5MA停損"
       },
       {
-        "stock_id": "5228",
-        "name": "鈺鎧",
-        "countdown_desc": "T-1 (10/20)",
-        "td_to_exit": 1,
-        "latest_price": 55.9,
-        "disp_cum_ret": -6.2,
-        "turnover_str": "2981萬",
-        "vol_ratio": 0.61,
-        "status": "⏳ 處置出關前夕 (T-1)",
-        "entry_sop": "未達標 (處置累積-6.2%未超漲、成交2981萬<3000萬、量比0.61非0.8~1.8)"
-      },
-      {
-        "stock_id": "8084",
-        "name": "巨虹",
-        "countdown_desc": "T-1 (10/20)",
-        "td_to_exit": 1,
-        "latest_price": 13.95,
-        "disp_cum_ret": -11.7,
-        "turnover_str": "495萬",
-        "vol_ratio": 0.93,
-        "status": "⏳ 處置出關前夕 (T-1)",
-        "entry_sop": "未達標 (處置累積-11.7%未超漲、成交495萬<3000萬)"
-      },
-      {
-        "stock_id": "3265",
-        "name": "台星科",
-        "countdown_desc": "T-2 (10/21)",
-        "td_to_exit": 2,
-        "latest_price": 269.0,
-        "disp_cum_ret": 1.1,
-        "turnover_str": "7.61億",
-        "vol_ratio": 0.95,
-        "status": "⏳ 處置蓄勢 (T-2)",
-        "entry_sop": "未達標 (未站上5MA)"
-      },
-      {
-        "stock_id": "2466",
-        "name": "冠西電",
-        "countdown_desc": "T-2 (10/21)",
-        "td_to_exit": 2,
-        "latest_price": 211.5,
-        "disp_cum_ret": -10.8,
-        "turnover_str": "2.70億",
-        "vol_ratio": 3.89,
-        "status": "⏳ 處置蓄勢 (T-2)",
-        "entry_sop": "未達標 (漲跌-10.8%非-5%~+12%、未站上5MA)"
-      },
-      {
-        "stock_id": "7772",
-        "name": "耀穎",
-        "countdown_desc": "T-2 (10/21)",
-        "td_to_exit": 2,
-        "latest_price": 128.0,
-        "disp_cum_ret": 2.4,
-        "turnover_str": "952萬",
-        "vol_ratio": 1.36,
-        "status": "⏳ 處置蓄勢 (T-2)",
-        "entry_sop": "未達標 (未站上5MA、成交952萬<3000萬)"
-      },
-      {
-        "stock_id": "9103",
-        "name": "美德醫療-DR",
-        "countdown_desc": "T-2 (10/21)",
-        "td_to_exit": 2,
-        "latest_price": 6.01,
-        "disp_cum_ret": -14.4,
-        "turnover_str": "922萬",
-        "vol_ratio": 0.59,
-        "status": "⏳ 處置蓄勢 (T-2)",
-        "entry_sop": "未達標 (漲跌-14.4%非-5%~+12%、未站上5MA、成交922萬<3000萬)"
-      },
-      {
-        "stock_id": "5205",
-        "name": "中茂",
-        "countdown_desc": "T-2 (10/21)",
-        "td_to_exit": 2,
-        "latest_price": 28.15,
-        "disp_cum_ret": -27.0,
-        "turnover_str": "16萬",
-        "vol_ratio": 1.23,
-        "status": "⏳ 處置蓄勢 (T-2)",
-        "entry_sop": "未達標 (漲跌-27.0%非-5%~+12%、未站上5MA、成交16萬<3000萬)"
+        "stock_id": "3701",
+        "name": "大眾控",
+        "countdown_desc": "T-0 (10/16)",
+        "td_to_exit": 0,
+        "latest_price": 66.1,
+        "disp_cum_ret": 8.2,
+        "turnover_str": "4.22億",
+        "vol_ratio": 2.59,
+        "status": "🚨 策略 C 執行 (T日出關空)",
+        "entry_sop": "開高 +1%~+5.2% 券賣放空，設 5% 停損 ｜ 開低或開平嚴禁追空 ｜ 13:25 全數平倉"
       },
       {
         "stock_id": "6672",
         "name": "騰輝電子-KY",
-        "countdown_desc": "T-0 (10/19)",
-        "td_to_exit": 0,
+        "countdown_desc": "T-1 (10/19)",
+        "td_to_exit": 1,
         "latest_price": 591.0,
         "disp_cum_ret": 6.5,
         "turnover_str": "7.93億",
         "vol_ratio": 0.82,
-        "status": "⚪ 今日出關 (觀望)",
-        "entry_sop": "處置期未超漲或開盤重挫，嚴禁接刀做多，全日觀望"
+        "status": "⏳ 處置出關前夕 (T-1)",
+        "entry_sop": "未達標 (處置累積+6.5%未超漲)"
       },
       {
         "stock_id": "8021",
         "name": "尖點",
-        "countdown_desc": "T-0 (10/19)",
-        "td_to_exit": 0,
+        "countdown_desc": "T-1 (10/19)",
+        "td_to_exit": 1,
         "latest_price": 494.0,
         "disp_cum_ret": -11.3,
         "turnover_str": "7.61億",
         "vol_ratio": 1.34,
-        "status": "⚪ 今日出關 (觀望)",
-        "entry_sop": "處置期未超漲或開盤重挫，嚴禁接刀做多，全日觀望"
+        "status": "⏳ 處置出關前夕 (T-1)",
+        "entry_sop": "未達標 (處置累積-11.3%未超漲)"
       },
       {
         "stock_id": "5475",
         "name": "德宏",
-        "countdown_desc": "T-0 (10/19)",
-        "td_to_exit": 0,
+        "countdown_desc": "T-1 (10/19)",
+        "td_to_exit": 1,
         "latest_price": 198.5,
         "disp_cum_ret": -2.2,
         "turnover_str": "3.87億",
         "vol_ratio": 0.79,
-        "status": "⚪ 今日出關 (觀望)",
-        "entry_sop": "處置期未超漲或開盤重挫，嚴禁接刀做多，全日觀望"
+        "status": "⏳ 處置出關前夕 (T-1)",
+        "entry_sop": "未達標 (處置累積-2.2%未超漲、量比0.79非0.8~1.8)"
       },
       {
         "stock_id": "6708",
         "name": "天擎",
-        "countdown_desc": "T-0 (10/19)",
-        "td_to_exit": 0,
+        "countdown_desc": "T-1 (10/19)",
+        "td_to_exit": 1,
         "latest_price": 55.0,
         "disp_cum_ret": -20.5,
         "turnover_str": "1125萬",
         "vol_ratio": 1.2,
+        "status": "⏳ 處置出關前夕 (T-1)",
+        "entry_sop": "未達標 (處置累積-20.5%未超漲、成交1125萬<3000萬)"
+      },
+      {
+        "stock_id": "6213",
+        "name": "聯茂",
+        "countdown_desc": "T-2 (10/20)",
+        "td_to_exit": 2,
+        "latest_price": 774.0,
+        "disp_cum_ret": -2.8,
+        "turnover_str": "38.30億",
+        "vol_ratio": 0.72,
+        "status": "⏳ 處置蓄勢 (T-2)",
+        "entry_sop": "未達標 (未站上5MA)"
+      },
+      {
+        "stock_id": "2492",
+        "name": "華新科",
+        "countdown_desc": "T-2 (10/20)",
+        "td_to_exit": 2,
+        "latest_price": 395.0,
+        "disp_cum_ret": -5.5,
+        "turnover_str": "28.66億",
+        "vol_ratio": 0.73,
+        "status": "⏳ 處置蓄勢 (T-2)",
+        "entry_sop": "未達標 (漲跌-5.5%非-5%~+12%、未站上5MA)"
+      },
+      {
+        "stock_id": "5228",
+        "name": "鈺鎧",
+        "countdown_desc": "T-2 (10/20)",
+        "td_to_exit": 2,
+        "latest_price": 55.9,
+        "disp_cum_ret": -6.2,
+        "turnover_str": "2981萬",
+        "vol_ratio": 0.61,
+        "status": "⏳ 處置蓄勢 (T-2)",
+        "entry_sop": "未達標 (漲跌-6.2%非-5%~+12%、未站上5MA、成交2981萬<3000萬)"
+      },
+      {
+        "stock_id": "8084",
+        "name": "巨虹",
+        "countdown_desc": "T-2 (10/20)",
+        "td_to_exit": 2,
+        "latest_price": 13.95,
+        "disp_cum_ret": -11.7,
+        "turnover_str": "495萬",
+        "vol_ratio": 0.93,
+        "status": "⏳ 處置蓄勢 (T-2)",
+        "entry_sop": "未達標 (漲跌-11.7%非-5%~+12%、未站上5MA、成交495萬<3000萬)"
+      },
+      {
+        "stock_id": "1709",
+        "name": "和益",
+        "countdown_desc": "T-0 (10/16)",
+        "td_to_exit": 0,
+        "latest_price": 54.9,
+        "disp_cum_ret": -8.8,
+        "turnover_str": "22.17億",
+        "vol_ratio": 3.94,
+        "status": "⚪ 今日出關 (觀望)",
+        "entry_sop": "處置期未超漲或開盤重挫，嚴禁接刀做多，全日觀望"
+      },
+      {
+        "stock_id": "6957",
+        "name": "裕慶-KY",
+        "countdown_desc": "T-0 (10/16)",
+        "td_to_exit": 0,
+        "latest_price": 474.5,
+        "disp_cum_ret": 6.9,
+        "turnover_str": "3.30億",
+        "vol_ratio": 3.14,
         "status": "⚪ 今日出關 (觀望)",
         "entry_sop": "處置期未超漲或開盤重挫，嚴禁接刀做多，全日觀望"
       }
