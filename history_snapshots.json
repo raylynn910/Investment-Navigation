@@ -560,6 +560,118 @@
           "latest_close": 147.0
         }
       ]
+    },
+    "2026-10-21": {
+      "date": "2026-10-21",
+      "stock_ids": [
+        "3287",
+        "6925",
+        "6672",
+        "6234",
+        "6278",
+        "6756",
+        "5475",
+        "6209",
+        "8042",
+        "3265",
+        "6277",
+        "8213",
+        "4903",
+        "6834",
+        "3147"
+      ],
+      "top15": [
+        {
+          "rank": 1,
+          "stock_id": "3287",
+          "stock_name": "廣寰科",
+          "latest_close": 70.1
+        },
+        {
+          "rank": 2,
+          "stock_id": "6925",
+          "stock_name": "意藍",
+          "latest_close": 112.5
+        },
+        {
+          "rank": 3,
+          "stock_id": "6672",
+          "stock_name": "騰輝電子-KY",
+          "latest_close": 627.0
+        },
+        {
+          "rank": 4,
+          "stock_id": "6234",
+          "stock_name": "高僑",
+          "latest_close": 50.4
+        },
+        {
+          "rank": 5,
+          "stock_id": "6278",
+          "stock_name": "台表科",
+          "latest_close": 316.5
+        },
+        {
+          "rank": 6,
+          "stock_id": "6756",
+          "stock_name": "威鋒電子",
+          "latest_close": 128.5
+        },
+        {
+          "rank": 7,
+          "stock_id": "5475",
+          "stock_name": "德宏",
+          "latest_close": 214.0
+        },
+        {
+          "rank": 8,
+          "stock_id": "6209",
+          "stock_name": "今國光",
+          "latest_close": 110.0
+        },
+        {
+          "rank": 9,
+          "stock_id": "8042",
+          "stock_name": "金山電",
+          "latest_close": 148.5
+        },
+        {
+          "rank": 10,
+          "stock_id": "3265",
+          "stock_name": "台星科",
+          "latest_close": 249.0
+        },
+        {
+          "rank": 11,
+          "stock_id": "6277",
+          "stock_name": "宏正",
+          "latest_close": 98.2
+        },
+        {
+          "rank": 12,
+          "stock_id": "8213",
+          "stock_name": "志超",
+          "latest_close": 42.85
+        },
+        {
+          "rank": 13,
+          "stock_id": "4903",
+          "stock_name": "聯光通",
+          "latest_close": 51.9
+        },
+        {
+          "rank": 14,
+          "stock_id": "6834",
+          "stock_name": "天二科技",
+          "latest_close": 144.0
+        },
+        {
+          "rank": 15,
+          "stock_id": "3147",
+          "stock_name": "大綜",
+          "latest_close": 308.5
+        }
+      ]
     }
   }
 }
