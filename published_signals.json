@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-10-20 23:51:54",
+  "generated_at": "2026-10-21 09:53:32",
   "data_date": "2026-10-20",
   "market_regime": {
     "weather": "CLOUDY",
@@ -25,7 +25,7 @@
       "spot_reason": "TXF 處於季線上但跌破 5MA 拉回，防守持股上限 50%。",
       "night_intercept_active": false,
       "night_buy_cap": 50,
-      "night_intercept_reason": "夜盤波動平穩 (+0.66%)，無觸發破線攔截，正常放行買單。",
+      "night_intercept_reason": "夜盤波動平穩 (+1.27%)，無觸發破線攔截，正常放行買單。",
       "mod_c_triggered": false,
       "mod_c_reason": "未觸發極端超賣緩衝條件，按常規紀律執行。",
       "txf_close": 46384.0,
@@ -33,10 +33,10 @@
       "txf_ma20": 48343.6,
       "txf_ma60": 46202.1,
       "txf_k_val": 15.3,
-      "night_close": 46691.0,
-      "night_ret_pct": 0.66,
-      "night_date": "2026-10-20",
-      "night_k_val": 15.2
+      "night_close": 46975.0,
+      "night_ret_pct": 1.27,
+      "night_date": "2026-10-21",
+      "night_k_val": 18.1
     }
   },
   "core_1_swing": {
@@ -425,7 +425,7 @@
         "optimal_mdd": "<= 28.9%"
       }
     },
-    "is_weekend_or_holiday": false,
+    "is_weekend_or_holiday": true,
     "last_closed_date": "2026-10-20",
     "next_trading_date": "2026-10-21",
     "total_active_disposals_count": 25,
@@ -585,7 +585,7 @@
         "base_date": "2026-10-20",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "2466",
@@ -617,7 +617,7 @@
         "base_date": "2026-10-20",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "9103",
@@ -649,7 +649,7 @@
         "base_date": "2026-10-20",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "7772",
@@ -681,7 +681,7 @@
         "base_date": "2026-10-20",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "5205",
@@ -713,7 +713,7 @@
         "base_date": "2026-10-20",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "2492",
@@ -745,7 +745,7 @@
         "base_date": "2026-10-20",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "6213",
@@ -777,7 +777,7 @@
         "base_date": "2026-10-20",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "8111",
@@ -804,12 +804,12 @@
         "is_hit_b": 0,
         "is_hit_c": 0,
         "action_timing": "觀望",
-        "entry_sop": "處置中持續觀察，預計 10/23 出關",
-        "exit_sop": "處置中持續觀察，預計 10/23 出關",
+        "entry_sop": "處置中持續觀察，預計 10/23 出關 ｜ 次一交易日 (10/21) 收盤將進入 T-2 搶跑點",
+        "exit_sop": "處置中持續觀察，預計 10/23 出關 ｜ 次一交易日 (10/21) 收盤將進入 T-2 搶跑點",
         "base_date": "2026-10-20",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "4979",
@@ -841,7 +841,7 @@
         "base_date": "2026-10-20",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3287",
@@ -873,7 +873,7 @@
         "base_date": "2026-10-20",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "2221",
@@ -905,7 +905,7 @@
         "base_date": "2026-10-20",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3055",
@@ -937,7 +937,7 @@
         "base_date": "2026-10-20",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3230",
@@ -969,7 +969,7 @@
         "base_date": "2026-10-20",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3597",
@@ -1001,7 +1001,7 @@
         "base_date": "2026-10-20",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3167",
@@ -1033,7 +1033,7 @@
         "base_date": "2026-10-20",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "6716",
@@ -1065,7 +1065,7 @@
         "base_date": "2026-10-20",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3354",
@@ -1097,7 +1097,7 @@
         "base_date": "2026-10-20",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "2424",
@@ -1129,7 +1129,7 @@
         "base_date": "2026-10-20",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3094",
@@ -1161,7 +1161,7 @@
         "base_date": "2026-10-20",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3518",
@@ -1193,7 +1193,7 @@
         "base_date": "2026-10-20",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "1709",
@@ -1225,7 +1225,7 @@
         "base_date": "2026-10-20",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3701",
@@ -1257,7 +1257,7 @@
         "base_date": "2026-10-20",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "6957",
@@ -1289,7 +1289,7 @@
         "base_date": "2026-10-20",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "8021",
@@ -1321,7 +1321,7 @@
         "base_date": "2026-10-20",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "6672",
@@ -1353,7 +1353,7 @@
         "base_date": "2026-10-20",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       }
     ],
     "next_trading_disposals_list": [
@@ -1387,7 +1387,7 @@
         "base_date": "2026-10-21",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3265",
@@ -1419,7 +1419,7 @@
         "base_date": "2026-10-21",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "2466",
@@ -1451,7 +1451,7 @@
         "base_date": "2026-10-21",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "9103",
@@ -1483,7 +1483,7 @@
         "base_date": "2026-10-21",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "7772",
@@ -1515,7 +1515,7 @@
         "base_date": "2026-10-21",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "5205",
@@ -1547,7 +1547,7 @@
         "base_date": "2026-10-21",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "4979",
@@ -1574,12 +1574,12 @@
         "is_hit_b": 0,
         "is_hit_c": 0,
         "action_timing": "觀望",
-        "entry_sop": "處置中持續觀察，預計 10/26 出關",
-        "exit_sop": "處置中持續觀察，預計 10/26 出關",
+        "entry_sop": "處置中持續觀察，預計 10/26 出關 ｜ 次一交易日 (10/21) 收盤將進入 T-2 搶跑點",
+        "exit_sop": "處置中持續觀察，預計 10/26 出關 ｜ 次一交易日 (10/21) 收盤將進入 T-2 搶跑點",
         "base_date": "2026-10-21",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3287",
@@ -1606,12 +1606,12 @@
         "is_hit_b": 0,
         "is_hit_c": 0,
         "action_timing": "觀望",
-        "entry_sop": "處置中持續觀察，預計 10/26 出關",
-        "exit_sop": "處置中持續觀察，預計 10/26 出關",
+        "entry_sop": "處置中持續觀察，預計 10/26 出關 ｜ 次一交易日 (10/21) 收盤將進入 T-2 搶跑點",
+        "exit_sop": "處置中持續觀察，預計 10/26 出關 ｜ 次一交易日 (10/21) 收盤將進入 T-2 搶跑點",
         "base_date": "2026-10-21",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "2221",
@@ -1638,12 +1638,12 @@
         "is_hit_b": 0,
         "is_hit_c": 0,
         "action_timing": "觀望",
-        "entry_sop": "處置中持續觀察，預計 10/26 出關",
-        "exit_sop": "處置中持續觀察，預計 10/26 出關",
+        "entry_sop": "處置中持續觀察，預計 10/26 出關 ｜ 次一交易日 (10/21) 收盤將進入 T-2 搶跑點",
+        "exit_sop": "處置中持續觀察，預計 10/26 出關 ｜ 次一交易日 (10/21) 收盤將進入 T-2 搶跑點",
         "base_date": "2026-10-21",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3055",
@@ -1670,12 +1670,12 @@
         "is_hit_b": 0,
         "is_hit_c": 0,
         "action_timing": "觀望",
-        "entry_sop": "處置中持續觀察，預計 10/26 出關",
-        "exit_sop": "處置中持續觀察，預計 10/26 出關",
+        "entry_sop": "處置中持續觀察，預計 10/26 出關 ｜ 次一交易日 (10/21) 收盤將進入 T-2 搶跑點",
+        "exit_sop": "處置中持續觀察，預計 10/26 出關 ｜ 次一交易日 (10/21) 收盤將進入 T-2 搶跑點",
         "base_date": "2026-10-21",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3230",
@@ -1702,12 +1702,12 @@
         "is_hit_b": 0,
         "is_hit_c": 0,
         "action_timing": "觀望",
-        "entry_sop": "處置中持續觀察，預計 10/26 出關",
-        "exit_sop": "處置中持續觀察，預計 10/26 出關",
+        "entry_sop": "處置中持續觀察，預計 10/26 出關 ｜ 次一交易日 (10/21) 收盤將進入 T-2 搶跑點",
+        "exit_sop": "處置中持續觀察，預計 10/26 出關 ｜ 次一交易日 (10/21) 收盤將進入 T-2 搶跑點",
         "base_date": "2026-10-21",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3597",
@@ -1734,12 +1734,12 @@
         "is_hit_b": 0,
         "is_hit_c": 0,
         "action_timing": "觀望",
-        "entry_sop": "處置中持續觀察，預計 10/26 出關",
-        "exit_sop": "處置中持續觀察，預計 10/26 出關",
+        "entry_sop": "處置中持續觀察，預計 10/26 出關 ｜ 次一交易日 (10/21) 收盤將進入 T-2 搶跑點",
+        "exit_sop": "處置中持續觀察，預計 10/26 出關 ｜ 次一交易日 (10/21) 收盤將進入 T-2 搶跑點",
         "base_date": "2026-10-21",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3167",
@@ -1771,7 +1771,7 @@
         "base_date": "2026-10-21",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "6716",
@@ -1803,7 +1803,7 @@
         "base_date": "2026-10-21",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3354",
@@ -1835,7 +1835,7 @@
         "base_date": "2026-10-21",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "2424",
@@ -1867,7 +1867,7 @@
         "base_date": "2026-10-21",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "1709",
@@ -1899,7 +1899,7 @@
         "base_date": "2026-10-21",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3701",
@@ -1931,7 +1931,7 @@
         "base_date": "2026-10-21",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "6957",
@@ -1963,7 +1963,7 @@
         "base_date": "2026-10-21",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "8021",
@@ -1995,7 +1995,7 @@
         "base_date": "2026-10-21",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "6672",
@@ -2027,7 +2027,7 @@
         "base_date": "2026-10-21",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "2492",
@@ -2059,7 +2059,7 @@
         "base_date": "2026-10-21",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "6213",
@@ -2091,7 +2091,7 @@
         "base_date": "2026-10-21",
         "last_closed_date": "2026-10-20",
         "next_trading_date": "2026-10-21",
-        "is_market_closed": 0
+        "is_market_closed": 1
       }
     ]
   },
