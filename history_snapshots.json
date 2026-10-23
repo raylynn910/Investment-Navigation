@@ -672,6 +672,118 @@
           "latest_close": 308.5
         }
       ]
+    },
+    "2026-10-22": {
+      "date": "2026-10-22",
+      "stock_ids": [
+        "6925",
+        "2468",
+        "4720",
+        "6756",
+        "6277",
+        "6672",
+        "6234",
+        "6148",
+        "6782",
+        "4938",
+        "6278",
+        "2355",
+        "6199",
+        "2603",
+        "3034"
+      ],
+      "top15": [
+        {
+          "rank": 1,
+          "stock_id": "6925",
+          "stock_name": "意藍",
+          "latest_close": 101.5
+        },
+        {
+          "rank": 2,
+          "stock_id": "2468",
+          "stock_name": "華經",
+          "latest_close": 55.0
+        },
+        {
+          "rank": 3,
+          "stock_id": "4720",
+          "stock_name": "德淵",
+          "latest_close": 30.95
+        },
+        {
+          "rank": 4,
+          "stock_id": "6756",
+          "stock_name": "威鋒電子",
+          "latest_close": 125.5
+        },
+        {
+          "rank": 5,
+          "stock_id": "6277",
+          "stock_name": "宏正",
+          "latest_close": 100.5
+        },
+        {
+          "rank": 6,
+          "stock_id": "6672",
+          "stock_name": "騰輝電子-KY",
+          "latest_close": 581.0
+        },
+        {
+          "rank": 7,
+          "stock_id": "6234",
+          "stock_name": "高僑",
+          "latest_close": 49.05
+        },
+        {
+          "rank": 8,
+          "stock_id": "6148",
+          "stock_name": "驊宏資",
+          "latest_close": 44.2
+        },
+        {
+          "rank": 9,
+          "stock_id": "6782",
+          "stock_name": "視陽",
+          "latest_close": 271.0
+        },
+        {
+          "rank": 10,
+          "stock_id": "4938",
+          "stock_name": "和碩",
+          "latest_close": 103.5
+        },
+        {
+          "rank": 11,
+          "stock_id": "6278",
+          "stock_name": "台表科",
+          "latest_close": 290.5
+        },
+        {
+          "rank": 12,
+          "stock_id": "2355",
+          "stock_name": "敬鵬",
+          "latest_close": 50.7
+        },
+        {
+          "rank": 13,
+          "stock_id": "6199",
+          "stock_name": "天品",
+          "latest_close": 149.5
+        },
+        {
+          "rank": 14,
+          "stock_id": "2603",
+          "stock_name": "長榮",
+          "latest_close": 260.0
+        },
+        {
+          "rank": 15,
+          "stock_id": "3034",
+          "stock_name": "聯詠",
+          "latest_close": 583.0
+        }
+      ]
     }
   }
 }
