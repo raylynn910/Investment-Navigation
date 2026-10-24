@@ -1,58 +1,157 @@
+# -*- coding: utf-8 -*-
+"""
+dashboard_ui.py
+================
+新科狀元・事件量化作戰中心 & 親友白話投資導航 (一站式整合版)
+特點：
+1. 頂部雙模式切換膠囊 (⚔️ 老手量化作戰中心 ⇄ 🧭 親友白話投資導航)
+2. 頂置 N7 終極本金守護者 (Guardian V7) 即時 HUD (含 08:30 夜盤攔買單 + 09:00 開盤防雙巴)
+3. 工具列收斂為「⚡ 一鍵盤後全量同步與發布」+「進階個別工具折疊抽屜」，徹底杜絕橫向擠壓
+4. 表格欄位嚴格精簡，100% 容器寬度自適應，保證零橫向捲軸
+5. 深色高保定美學：#0a0a0a 背景、#111827 微霧卡片、#10b981 翡翠綠強調色、16px 圓角
+"""
+
 import sys
 import os
+import json
+import datetime
+import importlib
+import pandas as pd
+import streamlit as st
 
-_project_root = r"c:\Users\m3192\OneDrive\文件\npx create-video@speaceX\twstockstest\dashboard_ui"
+_project_root = os.path.dirname(os.path.abspath(__file__))
 if _project_root not in sys.path:
     sys.path.insert(0, _project_root)
 
-import streamlit as st
-st.set_page_config(page_title="新科狀元・事件量化作戰手冊", layout="wide")
+st.set_page_config(
+    page_title="新科狀元・事件量化作戰中心",
+    page_icon="⚔️",
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
 
 import api_client
 import components_weapons as components
 
+def render_html(html_str: str):
+    """安全渲染 HTML，去除每行多餘縮排與空行，徹底防止 CommonMark 觸發 4-space 縮排程式碼區塊"""
+    cleaned = " ".join(line.strip() for line in html_str.splitlines() if line.strip())
+    st.markdown(cleaned, unsafe_allow_html=True)
+
+import disposal_event_scanner
+
+importlib.reload(api_client)
+importlib.reload(disposal_event_scanner)
+importlib.reload(components)
+
+PROJECT_ROOT = _project_root
+SIGNALS_FILE = os.path.join(PROJECT_ROOT, "published_signals.json")
+
 # ============================================================
 # Session State Initialize
 # ============================================================
-if "is_syncing" not in st.session_state: st.session_state.is_syncing = False
+if "is_syncing_all" not in st.session_state: st.session_state.is_syncing_all = False
 if "is_syncing_score" not in st.session_state: st.session_state.is_syncing_score = False
 if "is_syncing_revenue" not in st.session_state: st.session_state.is_syncing_revenue = False
 if "is_syncing_revenue_moneydj" not in st.session_state: st.session_state.is_syncing_revenue_moneydj = False
 if "is_syncing_financials" not in st.session_state: st.session_state.is_syncing_financials = False
 if "is_syncing_disposal" not in st.session_state: st.session_state.is_syncing_disposal = False
+if "is_syncing_taiex" not in st.session_state: st.session_state.is_syncing_taiex = False
+if "is_syncing_klines" not in st.session_state: st.session_state.is_syncing_klines = False
 if "is_exporting_signals" not in st.session_state: st.session_state.is_exporting_signals = False
 if "export_signal_result" not in st.session_state: st.session_state.export_signal_result = None
 if "sync_success_msg" not in st.session_state: st.session_state.sync_success_msg = None
 
 # ============================================================
-# CSS
+# CSS: 深色模式高保定微霧美學 (#0a0a0a + #10b981 + 16px 圓角)
 # ============================================================
 CSS = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;700;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
 
 :root {
     --color-bg:      #0a0a0a;
+    --color-card:    #111827;
     --color-up:      #10B981;
     --color-down:    #F43F5E;
-    --color-panel:   rgba(255, 255, 255, 0.04);
+    --color-amber:   #F59E0B;
+    --color-blue:    #38BDF8;
+    --color-panel:   rgba(255, 255, 255, 0.03);
     --color-text:    #E2E8F0;
     --color-muted:   #94A3B8;
-    --color-border:  rgba(255, 255, 255, 0.1);
+    --color-border:  rgba(255, 255, 255, 0.08);
 }
 
-.stApp { background: var(--color-bg); color: var(--color-text); font-family: 'Urbanist', sans-serif; }
-[data-testid="stAppViewContainer"] { background: var(--color-bg); color: var(--color-text); }
-.main .block-container { padding: 1.5rem; max-width: 100%; }
-h1, h2, h3, h4, h5, h6 { color: #FFFFFF; font-family: 'Urbanist', sans-serif; font-weight: 900; }
+.stApp {
+    background-color: var(--color-bg) !important;
+    color: var(--color-text) !important;
+    font-family: 'Urbanist', 'Noto Sans TC', sans-serif !important;
+}
 
+[data-testid="stAppViewContainer"] {
+    background-color: var(--color-bg) !important;
+    color: var(--color-text) !important;
+    overflow-x: hidden !important;
+}
+
+.main {
+    overflow-x: hidden !important;
+}
+
+.main .block-container {
+    padding-top: 0.6rem !important;
+    padding-bottom: 2rem !important;
+    padding-left: 1.2rem !important;
+    padding-right: 1.2rem !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #FFFFFF !important;
+    font-family: 'Urbanist', 'Noto Sans TC', sans-serif !important;
+    font-weight: 900 !important;
+}
+
+/* 頂部切換膠囊按鈕美化 */
+[data-testid="stRadio"] > div {
+    background: #111827 !important;
+    padding: 2px !important;
+    border-radius: 12px !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    display: flex !important;
+    gap: 4px !important;
+    justify-content: flex-end !important;
+}
+[data-testid="stRadio"] label {
+    background: transparent !important;
+    border-radius: 8px !important;
+    padding: 6px 14px !important;
+    cursor: pointer !important;
+    border: none !important;
+    margin: 0 !important;
+}
+[data-testid="stRadio"] label[data-checked="true"],
+[data-testid="stRadio"] div[role="radiogroup"] label:has(input:checked) {
+    background: #10B981 !important;
+    color: #0a0a0a !important;
+    font-weight: 900 !important;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35) !important;
+}
+[data-testid="stRadio"] label p,
+[data-testid="stRadio"] label span {
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    margin: 0 !important;
+}
+
+/* 訊息卡片 */
 .info-box {
-    background-color: var(--color-panel);
-    padding: 16px;
+    background-color: var(--color-card);
+    padding: 18px 20px;
     border-radius: 16px;
     border: 1px solid var(--color-border);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
     margin-bottom: 16px;
 }
 
@@ -64,60 +163,360 @@ h1, h2, h3, h4, h5, h6 { color: #FFFFFF; font-family: 'Urbanist', sans-serif; fo
     border-bottom: 1px solid var(--color-border);
 }
 .weapon-1 { color: #38bdf8; border-bottom-color: rgba(56,189,248,0.3); }
-.weapon-2 { color: #f43f5e; border-bottom-color: rgba(244,63,94,0.3); }
 .weapon-3 { color: #f59e0b; border-bottom-color: rgba(245,158,11,0.3); }
-.weapon-4 { color: #a855f7; border-bottom-color: rgba(168,85,247,0.3); }
 
+/* 標籤小標記 */
 .tag {
     display: inline-block;
-    padding: 2px 8px;
-    border-radius: 4px;
+    padding: 3px 10px;
+    border-radius: 6px;
     font-size: 12px;
-    font-weight: bold;
+    font-weight: 800;
     margin-right: 6px;
 }
 .tag-moo { background: rgba(16,185,129,0.15); border: 1px solid #10b981; color: #10b981; }
 .tag-moc { background: rgba(56,189,248,0.15); border: 1px solid #38bdf8; color: #38bdf8; }
-.tag-short { background: rgba(244,63,94,0.15); border: 1px solid #f43f5e; color: #f43f5e; }
+.tag-night { background: rgba(99,102,241,0.15); border: 1px solid #818cf8; color: #a5b4fc; }
+
+/* 消除水平捲軸與邊距自適應 */
+.stDataFrame {
+    width: 100% !important;
+}
+[data-testid="stDataFrame"] > div {
+    max-width: 100% !important;
+}
+
+/* 親友白話版專用巨無霸字體與直式卡片 */
+.companion-card {
+    background: #111827;
+    border-radius: 16px;
+    padding: 24px 22px;
+    margin-bottom: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+.companion-hero-title {
+    font-size: 36px;
+    font-weight: 900;
+    line-height: 1.25;
+    color: #F8FAFC;
+    margin-bottom: 8px;
+}
+.companion-hero-sub {
+    font-size: 20px;
+    font-weight: 700;
+    color: #94A3B8;
+    line-height: 1.4;
+}
+.companion-badge {
+    display: inline-block;
+    font-size: 18px;
+    font-weight: 900;
+    padding: 6px 14px;
+    border-radius: 10px;
+    margin-right: 8px;
+    margin-bottom: 6px;
+}
 </style>
 """
 
 st.markdown(CSS, unsafe_allow_html=True)
 
-# ============================================================
-# Main Render
-# ============================================================
-def main():
-    if st.session_state.sync_success_msg:
-        st.info(st.session_state.sync_success_msg, icon="ℹ️")
-        st.session_state.sync_success_msg = None
 
-    # Top Header
-    st.markdown("""
-    <div style='margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center;'>
-        <div>
-            <h1 style='margin: 0; font-size: 28px; background: linear-gradient(135deg, #fff 0%, #10b981 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;'>
-                新科狀元・全市場搜尋與量化作戰中心
-            </h1>
-            <div style='margin-top: 8px; font-size: 14px; color: #94a3b8;'>
-                <span class='tag tag-moo'>真・全市場掃描 (1,900+ 檔)</span>
-                <span class='tag' style='background: rgba(255,255,255,0.1); color: #fff;'>四大底線濾網 + 5000萬流動性</span>
-                <span class='tag tag-moc'>四大因子 10/20/0/70</span>
-            </div>
+# ============================================================
+# 執行一鍵全自動盤後同步管線 (Smart Pipeline)
+# ============================================================
+def execute_smart_sync_pipeline():
+    """依序自動執行：大盤夜盤 -> K線 -> 處置名單 -> 月營收 -> 財報ROE -> 跑分 -> 親友版發布"""
+    progress_bar = st.progress(0, text="🚀 啟動全自動盤後同步管線...")
+    try:
+        # 1. 大盤與夜盤
+        progress_bar.progress(15, text="1/6 正在更新大盤與台指期夜盤 (TXF / TXF_NIGHT)...")
+        try:
+            api_client.update_taiex()
+        except Exception as e:
+            print(f"[SmartSync] update_taiex notice: {e}")
+
+        # 2. 全市場 K 線
+        progress_bar.progress(35, text="2/6 正在校正全市場 K 線歷史與除權息跳空...")
+        try:
+            api_client.sync_daily_market_data()
+        except Exception as e:
+            print(f"[SmartSync] sync_daily_market_data notice: {e}")
+
+        # 3. 處置名單
+        progress_bar.progress(50, text="3/6 正在同步上市櫃處置出關名單...")
+        try:
+            from disposal_event_scanner import DisposalEventScanner
+            scanner = DisposalEventScanner()
+            scanner.sync_disposals()
+        except Exception as e:
+            print(f"[SmartSync] sync_disposals notice: {e}")
+
+        # 4. 月營收
+        progress_bar.progress(65, text="4/6 正在比對最新月營收數據...")
+        try:
+            from moneydj_revenue_scraper import scrape_moneydj_revenue
+            scrape_moneydj_revenue()
+        except Exception as e:
+            print(f"[SmartSync] scrape_moneydj_revenue notice: {e}")
+
+        # 5. 全市場重新跑分
+        progress_bar.progress(80, text="5/6 正在執行 1,900+ 檔截面 Z-Score 動能跑分...")
+        try:
+            api_client.run_screener()
+        except Exception as e:
+            print(f"[SmartSync] run_screener notice: {e}")
+
+        # 6. 發布最新訊號與 Git 推送
+        progress_bar.progress(95, text="6/6 正在產出親友版訊號快照並執行 Git 推送...")
+        from signal_publisher import export_and_publish_signals
+        res = export_and_publish_signals()
+        st.session_state.export_signal_result = res
+
+        progress_bar.progress(100, text="✅ 全自動盤後同步與發布全部完成！")
+        st.session_state.sync_success_msg = f"🎉 全自動盤後同步完成！資料日期: {res.get('data_date')}，Top 9 名單與處置狙擊已全量更新發布！"
+        st.cache_data.clear()
+
+    except Exception as e:
+        st.session_state.sync_success_msg = f"❌ 同步過程發生異常: {str(e)}"
+    finally:
+        st.session_state.is_syncing_all = False
+
+
+# ============================================================
+# 親友白話投資導航視圖 (Companion View)
+# ============================================================
+def render_companion_view():
+    render_html("""
+    <div style='text-align: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.08);'>
+        <div style='font-size: 34px; font-weight: 900; background: linear-gradient(135deg, #ffffff 0%, #10b981 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;'>
+            🧭 白話投資導航・親友與老手指南
         </div>
-        <div style='text-align: right;'>
-            <div style='color: #10b981; font-weight: bold; font-size: 14px;'>● ENGINE ONLINE & DATA VERIFIED</div>
+        <div style='font-size: 16px; color: #94a3b8; margin-top: 6px;'>
+            高鐵時刻表級大字看板 ｜ 零股配資試算 ｜ 一鍵健檢持股 ｜ 10字口訣避雷
         </div>
     </div>
-    """, unsafe_allow_html=True)
+    """)
 
-    # ============================================================
-    # 📤 前後台分離：匯出並發布親友版最新訊號 (Git Push)
-    # ============================================================
-    col_pub_btn, col_pub_note = st.columns([0.65, 0.35])
+    if not os.path.exists(SIGNALS_FILE):
+        st.warning("🚧 尚未找到 published_signals.json 訊號檔。請於老手作戰室點擊「⚡ 一鍵全自動盤後同步與發布」！")
+        return
+
+    try:
+        with open(SIGNALS_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception as e:
+        st.error(f"讀取訊號檔失敗: {e}")
+        return
+
+    # 最上方發布休市快報卡片 (10/23颱風假、10/26國定補假)
+    holiday_notice = data.get("holiday_notice", {})
+    if holiday_notice.get("is_active", True):
+        notice_title = holiday_notice.get("title", "10/23颱風假、10/26國定假日補假。台北股市休市")
+        render_html(f"""
+        <div style='background: rgba(245, 158, 11, 0.12); border: 2px solid #f59e0b; border-left: 8px solid #f59e0b; border-radius: 16px; padding: 20px 24px; margin-bottom: 22px;'>
+            <div style='display: flex; align-items: flex-start; gap: 16px;'>
+                <div style='font-size: 40px; line-height: 1;'>🏖️</div>
+                <div style='flex: 1;'>
+                    <div style='font-size: 26px; font-weight: 900; color: #fbbf24; line-height: 1.3; margin-bottom: 6px;'>
+                        【重要休市公告】{notice_title}
+                    </div>
+                    <div style='font-size: 16px; font-weight: 500; color: #fde68a; line-height: 1.6;'>
+                        📢 <b>10/23 (週五)</b> 因天然災害停止上班、<b>10/26 (週一)</b> 國定假日補假，台北股市全面休市！<br>
+                        • <b>次一開盤交易日</b>：<b>10/27 (週二) 09:00</b> 正常開市。<br>
+                        • <b>處置股票天數順延</b>：處置天數與管制期間暫停計算，解除處置日足額順延至 10/27 起陸續出關。<br>
+                        • <b>最新作戰基準</b>：目前為 <b>10/22 (週四) 最新收盤數據</b>，休市期間請安心休假！
+                    </div>
+                </div>
+            </div>
+        </div>
+        """)
+
+    data_date = data.get("data_date", "2026-01-01")
+    market = data.get("market_regime", {})
+    core1 = data.get("core_1_swing", {})
+    core2 = data.get("core_2_disposal", {})
+    all_stocks = data.get("all_searchable_stocks", {})
+
+    n7 = market.get("n7_guardian", {})
+    rec_equity = int(market.get("recommended_equity_pct", 50))
+    rec_cash = int(market.get("recommended_cash_pct", 50))
+    weather_title = market.get("weather_title", "⛅ 多雲警戒")
+    weather_desc = market.get("weather_desc", "")
+    taiex_c = market.get("taiex_close", 0)
+
+    # 1. 股市天氣預報 (大字看板 + N7 夜盤攔截巨幅警告)
+    weather_border = "#10b981" if rec_equity >= 80 else ("#f59e0b" if rec_equity >= 50 else "#f43f5e")
+    weather_icon = "☀️" if rec_equity >= 80 else ("⛅" if rec_equity >= 50 else "⛈️")
+
+    render_html(f"""
+    <div class='companion-card' style='border-top: 6px solid {weather_border}; text-align: center;'>
+        <div style='font-size: 64px; line-height: 1.1;'>{weather_icon}</div>
+        <div class='companion-hero-title' style='color: {weather_border};'>{weather_title}（建議持股上限：{rec_equity}%）</div>
+        <div style='font-size: 15px; color: #94a3b8; margin-top: 6px;'>
+            最新大盤: <b>{taiex_c:,.0f} 點</b> ｜ 資料基準日: <b>{data_date}</b>
+        </div>
+        <div style='font-size: 18px; font-weight: 700; color: #cbd5e1; margin-top: 14px; line-height: 1.5;'>
+            {weather_desc}
+        </div>
+    </div>
+    """)
+
+    # N7 夜盤攔截專屬警告卡
+    if n7.get("night_intercept_active"):
+        render_html(f"""
+        <div class='companion-card' style='border: 2px solid #f43f5e; background: rgba(244,63,94,0.08);'>
+            <div style='font-size: 22px; font-weight: 900; color: #f43f5e; margin-bottom: 6px;'>
+                🛑 【N7 守護者警告：夜盤重挫摜破季線！】
+            </div>
+            <div style='font-size: 16px; color: #fecdd3; line-height: 1.6;'>
+                <b>{n7.get('night_intercept_reason')}</b><br>
+                👉 <b>親友操盤口訣</b>：今天開盤「絕對不要買任何新股票」！手中持股若跌出15名優先賣出換現金！
+            </div>
+        </div>
+        """)
+    elif n7.get("mod_c_triggered"):
+        render_html(f"""
+        <div class='companion-card' style='border: 2px solid #f59e0b; background: rgba(245,158,11,0.08);'>
+            <div style='font-size: 22px; font-weight: 900; color: #f59e0b; margin-bottom: 6px;'>
+                ⚡ 【09:00 開盤防雙巴：極度超賣防錯殺！】
+            </div>
+            <div style='font-size: 16px; color: #fde68a; line-height: 1.6;'>
+                <b>{n7.get('mod_c_reason')}</b><br>
+                👉 <b>親友操盤口訣</b>：開盤不要慌張全砍在地板！減碼單分兩批，若盤中反彈站回即可保住獲利！
+            </div>
+        </div>
+        """)
+
+    # 2. 巨型零股配資試算機
+    st.markdown("<div class='companion-hero-title' style='font-size: 24px;'>💰 巨型零股配資試算機</div>", unsafe_allow_html=True)
+    user_capital = st.number_input(
+        "輸入預計投資總本金 (新台幣元)",
+        min_value=10000,
+        max_value=100000000,
+        value=300000,
+        step=50000,
+        key="companion_cap"
+    )
+
+    investable_total = user_capital * (rec_equity / 100.0)
+    cash_reserve = user_capital - investable_total
+    single_stock_budget = investable_total / 9.0 if rec_equity > 0 else 0.0
+
+    c_c1, c_c2, c_c3 = st.columns(3)
+    with c_c1:
+        render_html(f"""
+        <div class='companion-card' style='border-left: 6px solid #10b981; text-align: center;'>
+            <div style='font-size: 14px; color: #94a3b8;'>📈 可買股票總額 ({rec_equity}%)</div>
+            <div style='font-size: 28px; font-weight: 900; color: #10b981; margin-top: 4px;'>${investable_total:,.0f}</div>
+        </div>
+        """)
+    with c_c2:
+        render_html(f"""
+        <div class='companion-card' style='border-left: 6px solid #f43f5e; text-align: center;'>
+            <div style='font-size: 14px; color: #94a3b8;'>🏦 必留守防守現金 ({rec_cash}%)</div>
+            <div style='font-size: 28px; font-weight: 900; color: #f43f5e; margin-top: 4px;'>${cash_reserve:,.0f}</div>
+        </div>
+        """)
+    with c_c3:
+        render_html(f"""
+        <div class='companion-card' style='border-left: 6px solid #38bdf8; text-align: center;'>
+            <div style='font-size: 14px; color: #94a3b8;'>🎯 前9強每檔預算</div>
+            <div style='font-size: 28px; font-weight: 900; color: #38bdf8; margin-top: 4px;'>${single_stock_budget:,.0f}</div>
+        </div>
+        """)
+
+    # 3. 持股一鍵健檢
+    st.markdown("<div class='companion-hero-title' style='font-size: 24px; margin-top: 20px;'>🔍 「我手上的股票怎麼辦？」一鍵健檢</div>", unsafe_allow_html=True)
+    search_query = st.text_input("輸入 4 碼股票代號 (例如: 6672, 3287, 2330, 2454)", placeholder="請輸入代號", key="companion_search").strip()
+    if search_query:
+        target_info = all_stocks.get(search_query)
+        if target_info:
+            t_name = target_info.get("name", "")
+            t_rank = target_info.get("rank", 999)
+            t_close = target_info.get("close", 0.0)
+
+            if isinstance(t_rank, int) and t_rank <= 9:
+                render_html(f"""
+                <div class='companion-card' style='border-left: 6px solid #10b981; background: rgba(16,185,129,0.1);'>
+                    <div style='font-size: 22px; font-weight: 900; color: #10b981;'>
+                        🟢 {search_query} {t_name}（目前第 {t_rank} 名 ｜ 現價: {t_close:.2f}）
+                    </div>
+                    <div style='font-size: 16px; color: #a7f3d0; margin-top: 8px;'>
+                        👉 <b>行動口訣</b>：動能霸榜前 9 強！安心抱牢，享受波段飆升！
+                    </div>
+                </div>
+                """)
+            elif isinstance(t_rank, int) and t_rank <= 15:
+                render_html(f"""
+                <div class='companion-card' style='border-left: 6px solid #f59e0b; background: rgba(245,158,11,0.1);'>
+                    <div style='font-size: 22px; font-weight: 900; color: #f59e0b;'>
+                        🟡 {search_query} {t_name}（目前第 {t_rank} 名 ｜ 現價: {t_close:.2f}）
+                    </div>
+                    <div style='font-size: 16px; color: #fde68a; margin-top: 8px;'>
+                        👉 <b>行動口訣</b>：處於安全緩衝區！續抱不賣，亦無須追高加碼！
+                    </div>
+                </div>
+                """)
+            else:
+                render_html(f"""
+                <div class='companion-card' style='border-left: 6px solid #f43f5e; background: rgba(244,63,94,0.1);'>
+                    <div style='font-size: 22px; font-weight: 900; color: #f43f5e;'>
+                        🔴 {search_query} {t_name}（已跌出 15 名外 ｜ 現價: {t_close:.2f}）
+                    </div>
+                    <div style='font-size: 16px; color: #fecdd3; margin-top: 8px;'>
+                        👉 <b>行動口訣</b>：動能衰退！明日開盤 09:00 嚴守紀律市價賣出換現金！
+                    </div>
+                </div>
+                """)
+        else:
+            st.info(f"股票 {search_query} 未進入今日全市場動能篩選名單。")
+
+    # 4. 直式波段輪動看板 (十方極速陣 Top 9 / 10~15 緩衝)
+    st.markdown("<div class='companion-hero-title' style='font-size: 24px; margin-top: 24px;'>📈 直式波段輪動前 9 強</div>", unsafe_allow_html=True)
+    top_9_cards = core1.get("top_9", [])
+    for s in top_9_cards:
+        tags_html = " ".join([f"<span class='companion-badge' style='background:rgba(16,185,129,0.15); color:#10b981; border:1px solid #10b981;'>{t}</span>" for t in s.get("highlights", [])])
+        warn_html = f"<div style='font-size:13px; color:#fbbf24; margin-top:6px;'>{s['warning_tag']}</div>" if s.get("warning_tag") else ""
+        
+        render_html(f"""
+        <div class='companion-card' style='border-left: 6px solid #10b981; margin-bottom: 12px;'>
+            <div style='display: flex; justify-content: space-between; align-items: center;'>
+                <div>
+                    <span style='font-size: 24px; font-weight: 900; color: #fff;'>第 {s['rank']} 名：{s['stock_id']} {s['name']}</span>
+                    <span style='font-size: 16px; color: #94a3b8; margin-left: 12px;'>現價: {s['close']:.2f} ｜ 10日動能: {s['momentum_pct']:+.1f}% ｜ 營收年增: {s['revenue_yoy_pct']:+.1f}%</span>
+                </div>
+                <span style='background:#10b981; color:#0a0a0a; font-weight:900; padding:4px 10px; border-radius:6px; font-size:13px;'>🎯 前9買進</span>
+            </div>
+            <div style='margin-top: 8px;'>{tags_html}</div>
+            {warn_html}
+        </div>
+        """)
+
+
+# ============================================================
+# 老手量化實戰作戰室視圖 (Veteran War Room View)
+# ============================================================
+def render_veteran_war_room(portfolio_data, market_regime):
+    # 1. 頂部 N7 終極本金守護者 HUD
+    components.render_n7_guardian_hud(market_regime)
+
+    # 2. 智能極簡盤後同步列 (收斂為一鍵全自動 + 發布 + 個別抽屜)
+    col_main_sync, col_pub_btn, col_adv_btn = st.columns([0.48, 0.32, 0.20])
+    with col_main_sync:
+        if st.session_state.is_syncing_all:
+            st.button("⏳ 全自動盤後管線執行中...", disabled=True, use_container_width=True)
+            execute_smart_sync_pipeline()
+            st.rerun()
+        else:
+            if st.button("⚡ 一鍵盤後全自動同步與發布", type="primary", use_container_width=True):
+                st.session_state.is_syncing_all = True
+                st.rerun()
+
     with col_pub_btn:
         if st.session_state.is_exporting_signals:
-            st.button("⏳ 正在匯出訊號並推送至 Git...", disabled=True, width="stretch")
+            st.button("⏳ 發布親友版中...", disabled=True, use_container_width=True)
             try:
                 from signal_publisher import export_and_publish_signals
                 res = export_and_publish_signals()
@@ -127,191 +526,141 @@ def main():
             st.session_state.is_exporting_signals = False
             st.rerun()
         else:
-            if st.button("📤 匯出並發布親友版最新訊號 (Git Push)", type="primary", width="stretch"):
+            if st.button("📤 發布親友版 (Git Push)", use_container_width=True):
                 st.session_state.is_exporting_signals = True
                 st.rerun()
-    with col_pub_note:
-        st.markdown(
-            "<div style='font-size:12px; color:#10b981; line-height:1.4; padding-top:6px;'>"
-            "● 防洗掉歷史快照 ｜ 雙雷達保守水位 ｜ 處置避雷針 ｜ 自動 Git Push"
-            "</div>",
-            unsafe_allow_html=True
-        )
 
+    with col_adv_btn:
+        show_adv = st.toggle("🛠️ 個別同步抽屜", value=False, key="toggle_adv_sync")
+
+    if show_adv:
+        with st.container():
+            c1, c2, c3, c4, c5, c6 = st.columns(6)
+            with c1:
+                if st.button("🚀 單獨跑分", use_container_width=True):
+                    try:
+                        api_client.run_screener()
+                        st.success("跑分完成！")
+                        st.cache_data.clear()
+                    except Exception as e:
+                        st.error(f"錯誤: {e}")
+            with c2:
+                if st.button("🚨 同步處置", use_container_width=True):
+                    try:
+                        from disposal_event_scanner import DisposalEventScanner
+                        cnt = DisposalEventScanner().sync_disposals()
+                        st.success(f"處置更新 {cnt} 筆！")
+                        st.cache_data.clear()
+                    except Exception as e:
+                        st.error(f"錯誤: {e}")
+            with c3:
+                if st.button("📰 MoneyDJ營收", use_container_width=True):
+                    try:
+                        from moneydj_revenue_scraper import scrape_moneydj_revenue
+                        res = scrape_moneydj_revenue()
+                        st.success(f"爬取營收 {res.get('count')} 檔！")
+                        st.cache_data.clear()
+                    except Exception as e:
+                        st.error(f"錯誤: {e}")
+            with c4:
+                if st.button("🏢 OpenAPI營收", use_container_width=True):
+                    try:
+                        from update_revenue_openapi import fetch_and_update_openapi_revenue
+                        res = fetch_and_update_openapi_revenue()
+                        st.success(res.get("message", "營收同步完畢"))
+                        st.cache_data.clear()
+                    except Exception as e:
+                        st.error(f"錯誤: {e}")
+            with c5:
+                if st.button("📊 OpenAPI財報", use_container_width=True):
+                    try:
+                        api_client.update_financials()
+                        st.success("財報更新已啟動")
+                    except Exception as e:
+                        st.error(f"錯誤: {e}")
+            with c6:
+                if st.button("📈 同步大盤", use_container_width=True):
+                    try:
+                        api_client.update_taiex()
+                        st.success("大盤夜盤已更新")
+                        st.cache_data.clear()
+                    except Exception as e:
+                        st.error(f"錯誤: {e}")
+
+    # 發布結果提示
     if st.session_state.export_signal_result:
         res = st.session_state.export_signal_result
         if res.get("success"):
             git_info = res.get("git_status", {})
             st.success(
-                f"✅ **親友版最新訊號發布成功 (資料日期: {res.get('data_date')})！**\n\n"
-                f"• **核心一波段**：強勢前 9 強 `{res.get('top_9_count')}` 檔 ｜ 緩衝區 `{res.get('buffer_count')}` 檔 ｜ 最新跌出 15 名外 `{res.get('dropped_count')}` 檔\n"
-                f"• **核心二處置**：策略 B 今日觸發 `{res.get('hits_b_count')}` 檔 ｜ 策略 C 今日觸發 `{res.get('hits_c_count')}` 檔\n"
-                f"• **Git 狀態**：{git_info.get('message', '完成')}"
+                f"✅ **親友版訊號發布成功 (資料日期: {res.get('data_date')})！** "
+                f"前 9 強 `{res.get('top_9_count')}` 檔 ｜ 緩衝 `{res.get('buffer_count')}` 檔 ｜ 汰弱 `{res.get('dropped_count')}` 檔 ｜ "
+                f"策略B `{res.get('hits_b_count')}` 檔 ｜ 策略C `{res.get('hits_c_count')}` 檔 ｜ Git: {git_info.get('message', '完成')}"
             )
         else:
             st.error(f"❌ 發布失敗: {res.get('message')}")
-        if st.button("✖ 關閉發布通知", key="dismiss_export_msg"):
+        if st.button("✖ 關閉提示", key="dismiss_export_msg"):
             st.session_state.export_signal_result = None
             st.rerun()
 
-    st.markdown("<div style='margin-bottom: 12px;'></div>", unsafe_allow_html=True)
-
-    # Toolbar
-    col_t1, col_t2, col_t3, col_t4, col_t5, col_t6, col_t7 = st.columns(7)
-    
-    with col_t1:
-        if st.session_state.is_syncing_score:
-            st.button("全市場掃描中...", disabled=True, width="stretch")
-            try:
-                res = api_client.run_screener()
-                st.session_state.sync_success_msg = "全市場跑分完畢！最新四大武器名單已更新。"
-                st.cache_data.clear()
-            except Exception as e:
-                st.session_state.sync_success_msg = f"跑分錯誤: {str(e)}"
-            st.session_state.is_syncing_score = False
-            st.rerun()
-        else:
-            if st.button("🚀 執行全市場掃描跑分 (Daily)", width="stretch"):
-                st.session_state.is_syncing_score = True
-                st.rerun()
-                
-    with col_t2:
-        if st.session_state.is_syncing_disposal:
-            st.button("處置同步中...", disabled=True, width="stretch")
-            try:
-                from disposal_event_scanner import DisposalEventScanner
-                scanner = DisposalEventScanner()
-                cnt = scanner.sync_disposals()
-                st.cache_data.clear()
-                st.session_state.sync_success_msg = f"處置名單與 DuckDB 資料庫同步完畢 (已更新/儲存 {cnt} 筆記錄)！"
-            except Exception as e:
-                st.session_state.sync_success_msg = f"錯誤: {e}"
-            st.session_state.is_syncing_disposal = False
-            st.rerun()
-        else:
-            if st.button("🚨 同步處置出關名單", width="stretch"):
-                st.session_state.is_syncing_disposal = True
-                st.rerun()
-
-    with col_t3:
-        if st.session_state.is_syncing_revenue_moneydj:
-            st.button("快報爬取中...", disabled=True, width="stretch")
-            try:
-                from moneydj_revenue_scraper import scrape_moneydj_revenue
-                res = scrape_moneydj_revenue()
-                if res.get("status") == "success":
-                    st.session_state.sync_success_msg = f"MoneyDJ 今日營收快報爬取成功！已更新/寫入 {res.get('count')} 檔個股 (目標歸屬月: {res.get('target_date')})。"
-                else:
-                    st.session_state.sync_success_msg = f"爬取營收快報失敗: {res.get('message')}"
-                st.cache_data.clear()
-            except Exception as e:
-                st.session_state.sync_success_msg = f"錯誤: {e}"
-            st.session_state.is_syncing_revenue_moneydj = False
-            st.rerun()
-        else:
-            if st.button("每月10以前爬蟲最新營收", width="stretch"):
-                st.session_state.is_syncing_revenue_moneydj = True
-                st.rerun()
-
-    with col_t4:
-        if st.session_state.is_syncing_revenue:
-            st.button("官方全量同步中...", disabled=True, width="stretch")
-            try:
-                from update_revenue_openapi import fetch_and_update_openapi_revenue
-                res = fetch_and_update_openapi_revenue()
-                st.session_state.sync_success_msg = res.get("message", "全市場官方營收已同步完畢！")
-                st.cache_data.clear()
-            except Exception as e:
-                st.session_state.sync_success_msg = f"官方營收同步錯誤: {e}"
-            st.session_state.is_syncing_revenue = False
-            st.rerun()
-        else:
-            if st.button("同步最新月營收 (OpenAPI)", width="stretch"):
-                st.session_state.is_syncing_revenue = True
-                st.rerun()
-
-    with col_t5:
-        if st.session_state.is_syncing_financials:
-            st.button("財報同步中...", disabled=True, width="stretch")
-            try:
-                api_client.update_financials()
-                st.session_state.sync_success_msg = "財報 (ROE) 背景更新已啟動"
-            except: pass
-            st.session_state.is_syncing_financials = False
-            st.rerun()
-        else:
-            if st.button("同步最新財報ROE", width="stretch"):
-                st.session_state.is_syncing_financials = True
-                st.rerun()
-
-    with col_t6:
-        if st.session_state.is_syncing:
-            st.button("K線同步中...", disabled=True, width="stretch")
-            try:
-                api_client.sync_daily_market_data()
-                st.session_state.sync_success_msg = "K線歷史已自動補齊"
-            except: pass
-            st.session_state.is_syncing = False
-            st.cache_data.clear()
-            st.rerun()
-        else:
-            if st.button("同步全市場K線", width="stretch"):
-                st.session_state.is_syncing = True
-                st.rerun()
-
-    with col_t7:
-        if st.session_state.get("is_syncing_taiex", False):
-            st.button("大盤同步中...", disabled=True, width="stretch")
-            try:
-                api_client.update_taiex()
-                st.session_state.sync_success_msg = "大盤點位與波動率已更新"
-            except: pass
-            st.session_state.is_syncing_taiex = False
-            st.cache_data.clear()
-            st.rerun()
-        else:
-            if st.button("同步最新數據(大盤)", width="stretch"):
-                st.session_state.is_syncing_taiex = True
-                st.rerun()
-
-    st.markdown("<br>", unsafe_allow_html=True)
-
-    # Auto-update TAIEX on first load
-    if not st.session_state.get("has_auto_updated_taiex", False):
-        with st.spinner("系統連線中：自動校正大盤水位與波動率..."):
-            try:
-                api_client.update_taiex()
-                api_client.fetch_market_regime.clear()
-            except:
-                pass
-        st.session_state.has_auto_updated_taiex = True
-        st.rerun()
-
-    # Fetch Data
-    with st.spinner("載入全市場作戰數據..."):
-        portfolio_data = api_client.fetch_portfolio_data()
-        market_regime = api_client.fetch_market_regime()
-
-    # Macro TAIEX Gap Indicator & Radar
-    if market_regime:
-        components.render_macro_hedge_radar(market_regime)
-        components.render_market_regime_panel(market_regime)
-
-    # 陣型C - 雙核心實戰作戰中心 (移除武器二、武器四，全寬展開零橫向卷軸)
-    st.markdown("<h2 style='text-align: center; margin: 36px 0 20px 0; font-weight: 800; color: #f8fafc; letter-spacing: 0.5px;'>⚔️ 陣型C - 雙核心實戰作戰中心</h2>", unsafe_allow_html=True)
-    
-    # 核心一：波段輪動 (十方極速陣) 全寬展開
+    # 4. 核心一：波段輪動 (十方極速陣)
     components.render_weapon1_swing(portfolio_data, market_regime)
-    
-    st.markdown("<div style='margin: 32px 0;'><hr style='border: none; border-top: 1px solid rgba(255,255,255,0.08);'></div>", unsafe_allow_html=True)
-    
-    # 核心二：處置出關狙擊 (策略 B 搶跑 ｜ 策略 C 開高走低做空) 全寬展開
+
+    st.markdown("<div style='margin: 18px 0;'><hr style='border: none; border-top: 1px solid rgba(255,255,255,0.08);'></div>", unsafe_allow_html=True)
+
+    # 5. 核心二：處置出關狙擊 (策略 B 搶跑 ｜ 策略 C 開高走低做空)
     components.render_weapon3_disposal()
 
-    st.markdown("<div style='margin: 32px 0;'><hr style='border: none; border-top: 1px solid rgba(255,255,255,0.08);'></div>", unsafe_allow_html=True)
-    
-    # Super Grid Detail (The Full Market Ranks)
+    st.markdown("<div style='margin: 18px 0;'><hr style='border: none; border-top: 1px solid rgba(255,255,255,0.08);'></div>", unsafe_allow_html=True)
+
+    # 6. 全市場 Top 30 觀測站
     components.render_super_grid_v2(portfolio_data)
+
+
+# ============================================================
+# Main Entry Point
+# ============================================================
+def main():
+    if st.session_state.sync_success_msg:
+        st.info(st.session_state.sync_success_msg, icon="ℹ️")
+        st.session_state.sync_success_msg = None
+
+    # 頂部模式切換膠囊
+    col_header, col_mode = st.columns([0.66, 0.34])
+    with col_header:
+        render_html("""
+        <div>
+            <h1 style='margin: 0; font-size: 22px; background: linear-gradient(135deg, #fff 0%, #10b981 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;'>
+                ⚔️ 新科狀元・事件量化作戰中心
+            </h1>
+            <div style='margin-top: 3px; font-size: 12px; color: #94a3b8;'>
+                <span class='tag tag-night'>🛡️ N7 終極守護</span>
+                <span class='tag tag-moo'>五大濾網 + 5000萬甜區</span>
+                <span class='tag tag-moc'>前 9 買 ｜ 15 賣</span>
+            </div>
+        </div>
+        """)
+
+    with col_mode:
+        selected_mode = st.radio(
+            "系統導航模式",
+            ["⚔️ 老手量化作戰", "🧭 親友白話導航"],
+            index=0,
+            horizontal=True,
+            label_visibility="collapsed"
+        )
+
+    st.markdown("<div style='margin-bottom: 8px;'></div>", unsafe_allow_html=True)
+
+    if "親友" in selected_mode:
+        render_companion_view()
+    else:
+        with st.spinner("載入全市場作戰數據..."):
+            portfolio_data = api_client.fetch_portfolio_data()
+            market_regime = api_client.fetch_market_regime()
+
+        render_veteran_war_room(portfolio_data, market_regime)
+
 
 if __name__ == "__main__":
     main()

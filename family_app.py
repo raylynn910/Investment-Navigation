@@ -21,12 +21,15 @@ import streamlit as st
 # ============================================================
 # 1. 頁面設定與自訂巨無霸紙質亮色 CSS
 # ============================================================
-st.set_page_config(
-    page_title="白話投資導航・親友與老手指南",
-    page_icon="🧭",
-    layout="centered",
-    initial_sidebar_state="collapsed"
-)
+try:
+    st.set_page_config(
+        page_title="白話投資導航・親友與老手指南",
+        page_icon="🧭",
+        layout="centered",
+        initial_sidebar_state="collapsed"
+    )
+except Exception:
+    pass
 
 def render_html(html_str: str):
     """
@@ -437,7 +440,25 @@ def check_freshness(data_date_val: str) -> tuple[bool, str]:
         if d_data == today:
             return True, "今日最新盤後訊號"
         
-        # 2. 如果今天是週末 (週六/週日)
+        # 2. 如果今天是休市日 (颱風假、國定假日、週末)
+        is_holiday = False
+        try:
+            from tools.market_calendar import is_trading_day
+            if not is_trading_day(today):
+                is_holiday = True
+        except Exception:
+            pass
+
+        if not is_holiday and data.get("holiday_notice", {}).get("is_active"):
+            is_holiday = True
+
+        if today.weekday() >= 5 or str(today) in ["2026-10-23", "2026-10-26"]:
+            is_holiday = True
+
+        if is_holiday:
+            return True, "休市中（10/23颱風假、10/26國定假日補假。台北股市休市，顯示 10/22 最新收盤訊號，10/27 開盤）"
+        
+        # 3. 如果今天是週末 (週六/週日)
         if today.weekday() == 5: # 週六
             friday = today - datetime.timedelta(days=1)
             if d_data == friday:
@@ -447,7 +468,7 @@ def check_freshness(data_date_val: str) -> tuple[bool, str]:
             if d_data == friday:
                 return True, "週末休息中（顯示本週五收盤訊號）"
                 
-        # 3. 如果今天是平日且在開盤前 (09:00 前)
+        # 4. 如果今天是平日且在開盤前 (09:00 前)
         if today.weekday() < 5 and now_tw.hour < 9:
             yesterday = today - datetime.timedelta(days=1)
             if today.weekday() == 0: # 週一晨間看上週五
@@ -455,7 +476,7 @@ def check_freshness(data_date_val: str) -> tuple[bool, str]:
             if d_data == yesterday:
                 return True, "盤前備戰中（顯示前一交易日收盤訊號）"
                 
-        # 4. 判定為過期
+        # 5. 判定為過期
         return False, f"版主尚未更新最新盤後資料（目前為 {data_date_val}），今日暫停參考！"
     except Exception:
         return True, "資料狀態已載入"
@@ -467,6 +488,31 @@ if not is_fresh:
     render_html(f"""
     <div class='mega-warning-box alert-danger'>
         🚨 🚧 {freshness_msg}
+    </div>
+    """)
+
+# ============================================================
+# 4.8 最上方休市公告卡片 (颱風假與國定補假)
+# ============================================================
+holiday_notice = data.get("holiday_notice", {})
+if holiday_notice.get("is_active", True):
+    notice_title = holiday_notice.get("title", "10/23颱風假、10/26國定假日補假。台北股市休市")
+    render_html(f"""
+    <div class='mega-warning-box alert-warning' style='background: #FFFBEB !important; border-left: 10px solid #D97706 !important; border: 2.5px solid #F59E0B; border-radius: 20px; padding: 24px 26px; margin-bottom: 24px; box-shadow: 0 4px 16px rgba(217, 119, 6, 0.12);'>
+        <div style='display: flex; align-items: flex-start; gap: 16px;'>
+            <div style='font-size: 52px; line-height: 1;'>🏖️</div>
+            <div style='flex: 1;'>
+                <div style='font-size: 32px; font-weight: 900; color: #92400E; line-height: 1.3; margin-bottom: 8px;'>
+                    【重要休市公告】{notice_title}
+                </div>
+                <div style='font-size: 22px; font-weight: 700; color: #B45309; line-height: 1.55;'>
+                    📢 <b>10/23 (週五)</b> 因天然災害停止上班、<b>10/26 (週一)</b> 為國定假日補假，台北股市全面休市！<br>
+                    • <b>次一開盤交易日</b>：<b>10/27 (週二) 09:00</b> 正常開市。<br>
+                    • <b>處置股票天數順延</b>：處置天數與管制期間暫停計算，解除處置日足額順延至 10/27 起陸續出關。<br>
+                    • <b>當前訊號基準</b>：目前為 <b>10/22 (週四) 最新收盤基準</b>，休市期間請安心休假，開市前再行參考！
+                </div>
+            </div>
+        </div>
     </div>
     """)
 
@@ -1209,6 +1255,26 @@ if is_pro_confirmed:
                 </div>
             </div>
             """)
+
+        next_day_b = core2.get("next_day_b_triggers", [])
+        next_trading_d_str = core2.get("next_trading_date", "")
+        is_weekend = core2.get("is_weekend_or_holiday", False)
+        if is_weekend and next_day_b:
+            for r in next_day_b:
+                render_html(f"""
+                <div class='paper-card' style='border-left: 8px solid #3B82F6; padding: 24px 22px; margin-bottom: 20px; border-radius: 16px; background: #EFF6FF;'>
+                    <div class='mega-card-title' style='color: #1D4ED8; font-size: 32px !important;'>
+                        🔮 下週一 ({next_trading_d_str}) 作戰推演：{r['stock_id']} {r['name']}
+                    </div>
+                    <div class='mega-subtext' style='color: #1E293B; margin: 12px 0;'>
+                        現價: <b>{r['latest_price']:.2f}</b> ｜ 累積: <b style='color:#15803D;'>{r['disp_cum_ret']:+.1f}%</b> ｜ 金額: <b>{r['turnover_str']}</b><br>
+                        執行時機: <b style='color:#1D4ED8;'>{r['action_timing']}</b> (出關倒數: {r['countdown_desc']})
+                    </div>
+                    <div class='mega-warning-box alert-success' style='border-color: #93C5FD; background: #DBEAFE;'>
+                        👉 <b>作戰準備：</b>{r['entry_sop']}
+                    </div>
+                </div>
+                """)
 
     # 下方蓄勢觀察名單
     with st.expander("⏳ 查看即將出關蓄勢名單 (T-1 / T-2) 與歷史回測數據"):
