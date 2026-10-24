@@ -502,8 +502,8 @@ def render_veteran_war_room(portfolio_data, market_regime):
     # 1. 頂部 N7 終極本金守護者 HUD
     components.render_n7_guardian_hud(market_regime)
 
-    # 2. 智能極簡盤後同步列 (收斂為一鍵全自動 + 發布 + 個別抽屜)
-    col_main_sync, col_pub_btn, col_adv_btn = st.columns([0.48, 0.32, 0.20])
+    # 2. 智能極簡盤後同步列 (收斂為一鍵全自動 + 即時推送雲端 + 個別抽屜)
+    col_main_sync, col_pub_btn, col_adv_btn = st.columns([0.44, 0.38, 0.18])
     with col_main_sync:
         if st.session_state.is_syncing_all:
             st.button("⏳ 全自動盤後管線執行中...", disabled=True, use_container_width=True)
@@ -516,22 +516,24 @@ def render_veteran_war_room(portfolio_data, market_regime):
 
     with col_pub_btn:
         if st.session_state.is_exporting_signals:
-            st.button("⏳ 發布親友版中...", disabled=True, use_container_width=True)
+            st.button("⏳ 正在推播至雲端 Streamlit.app...", disabled=True, use_container_width=True)
             try:
                 from signal_publisher import export_and_publish_signals
                 res = export_and_publish_signals()
                 st.session_state.export_signal_result = res
+                if res.get("success") and res.get("git_status", {}).get("git_pushed"):
+                    st.toast("🚀 雲端親友版已成功推播！Streamlit.app 正自動熱重載中...", icon="✅")
             except Exception as e:
                 st.session_state.export_signal_result = {"success": False, "message": str(e)}
             st.session_state.is_exporting_signals = False
             st.rerun()
         else:
-            if st.button("📤 發布親友版 (Git Push)", use_container_width=True):
+            if st.button("🚀 一鍵即時推送雲端親友版 (Streamlit.app)", use_container_width=True):
                 st.session_state.is_exporting_signals = True
                 st.rerun()
 
     with col_adv_btn:
-        show_adv = st.toggle("🛠️ 個別同步抽屜", value=False, key="toggle_adv_sync")
+        show_adv = st.toggle("🛠️ 個別抽屜", value=False, key="toggle_adv_sync")
 
     if show_adv:
         with st.container():
@@ -587,21 +589,39 @@ def render_veteran_war_room(portfolio_data, market_regime):
                     except Exception as e:
                         st.error(f"錯誤: {e}")
 
-    # 發布結果提示
+    # 雲端親友版連動狀態卡片 (含直達 Streamlit.app 按鈕)
     if st.session_state.export_signal_result:
         res = st.session_state.export_signal_result
         if res.get("success"):
             git_info = res.get("git_status", {})
-            st.success(
-                f"✅ **親友版訊號發布成功 (資料日期: {res.get('data_date')})！** "
-                f"前 9 強 `{res.get('top_9_count')}` 檔 ｜ 緩衝 `{res.get('buffer_count')}` 檔 ｜ 汰弱 `{res.get('dropped_count')}` 檔 ｜ "
-                f"策略B `{res.get('hits_b_count')}` 檔 ｜ 策略C `{res.get('hits_c_count')}` 檔 ｜ Git: {git_info.get('message', '完成')}"
-            )
+            pushed_at = git_info.get("pushed_at", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            commit_hash = git_info.get("commit_hash", "")
+            cloud_url = git_info.get("cloud_url", "https://investment-navigation.streamlit.app")
+            
+            c_msg, c_btn, c_close = st.columns([0.68, 0.22, 0.10])
+            with c_msg:
+                st.markdown(f"""
+                <div style='background: rgba(16, 185, 129, 0.10); border-left: 5px solid #10b981; border-radius: 8px; padding: 10px 16px;'>
+                    <div style='font-size: 15px; font-weight: bold; color: #10b981;'>
+                        🚀 雲端親友版 (Streamlit.app) 連動推送成功！
+                    </div>
+                    <div style='font-size: 13px; color: #cbd5e1; margin-top: 4px;'>
+                        📅 資料基準: <b>{res.get('data_date')}</b> ｜ ⏱️ 推送時間: <b>{pushed_at}</b> ｜ 🔀 Commit: <code>{commit_hash or 'latest'}</code><br>
+                        📊 前 9 強 <b>{res.get('top_9_count')}</b> 檔 ｜ 緩衝 <b>{res.get('buffer_count')}</b> 檔 ｜ 處置策略B <b>{res.get('hits_b_count')}</b> 檔 ｜ 休市公告已全面同步
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+            with c_btn:
+                st.link_button("🔗 開啟 Streamlit.app", cloud_url, use_container_width=True)
+            with c_close:
+                if st.button("✖ 關閉", key="dismiss_export_msg", use_container_width=True):
+                    st.session_state.export_signal_result = None
+                    st.rerun()
         else:
-            st.error(f"❌ 發布失敗: {res.get('message')}")
-        if st.button("✖ 關閉提示", key="dismiss_export_msg"):
-            st.session_state.export_signal_result = None
-            st.rerun()
+            st.error(f"❌ 雲端推送失敗: {res.get('message')}")
+            if st.button("✖ 關閉提示", key="dismiss_export_msg"):
+                st.session_state.export_signal_result = None
+                st.rerun()
 
     # 4. 核心一：波段輪動 (十方極速陣)
     components.render_weapon1_swing(portfolio_data, market_regime)
