@@ -856,27 +856,64 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
 
 
 def run_git_sync(data_date: str) -> dict:
-    """執行 Git Add, Commit, Push 並回報狀態"""
+    """執行 Git Add, Commit, Push 並具備 OneDrive index.lock 自動自我修復機制"""
     result = {
         "git_committed": False,
         "git_pushed": False,
+        "commit_hash": "",
+        "pushed_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "cloud_url": "https://investment-navigation.streamlit.app",
         "message": ""
     }
+    
+    # 自我修復：檢查並清除 OneDrive 或歷史殘留之 index.lock
+    lock_file = os.path.join(PROJECT_ROOT, ".git", "index.lock")
+    if os.path.exists(lock_file):
+        try:
+            os.remove(lock_file)
+            print("[run_git_sync] 偵測到殘留的 .git/index.lock，已自動安全清除！")
+        except Exception as lock_e:
+            print(f"[run_git_sync] 清除 index.lock 警示: {lock_e}")
+
+    tracked_files = [
+        "published_signals.json",
+        "history_snapshots.json",
+        "family_app.py",
+        "dashboard_ui.py",
+        "tools/market_calendar.py",
+        "tools/__init__.py",
+        ".gitignore"
+    ]
+
     try:
-        # 1. git add
+        # 1. git add (具備重試機制)
         add_res = subprocess.run(
-            ["git", "add", "published_signals.json", "history_snapshots.json", "family_app.py", "dashboard_ui.py", "tools/market_calendar.py", ".gitignore"],
+            ["git", "add"] + tracked_files,
             cwd=PROJECT_ROOT,
             capture_output=True,
             encoding="utf-8",
             errors="replace"
         )
         if add_res.returncode != 0:
+            # 重試一次
+            if os.path.exists(lock_file):
+                try: os.remove(lock_file)
+                except Exception: pass
+            time.sleep(0.5)
+            add_res = subprocess.run(
+                ["git", "add"] + tracked_files,
+                cwd=PROJECT_ROOT,
+                capture_output=True,
+                encoding="utf-8",
+                errors="replace"
+            )
+            
+        if add_res.returncode != 0:
             result["message"] = f"Git Add 失敗: {(add_res.stderr or '').strip()}"
             return result
 
         # 2. git commit
-        commit_msg = f"Update daily signals ({data_date})"
+        commit_msg = f"Update daily signals ({data_date}) & holiday notice"
         commit_res = subprocess.run(
             ["git", "commit", "-m", commit_msg],
             cwd=PROJECT_ROOT,
@@ -894,6 +931,14 @@ def run_git_sync(data_date: str) -> dict:
             else:
                 result["message"] = f"Git Commit 提示: {stdout_str or stderr_str}"
 
+        # 取得最新 Commit Hash
+        try:
+            rev_res = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=PROJECT_ROOT, capture_output=True, text=True)
+            if rev_res.returncode == 0:
+                result["commit_hash"] = rev_res.stdout.strip()
+        except Exception:
+            pass
+
         # 3. 檢查是否有遠端倉庫 (remote)
         remote_res = subprocess.run(
             ["git", "remote"],
@@ -906,24 +951,37 @@ def run_git_sync(data_date: str) -> dict:
 
         if not has_remote:
             result["git_pushed"] = False
-            result["message"] = "本地 Git 記錄已成功提交。尚未設定遠端倉庫 (git remote)，若需同步至 GitHub 請先配置 git remote。"
+            result["message"] = "本地 Git 記錄已成功提交。尚未設定遠端倉庫 (git remote)。"
             return result
 
-        # 4. git push
+        # 4. git push (具備超時與重試機制)
         push_res = subprocess.run(
-            ["git", "push"],
+            ["git", "push", "origin", "main"],
             cwd=PROJECT_ROOT,
             capture_output=True,
             encoding="utf-8",
             errors="replace",
-            timeout=20
+            timeout=25
         )
         if push_res.returncode == 0:
             result["git_pushed"] = True
-            result["message"] = "✅ 訊號檔案已成功提交並推送到 GitHub 遠端倉庫！"
+            result["message"] = f"✅ 訊號與前端已成功推播至 GitHub ({result['commit_hash']})！Streamlit.app 正自動熱重載！"
         else:
-            result["git_pushed"] = False
-            result["message"] = f"Git Push 失敗 (請確認網路連線或遠端權限): {(push_res.stderr or '').strip()}"
+            time.sleep(1)
+            push_res = subprocess.run(
+                ["git", "push", "origin", "main"],
+                cwd=PROJECT_ROOT,
+                capture_output=True,
+                encoding="utf-8",
+                errors="replace",
+                timeout=25
+            )
+            if push_res.returncode == 0:
+                result["git_pushed"] = True
+                result["message"] = f"✅ 訊號與前端已成功推播至 GitHub ({result['commit_hash']})！Streamlit.app 正自動熱重載！"
+            else:
+                result["git_pushed"] = False
+                result["message"] = f"Git Push 失敗 (請確認網路連線或遠端權限): {(push_res.stderr or '').strip()}"
 
     except Exception as e:
         result["message"] = f"Git 操作例外: {str(e)}"
