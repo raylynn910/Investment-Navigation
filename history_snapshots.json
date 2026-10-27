@@ -784,6 +784,118 @@
           "latest_close": 583.0
         }
       ]
+    },
+    "2026-10-27": {
+      "date": "2026-10-27",
+      "stock_ids": [
+        "6925",
+        "2468",
+        "4720",
+        "6277",
+        "6756",
+        "3498",
+        "6234",
+        "4938",
+        "4566",
+        "3034",
+        "6199",
+        "6933",
+        "6148",
+        "2603",
+        "3406"
+      ],
+      "top15": [
+        {
+          "rank": 1,
+          "stock_id": "6925",
+          "stock_name": "意藍",
+          "latest_close": 111.5
+        },
+        {
+          "rank": 2,
+          "stock_id": "2468",
+          "stock_name": "華經",
+          "latest_close": 55.0
+        },
+        {
+          "rank": 3,
+          "stock_id": "4720",
+          "stock_name": "德淵",
+          "latest_close": 34.0
+        },
+        {
+          "rank": 4,
+          "stock_id": "6277",
+          "stock_name": "宏正",
+          "latest_close": 101.0
+        },
+        {
+          "rank": 5,
+          "stock_id": "6756",
+          "stock_name": "威鋒電子",
+          "latest_close": 121.5
+        },
+        {
+          "rank": 6,
+          "stock_id": "3498",
+          "stock_name": "陽程",
+          "latest_close": 252.0
+        },
+        {
+          "rank": 7,
+          "stock_id": "6234",
+          "stock_name": "高僑",
+          "latest_close": 46.1
+        },
+        {
+          "rank": 8,
+          "stock_id": "4938",
+          "stock_name": "和碩",
+          "latest_close": 105.0
+        },
+        {
+          "rank": 9,
+          "stock_id": "4566",
+          "stock_name": "時碩工業",
+          "latest_close": 87.2
+        },
+        {
+          "rank": 10,
+          "stock_id": "3034",
+          "stock_name": "聯詠",
+          "latest_close": 599.0
+        },
+        {
+          "rank": 11,
+          "stock_id": "6199",
+          "stock_name": "天品",
+          "latest_close": 153.0
+        },
+        {
+          "rank": 12,
+          "stock_id": "6933",
+          "stock_name": "AMAX-KY",
+          "latest_close": 398.5
+        },
+        {
+          "rank": 13,
+          "stock_id": "6148",
+          "stock_name": "驊宏資",
+          "latest_close": 43.0
+        },
+        {
+          "rank": 14,
+          "stock_id": "2603",
+          "stock_name": "長榮",
+          "latest_close": 261.5
+        },
+        {
+          "rank": 15,
+          "stock_id": "3406",
+          "stock_name": "玉晶光",
+          "latest_close": 1210.0
+        }
+      ]
     }
   }
 }
