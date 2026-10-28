@@ -1,11 +1,11 @@
 {
   "version": "1.0",
-  "generated_at": "2026-10-28 07:16:44",
+  "generated_at": "2026-10-28 08:58:22",
   "data_date": "2026-10-27",
   "holiday_notice": {
-    "is_active": true,
-    "title": "10/23颱風假、10/26國定假日補假。台北股市休市",
-    "message": "10/23 (週五) 因天然災害停止上班、10/26 (週一) 為國定假日補假，台北股市全面休市！處置股票天數與期間暫停計算並足額順延，次一正常開盤交易日為 10/27 (週二)。",
+    "is_active": false,
+    "title": "",
+    "message": "",
     "last_closed_date": "2026-10-27",
     "next_trading_date": "2026-10-28"
   },

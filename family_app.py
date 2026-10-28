@@ -440,7 +440,7 @@ def check_freshness(data_date_val: str) -> tuple[bool, str]:
         if d_data == today:
             return True, "今日最新盤後訊號"
         
-        # 2. 如果今天是休市日 (颱風假、國定假日、週末)
+        # 2. 如果今天是休市日 (國定假日、週末、或天然災害休市)
         is_holiday = False
         try:
             from tools.market_calendar import is_trading_day
@@ -452,11 +452,8 @@ def check_freshness(data_date_val: str) -> tuple[bool, str]:
         if not is_holiday and data.get("holiday_notice", {}).get("is_active"):
             is_holiday = True
 
-        if today.weekday() >= 5 or str(today) in ["2026-10-23", "2026-10-26"]:
-            is_holiday = True
-
         if is_holiday:
-            return True, "休市中（10/23颱風假、10/26國定假日補假。台北股市休市，顯示 10/22 最新收盤訊號，10/27 開盤）"
+            return True, f"休市中（台北股市休市，顯示 {data_date_val} 最新有效盤後訊號）"
         
         # 3. 如果今天是週末 (週六/週日)
         if today.weekday() == 5: # 週六
@@ -492,29 +489,28 @@ if not is_fresh:
     """)
 
 # ============================================================
-# 4.8 最上方休市公告卡片 (颱風假與國定補假)
+# 4.8 最上方休市公告卡片 (如有生效中休市公告)
 # ============================================================
 holiday_notice = data.get("holiday_notice", {})
-if holiday_notice.get("is_active", True):
-    notice_title = holiday_notice.get("title", "10/23颱風假、10/26國定假日補假。台北股市休市")
-    render_html(f"""
-    <div class='mega-warning-box alert-warning' style='background: #FFFBEB !important; border-left: 10px solid #D97706 !important; border: 2.5px solid #F59E0B; border-radius: 20px; padding: 24px 26px; margin-bottom: 24px; box-shadow: 0 4px 16px rgba(217, 119, 6, 0.12);'>
-        <div style='display: flex; align-items: flex-start; gap: 16px;'>
-            <div style='font-size: 52px; line-height: 1;'>🏖️</div>
-            <div style='flex: 1;'>
-                <div style='font-size: 32px; font-weight: 900; color: #92400E; line-height: 1.3; margin-bottom: 8px;'>
-                    【重要休市公告】{notice_title}
-                </div>
-                <div style='font-size: 22px; font-weight: 700; color: #B45309; line-height: 1.55;'>
-                    📢 <b>10/23 (週五)</b> 因天然災害停止上班、<b>10/26 (週一)</b> 為國定假日補假，台北股市全面休市！<br>
-                    • <b>次一開盤交易日</b>：<b>10/27 (週二) 09:00</b> 正常開市。<br>
-                    • <b>處置股票天數順延</b>：處置天數與管制期間暫停計算，解除處置日足額順延至 10/27 起陸續出關。<br>
-                    • <b>當前訊號基準</b>：目前為 <b>10/22 (週四) 最新收盤基準</b>，休市期間請安心休假，開市前再行參考！
+if holiday_notice and holiday_notice.get("is_active") is True:
+    notice_title = holiday_notice.get("title", "")
+    notice_msg = holiday_notice.get("message", "")
+    if notice_title:
+        render_html(f"""
+        <div class='mega-warning-box alert-warning' style='background: #FFFBEB !important; border-left: 10px solid #D97706 !important; border: 2.5px solid #F59E0B; border-radius: 20px; padding: 24px 26px; margin-bottom: 24px; box-shadow: 0 4px 16px rgba(217, 119, 6, 0.12);'>
+            <div style='display: flex; align-items: flex-start; gap: 16px;'>
+                <div style='font-size: 52px; line-height: 1;'>🏖️</div>
+                <div style='flex: 1;'>
+                    <div style='font-size: 32px; font-weight: 900; color: #92400E; line-height: 1.3; margin-bottom: 8px;'>
+                        【重要休市公告】{notice_title}
+                    </div>
+                    <div style='font-size: 22px; font-weight: 700; color: #B45309; line-height: 1.55;'>
+                        {notice_msg}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    """)
+        """)
 
 
 # ============================================================

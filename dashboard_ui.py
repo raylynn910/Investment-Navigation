@@ -310,28 +310,27 @@ def render_companion_view():
         st.error(f"讀取訊號檔失敗: {e}")
         return
 
-    # 最上方發布休市快報卡片 (10/23颱風假、10/26國定補假)
+    # 最上方發布休市快報卡片 (如有生效中休市公告)
     holiday_notice = data.get("holiday_notice", {})
-    if holiday_notice.get("is_active", True):
-        notice_title = holiday_notice.get("title", "10/23颱風假、10/26國定假日補假。台北股市休市")
-        render_html(f"""
-        <div style='background: rgba(245, 158, 11, 0.12); border: 2px solid #f59e0b; border-left: 8px solid #f59e0b; border-radius: 16px; padding: 20px 24px; margin-bottom: 22px;'>
-            <div style='display: flex; align-items: flex-start; gap: 16px;'>
-                <div style='font-size: 40px; line-height: 1;'>🏖️</div>
-                <div style='flex: 1;'>
-                    <div style='font-size: 26px; font-weight: 900; color: #fbbf24; line-height: 1.3; margin-bottom: 6px;'>
-                        【重要休市公告】{notice_title}
-                    </div>
-                    <div style='font-size: 16px; font-weight: 500; color: #fde68a; line-height: 1.6;'>
-                        📢 <b>10/23 (週五)</b> 因天然災害停止上班、<b>10/26 (週一)</b> 國定假日補假，台北股市全面休市！<br>
-                        • <b>次一開盤交易日</b>：<b>10/27 (週二) 09:00</b> 正常開市。<br>
-                        • <b>處置股票天數順延</b>：處置天數與管制期間暫停計算，解除處置日足額順延至 10/27 起陸續出關。<br>
-                        • <b>最新作戰基準</b>：目前為 <b>10/22 (週四) 最新收盤數據</b>，休市期間請安心休假！
+    if holiday_notice and holiday_notice.get("is_active") is True:
+        notice_title = holiday_notice.get("title", "")
+        notice_msg = holiday_notice.get("message", "")
+        if notice_title:
+            render_html(f"""
+            <div style='background: rgba(245, 158, 11, 0.12); border: 2px solid #f59e0b; border-left: 8px solid #f59e0b; border-radius: 16px; padding: 20px 24px; margin-bottom: 22px;'>
+                <div style='display: flex; align-items: flex-start; gap: 16px;'>
+                    <div style='font-size: 40px; line-height: 1;'>🏖️</div>
+                    <div style='flex: 1;'>
+                        <div style='font-size: 26px; font-weight: 900; color: #fbbf24; line-height: 1.3; margin-bottom: 6px;'>
+                            【重要休市公告】{notice_title}
+                        </div>
+                        <div style='font-size: 16px; font-weight: 500; color: #fde68a; line-height: 1.6;'>
+                            {notice_msg}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        """)
+            """)
 
     data_date = data.get("data_date", "2026-01-01")
     market = data.get("market_regime", {})
