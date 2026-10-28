@@ -896,6 +896,118 @@
           "latest_close": 1210.0
         }
       ]
+    },
+    "2026-10-28": {
+      "date": "2026-10-28",
+      "stock_ids": [
+        "6756",
+        "6925",
+        "4720",
+        "3691",
+        "6221",
+        "2468",
+        "3406",
+        "5426",
+        "6415",
+        "3006",
+        "3147",
+        "6277",
+        "2451",
+        "4566",
+        "3498"
+      ],
+      "top15": [
+        {
+          "rank": 1,
+          "stock_id": "6756",
+          "stock_name": "威鋒電子",
+          "latest_close": 133.5
+        },
+        {
+          "rank": 2,
+          "stock_id": "6925",
+          "stock_name": "意藍",
+          "latest_close": 122.5
+        },
+        {
+          "rank": 3,
+          "stock_id": "4720",
+          "stock_name": "德淵",
+          "latest_close": 32.5
+        },
+        {
+          "rank": 4,
+          "stock_id": "3691",
+          "stock_name": "碩禾",
+          "latest_close": 131.0
+        },
+        {
+          "rank": 5,
+          "stock_id": "6221",
+          "stock_name": "晉泰",
+          "latest_close": 40.5
+        },
+        {
+          "rank": 6,
+          "stock_id": "2468",
+          "stock_name": "華經",
+          "latest_close": 55.1
+        },
+        {
+          "rank": 7,
+          "stock_id": "3406",
+          "stock_name": "玉晶光",
+          "latest_close": 1330.0
+        },
+        {
+          "rank": 8,
+          "stock_id": "5426",
+          "stock_name": "振發",
+          "latest_close": 34.65
+        },
+        {
+          "rank": 9,
+          "stock_id": "6415",
+          "stock_name": "矽力*-KY",
+          "latest_close": 525.0
+        },
+        {
+          "rank": 10,
+          "stock_id": "3006",
+          "stock_name": "晶豪科",
+          "latest_close": 275.5
+        },
+        {
+          "rank": 11,
+          "stock_id": "3147",
+          "stock_name": "大綜",
+          "latest_close": 316.0
+        },
+        {
+          "rank": 12,
+          "stock_id": "6277",
+          "stock_name": "宏正",
+          "latest_close": 95.4
+        },
+        {
+          "rank": 13,
+          "stock_id": "2451",
+          "stock_name": "創見",
+          "latest_close": 293.5
+        },
+        {
+          "rank": 14,
+          "stock_id": "4566",
+          "stock_name": "時碩工業",
+          "latest_close": 89.3
+        },
+        {
+          "rank": 15,
+          "stock_id": "3498",
+          "stock_name": "陽程",
+          "latest_close": 263.5
+        }
+      ]
     }
   }
 }
