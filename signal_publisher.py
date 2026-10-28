@@ -791,9 +791,9 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
         "generated_at": generated_at_str,
         "data_date": data_date,
         "holiday_notice": {
-            "is_active": True,
-            "title": "10/23颱風假、10/26國定假日補假。台北股市休市",
-            "message": "10/23 (週五) 因天然災害停止上班、10/26 (週一) 為國定假日補假，台北股市全面休市！處置股票天數與期間暫停計算並足額順延，次一正常開盤交易日為 10/27 (週二)。",
+            "is_active": False,
+            "title": "",
+            "message": "",
             "last_closed_date": last_closed_date_str,
             "next_trading_date": next_trading_date_str
         },
@@ -880,6 +880,7 @@ def run_git_sync(data_date: str) -> dict:
         "history_snapshots.json",
         "family_app.py",
         "dashboard_ui.py",
+        "components_weapons.py",
         "tools/market_calendar.py",
         "tools/__init__.py",
         ".gitignore"
