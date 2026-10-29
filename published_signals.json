@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-10-28 19:38:02",
+  "generated_at": "2026-10-29 08:48:54",
   "data_date": "2026-10-28",
   "holiday_notice": {
     "is_active": false,
@@ -32,7 +32,7 @@
       "spot_reason": "TXF 站穩季線與 5MA 之上，多頭結構完整，維持 100% 滿水位。",
       "night_intercept_active": false,
       "night_buy_cap": 100,
-      "night_intercept_reason": "夜盤波動平穩 (-0.77%)，無觸發破線攔截，正常放行買單。",
+      "night_intercept_reason": "夜盤波動平穩 (-0.26%)，無觸發破線攔截，正常放行買單。",
       "mod_c_triggered": false,
       "mod_c_reason": "未觸發極端超賣緩衝條件，按常規紀律執行。",
       "txf_close": 47244.0,
@@ -40,10 +40,10 @@
       "txf_ma20": 48069.3,
       "txf_ma60": 46481.7,
       "txf_k_val": 18.7,
-      "night_close": 46880.0,
-      "night_ret_pct": -0.77,
-      "night_date": "2026-10-28",
-      "night_k_val": 29.4
+      "night_close": 47121.0,
+      "night_ret_pct": -0.26,
+      "night_date": "2026-10-29",
+      "night_k_val": 33.8
     }
   },
   "core_1_swing": {
@@ -652,7 +652,7 @@
         "optimal_mdd": "<= 28.9%"
       }
     },
-    "is_weekend_or_holiday": false,
+    "is_weekend_or_holiday": true,
     "last_closed_date": "2026-10-28",
     "next_trading_date": "2026-10-29",
     "total_active_disposals_count": 15,
@@ -744,7 +744,7 @@
         "base_date": "2026-10-28",
         "last_closed_date": "2026-10-28",
         "next_trading_date": "2026-10-29",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "2424",
@@ -776,7 +776,7 @@
         "base_date": "2026-10-28",
         "last_closed_date": "2026-10-28",
         "next_trading_date": "2026-10-29",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3055",
@@ -808,7 +808,7 @@
         "base_date": "2026-10-28",
         "last_closed_date": "2026-10-28",
         "next_trading_date": "2026-10-29",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3287",
@@ -835,12 +835,12 @@
         "is_hit_b": 0,
         "is_hit_c": 0,
         "action_timing": "觀望",
-        "entry_sop": "處置中持續觀察，預計 11/02 出關",
-        "exit_sop": "處置中持續觀察，預計 11/02 出關",
+        "entry_sop": "處置中持續觀察，預計 11/02 出關 ｜ 次一交易日 (10/29) 收盤將進入 T-2 搶跑點",
+        "exit_sop": "處置中持續觀察，預計 11/02 出關 ｜ 次一交易日 (10/29) 收盤將進入 T-2 搶跑點",
         "base_date": "2026-10-28",
         "last_closed_date": "2026-10-28",
         "next_trading_date": "2026-10-29",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "8358",
@@ -872,7 +872,7 @@
         "base_date": "2026-10-28",
         "last_closed_date": "2026-10-28",
         "next_trading_date": "2026-10-29",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "4542",
@@ -904,7 +904,7 @@
         "base_date": "2026-10-28",
         "last_closed_date": "2026-10-28",
         "next_trading_date": "2026-10-29",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "8437",
@@ -936,7 +936,7 @@
         "base_date": "2026-10-28",
         "last_closed_date": "2026-10-28",
         "next_trading_date": "2026-10-29",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "5205",
@@ -968,7 +968,7 @@
         "base_date": "2026-10-28",
         "last_closed_date": "2026-10-28",
         "next_trading_date": "2026-10-29",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "5475",
@@ -1000,7 +1000,7 @@
         "base_date": "2026-10-28",
         "last_closed_date": "2026-10-28",
         "next_trading_date": "2026-10-29",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "6925",
@@ -1032,7 +1032,7 @@
         "base_date": "2026-10-28",
         "last_closed_date": "2026-10-28",
         "next_trading_date": "2026-10-29",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3354",
@@ -1064,7 +1064,7 @@
         "base_date": "2026-10-28",
         "last_closed_date": "2026-10-28",
         "next_trading_date": "2026-10-29",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "6751",
@@ -1096,7 +1096,7 @@
         "base_date": "2026-10-28",
         "last_closed_date": "2026-10-28",
         "next_trading_date": "2026-10-29",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3441",
@@ -1128,7 +1128,7 @@
         "base_date": "2026-10-28",
         "last_closed_date": "2026-10-28",
         "next_trading_date": "2026-10-29",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "2466",
@@ -1160,7 +1160,7 @@
         "base_date": "2026-10-28",
         "last_closed_date": "2026-10-28",
         "next_trading_date": "2026-10-29",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "9103",
@@ -1192,7 +1192,7 @@
         "base_date": "2026-10-28",
         "last_closed_date": "2026-10-28",
         "next_trading_date": "2026-10-29",
-        "is_market_closed": 0
+        "is_market_closed": 1
       }
     ],
     "next_trading_disposals_list": [
@@ -1226,7 +1226,39 @@
         "base_date": "2026-10-29",
         "last_closed_date": "2026-10-28",
         "next_trading_date": "2026-10-29",
-        "is_market_closed": 0
+        "is_market_closed": 1
+      },
+      {
+        "stock_id": "3287",
+        "name": "廣寰科",
+        "market": "上櫃",
+        "disposal_tier": "2分盤",
+        "prepay_type": "門檻預收(單筆10張/累計30張)",
+        "regulatory_regime": "新制 (5日/2分盤)",
+        "latest_price": 62.0,
+        "disp_cum_ret": -11.55,
+        "turnover": 34968000.0,
+        "turnover_str": "3497萬",
+        "vol_ratio": 0.41,
+        "ma5": 65.3,
+        "mom_20_pct": 51.04,
+        "start_date": "2026-10-22",
+        "end_date": "2026-10-30",
+        "exit_date": "2026-11-02",
+        "td_to_exit": 2,
+        "countdown_desc": "T-2 (11/02)",
+        "countdown_days": 2,
+        "status": "⏳ 處置蓄勢 (T-2)",
+        "priority": 3,
+        "is_hit_b": 0,
+        "is_hit_c": 0,
+        "action_timing": "觀望",
+        "entry_sop": "未達標 (漲跌-11.6%非-5%~+12%、未站上5MA)",
+        "exit_sop": "未達標 (漲跌-11.6%非-5%~+12%、未站上5MA)",
+        "base_date": "2026-10-29",
+        "last_closed_date": "2026-10-28",
+        "next_trading_date": "2026-10-29",
+        "is_market_closed": 1
       },
       {
         "stock_id": "3167",
@@ -1258,7 +1290,295 @@
         "base_date": "2026-10-29",
         "last_closed_date": "2026-10-28",
         "next_trading_date": "2026-10-29",
-        "is_market_closed": 0
+        "is_market_closed": 1
+      },
+      {
+        "stock_id": "8358",
+        "name": "金居",
+        "market": "上櫃",
+        "disposal_tier": "2分盤",
+        "prepay_type": "門檻預收(單筆10張/累計30張)",
+        "regulatory_regime": "新制 (5日/2分盤)",
+        "latest_price": 460.0,
+        "disp_cum_ret": 4.9,
+        "turnover": 964160000.0,
+        "turnover_str": "9.64億",
+        "vol_ratio": 0.55,
+        "ma5": 454.1,
+        "mom_20_pct": -9.98,
+        "start_date": "2026-10-27",
+        "end_date": "2026-11-02",
+        "exit_date": "2026-11-03",
+        "td_to_exit": 3,
+        "countdown_desc": "T-3 (11/03)",
+        "countdown_days": 3,
+        "status": "關狗籠中 (倒數3天)",
+        "priority": 5,
+        "is_hit_b": 0,
+        "is_hit_c": 0,
+        "action_timing": "觀望",
+        "entry_sop": "處置中持續觀察，預計 11/03 出關 ｜ 次一交易日 (10/29) 收盤將進入 T-2 搶跑點",
+        "exit_sop": "處置中持續觀察，預計 11/03 出關 ｜ 次一交易日 (10/29) 收盤將進入 T-2 搶跑點",
+        "base_date": "2026-10-29",
+        "last_closed_date": "2026-10-28",
+        "next_trading_date": "2026-10-29",
+        "is_market_closed": 1
+      },
+      {
+        "stock_id": "4542",
+        "name": "科嶠",
+        "market": "上櫃",
+        "disposal_tier": "2分盤",
+        "prepay_type": "門檻預收(單筆10張/累計30張)",
+        "regulatory_regime": "新制 (5日/2分盤)",
+        "latest_price": 369.0,
+        "disp_cum_ret": 6.96,
+        "turnover": 119925000.0,
+        "turnover_str": "1.20億",
+        "vol_ratio": 0.75,
+        "ma5": 366.0,
+        "mom_20_pct": 12.5,
+        "start_date": "2026-10-27",
+        "end_date": "2026-11-02",
+        "exit_date": "2026-11-03",
+        "td_to_exit": 3,
+        "countdown_desc": "T-3 (11/03)",
+        "countdown_days": 3,
+        "status": "關狗籠中 (倒數3天)",
+        "priority": 5,
+        "is_hit_b": 0,
+        "is_hit_c": 0,
+        "action_timing": "觀望",
+        "entry_sop": "處置中持續觀察，預計 11/03 出關 ｜ 次一交易日 (10/29) 收盤將進入 T-2 搶跑點",
+        "exit_sop": "處置中持續觀察，預計 11/03 出關 ｜ 次一交易日 (10/29) 收盤將進入 T-2 搶跑點",
+        "base_date": "2026-10-29",
+        "last_closed_date": "2026-10-28",
+        "next_trading_date": "2026-10-29",
+        "is_market_closed": 1
+      },
+      {
+        "stock_id": "8437",
+        "name": "大地-KY",
+        "market": "上櫃",
+        "disposal_tier": "2分盤",
+        "prepay_type": "門檻預收(單筆10張/累計30張)",
+        "regulatory_regime": "新制 (5日/2分盤)",
+        "latest_price": 15.5,
+        "disp_cum_ret": -3.73,
+        "turnover": 2991500.0,
+        "turnover_str": "299萬",
+        "vol_ratio": 0.55,
+        "ma5": 15.92,
+        "mom_20_pct": 45.54,
+        "start_date": "2026-10-27",
+        "end_date": "2026-11-02",
+        "exit_date": "2026-11-03",
+        "td_to_exit": 3,
+        "countdown_desc": "T-3 (11/03)",
+        "countdown_days": 3,
+        "status": "關狗籠中 (倒數3天)",
+        "priority": 5,
+        "is_hit_b": 0,
+        "is_hit_c": 0,
+        "action_timing": "觀望",
+        "entry_sop": "處置中持續觀察，預計 11/03 出關 ｜ 次一交易日 (10/29) 收盤將進入 T-2 搶跑點",
+        "exit_sop": "處置中持續觀察，預計 11/03 出關 ｜ 次一交易日 (10/29) 收盤將進入 T-2 搶跑點",
+        "base_date": "2026-10-29",
+        "last_closed_date": "2026-10-28",
+        "next_trading_date": "2026-10-29",
+        "is_market_closed": 1
+      },
+      {
+        "stock_id": "5205",
+        "name": "中茂",
+        "market": "上櫃",
+        "disposal_tier": "2分盤",
+        "prepay_type": "門檻預收(單筆10張/累計30張)",
+        "regulatory_regime": "新制 (5日/2分盤)",
+        "latest_price": 22.2,
+        "disp_cum_ret": -9.76,
+        "turnover": 333000.0,
+        "turnover_str": "33萬",
+        "vol_ratio": 0.62,
+        "ma5": 22.91,
+        "mom_20_pct": 28.7,
+        "start_date": "2026-10-27",
+        "end_date": "2026-11-02",
+        "exit_date": "2026-11-03",
+        "td_to_exit": 3,
+        "countdown_desc": "T-3 (11/03)",
+        "countdown_days": 3,
+        "status": "關狗籠中 (倒數3天)",
+        "priority": 5,
+        "is_hit_b": 0,
+        "is_hit_c": 0,
+        "action_timing": "觀望",
+        "entry_sop": "處置中持續觀察，預計 11/03 出關 ｜ 次一交易日 (10/29) 收盤將進入 T-2 搶跑點",
+        "exit_sop": "處置中持續觀察，預計 11/03 出關 ｜ 次一交易日 (10/29) 收盤將進入 T-2 搶跑點",
+        "base_date": "2026-10-29",
+        "last_closed_date": "2026-10-28",
+        "next_trading_date": "2026-10-29",
+        "is_market_closed": 1
+      },
+      {
+        "stock_id": "5475",
+        "name": "德宏",
+        "market": "上櫃",
+        "disposal_tier": "2分盤",
+        "prepay_type": "門檻預收(單筆10張/累計30張)",
+        "regulatory_regime": "新制 (5日/2分盤)",
+        "latest_price": 188.5,
+        "disp_cum_ret": 3.01,
+        "turnover": 266162000.0,
+        "turnover_str": "2.66億",
+        "vol_ratio": 0.2,
+        "ma5": 202.0,
+        "mom_20_pct": 4.14,
+        "start_date": "2026-10-28",
+        "end_date": "2026-11-03",
+        "exit_date": "2026-11-04",
+        "td_to_exit": 4,
+        "countdown_desc": "T-4 (11/04)",
+        "countdown_days": 4,
+        "status": "關狗籠中 (倒數4天)",
+        "priority": 5,
+        "is_hit_b": 0,
+        "is_hit_c": 0,
+        "action_timing": "觀望",
+        "entry_sop": "處置中持續觀察，預計 11/04 出關",
+        "exit_sop": "處置中持續觀察，預計 11/04 出關",
+        "base_date": "2026-10-29",
+        "last_closed_date": "2026-10-28",
+        "next_trading_date": "2026-10-29",
+        "is_market_closed": 1
+      },
+      {
+        "stock_id": "6925",
+        "name": "意藍",
+        "market": "上櫃",
+        "disposal_tier": "2分盤",
+        "prepay_type": "門檻預收(單筆10張/累計30張)",
+        "regulatory_regime": "新制 (5日/2分盤)",
+        "latest_price": 122.5,
+        "disp_cum_ret": 9.87,
+        "turnover": 134382500.0,
+        "turnover_str": "1.34億",
+        "vol_ratio": 0.44,
+        "ma5": 110.1,
+        "mom_20_pct": 79.62,
+        "start_date": "2026-10-28",
+        "end_date": "2026-11-03",
+        "exit_date": "2026-11-04",
+        "td_to_exit": 4,
+        "countdown_desc": "T-4 (11/04)",
+        "countdown_days": 4,
+        "status": "關狗籠中 (倒數4天)",
+        "priority": 5,
+        "is_hit_b": 0,
+        "is_hit_c": 0,
+        "action_timing": "觀望",
+        "entry_sop": "處置中持續觀察，預計 11/04 出關",
+        "exit_sop": "處置中持續觀察，預計 11/04 出關",
+        "base_date": "2026-10-29",
+        "last_closed_date": "2026-10-28",
+        "next_trading_date": "2026-10-29",
+        "is_market_closed": 1
+      },
+      {
+        "stock_id": "3354",
+        "name": "律勝",
+        "market": "上櫃",
+        "disposal_tier": "2分盤",
+        "prepay_type": "門檻預收(單筆10張/累計30張)",
+        "regulatory_regime": "新制 (5日/2分盤)",
+        "latest_price": 53.5,
+        "disp_cum_ret": 6.79,
+        "turnover": 69443000.0,
+        "turnover_str": "6944萬",
+        "vol_ratio": 0.72,
+        "ma5": 51.91,
+        "mom_20_pct": 78.33,
+        "start_date": "2026-10-28",
+        "end_date": "2026-11-03",
+        "exit_date": "2026-11-04",
+        "td_to_exit": 4,
+        "countdown_desc": "T-4 (11/04)",
+        "countdown_days": 4,
+        "status": "關狗籠中 (倒數4天)",
+        "priority": 5,
+        "is_hit_b": 0,
+        "is_hit_c": 0,
+        "action_timing": "觀望",
+        "entry_sop": "處置中持續觀察，預計 11/04 出關",
+        "exit_sop": "處置中持續觀察，預計 11/04 出關",
+        "base_date": "2026-10-29",
+        "last_closed_date": "2026-10-28",
+        "next_trading_date": "2026-10-29",
+        "is_market_closed": 1
+      },
+      {
+        "stock_id": "6751",
+        "name": "智聯服務",
+        "market": "上櫃",
+        "disposal_tier": "2分盤",
+        "prepay_type": "門檻預收(單筆10張/累計30張)",
+        "regulatory_regime": "新制 (5日/2分盤)",
+        "latest_price": 82.4,
+        "disp_cum_ret": 6.74,
+        "turnover": 58009600.0,
+        "turnover_str": "5801萬",
+        "vol_ratio": 0.71,
+        "ma5": 73.42,
+        "mom_20_pct": 88.13,
+        "start_date": "2026-10-28",
+        "end_date": "2026-11-03",
+        "exit_date": "2026-11-04",
+        "td_to_exit": 4,
+        "countdown_desc": "T-4 (11/04)",
+        "countdown_days": 4,
+        "status": "關狗籠中 (倒數4天)",
+        "priority": 5,
+        "is_hit_b": 0,
+        "is_hit_c": 0,
+        "action_timing": "觀望",
+        "entry_sop": "處置中持續觀察，預計 11/04 出關",
+        "exit_sop": "處置中持續觀察，預計 11/04 出關",
+        "base_date": "2026-10-29",
+        "last_closed_date": "2026-10-28",
+        "next_trading_date": "2026-10-29",
+        "is_market_closed": 1
+      },
+      {
+        "stock_id": "3441",
+        "name": "聯一光",
+        "market": "上櫃",
+        "disposal_tier": "2分盤",
+        "prepay_type": "門檻預收(單筆10張/累計30張)",
+        "regulatory_regime": "新制 (5日/2分盤)",
+        "latest_price": 199.5,
+        "disp_cum_ret": 0.0,
+        "turnover": 4144812000.0,
+        "turnover_str": "41.45億",
+        "vol_ratio": 1.62,
+        "ma5": 224.5,
+        "mom_20_pct": 10.22,
+        "start_date": "2026-10-29",
+        "end_date": "2026-11-04",
+        "exit_date": "2026-11-05",
+        "td_to_exit": 5,
+        "countdown_desc": "T-5 (11/05)",
+        "countdown_days": 5,
+        "status": "關狗籠中 (倒數5天)",
+        "priority": 5,
+        "is_hit_b": 0,
+        "is_hit_c": 0,
+        "action_timing": "觀望",
+        "entry_sop": "處置中持續觀察，預計 11/05 出關",
+        "exit_sop": "處置中持續觀察，預計 11/05 出關",
+        "base_date": "2026-10-29",
+        "last_closed_date": "2026-10-28",
+        "next_trading_date": "2026-10-29",
+        "is_market_closed": 1
       },
       {
         "stock_id": "3055",
@@ -1290,7 +1610,7 @@
         "base_date": "2026-10-29",
         "last_closed_date": "2026-10-28",
         "next_trading_date": "2026-10-29",
-        "is_market_closed": 0
+        "is_market_closed": 1
       }
     ]
   },
