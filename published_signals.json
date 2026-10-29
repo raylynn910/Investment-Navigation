@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-10-29 23:09:21",
+  "generated_at": "2026-10-30 01:07:32",
   "data_date": "2026-10-29",
   "holiday_notice": {
     "is_active": false,
@@ -50,28 +50,6 @@
     "top_9": [
       {
         "rank": 1,
-        "stock_id": "3691",
-        "stock_name": "碩禾",
-        "name": "碩禾",
-        "latest_close": 144.0,
-        "close": 144.0,
-        "latest_date": "2026-10-29",
-        "momentum_value": 0.4458,
-        "momentum_pct": 44.6,
-        "revenue_yoy_value": 64.2,
-        "revenue_yoy_pct": 64.2,
-        "roe_value": 2.9,
-        "roe_pct": 2.9,
-        "total_score": 3.28,
-        "highlights": [
-          "🔥 營收強勁高成長",
-          "✨ 本業獲利穩固",
-          "⚡ 動能飆速衝刺"
-        ],
-        "warning_tag": null
-      },
-      {
-        "rank": 2,
         "stock_id": "6925",
         "stock_name": "意藍",
         "name": "意藍",
@@ -80,17 +58,39 @@
         "latest_date": "2026-10-29",
         "momentum_value": 0.6096,
         "momentum_pct": 61.0,
-        "revenue_yoy_value": 21.4,
-        "revenue_yoy_pct": 21.4,
+        "revenue_yoy_value": 21.1,
+        "revenue_yoy_pct": 21.1,
         "roe_value": 2.8,
         "roe_pct": 2.8,
-        "total_score": 3.27,
+        "total_score": 3.11,
         "highlights": [
           "📈 營收穩健成長",
           "✨ 本業獲利穩固",
           "⚡ 動能飆速衝刺"
         ],
         "warning_tag": "⚠️ 處置/出關劇烈波動，新手建議跳過"
+      },
+      {
+        "rank": 2,
+        "stock_id": "3691",
+        "stock_name": "碩禾",
+        "name": "碩禾",
+        "latest_close": 144.0,
+        "close": 144.0,
+        "latest_date": "2026-10-29",
+        "momentum_value": 0.4458,
+        "momentum_pct": 44.6,
+        "revenue_yoy_value": 48.9,
+        "revenue_yoy_pct": 48.9,
+        "roe_value": 2.9,
+        "roe_pct": 2.9,
+        "total_score": 3.03,
+        "highlights": [
+          "🔥 營收強勁高成長",
+          "✨ 本業獲利穩固",
+          "⚡ 動能飆速衝刺"
+        ],
+        "warning_tag": null
       },
       {
         "rank": 3,
@@ -102,11 +102,11 @@
         "latest_date": "2026-10-29",
         "momentum_value": 0.3745,
         "momentum_pct": 37.5,
-        "revenue_yoy_value": 66.2,
-        "revenue_yoy_pct": 66.2,
+        "revenue_yoy_value": 67.2,
+        "revenue_yoy_pct": 67.2,
         "roe_value": 1.2,
         "roe_pct": 1.2,
-        "total_score": 2.62,
+        "total_score": 2.44,
         "highlights": [
           "🔥 營收強勁高成長",
           "✨ 本業獲利穩固",
@@ -116,6 +116,28 @@
       },
       {
         "rank": 4,
+        "stock_id": "2465",
+        "stock_name": "麗臺",
+        "name": "麗臺",
+        "latest_close": 113.0,
+        "close": 113.0,
+        "latest_date": "2026-10-29",
+        "momentum_value": 0.264,
+        "momentum_pct": 26.4,
+        "revenue_yoy_value": 309.4,
+        "revenue_yoy_pct": 309.4,
+        "roe_value": 9.6,
+        "roe_pct": 9.6,
+        "total_score": 2.18,
+        "highlights": [
+          "🔥 營收翻倍暴增",
+          "💎 高ROE優等生",
+          "🚀 強勢動能領跑"
+        ],
+        "warning_tag": null
+      },
+      {
+        "rank": 5,
         "stock_id": "3006",
         "stock_name": "晶豪科",
         "name": "晶豪科",
@@ -124,11 +146,11 @@
         "latest_date": "2026-10-29",
         "momentum_value": 0.1674,
         "momentum_pct": 16.7,
-        "revenue_yoy_value": 470.2,
-        "revenue_yoy_pct": 470.2,
-        "roe_value": 21.0,
-        "roe_pct": 21.0,
-        "total_score": 2.08,
+        "revenue_yoy_value": 504.1,
+        "revenue_yoy_pct": 504.1,
+        "roe_value": 33.3,
+        "roe_pct": 33.3,
+        "total_score": 2.09,
         "highlights": [
           "🔥 營收翻倍暴增",
           "💎 獲利體質極佳",
@@ -137,7 +159,7 @@
         "warning_tag": null
       },
       {
-        "rank": 5,
+        "rank": 6,
         "stock_id": "6415",
         "stock_name": "矽力*-KY",
         "name": "矽力*-KY",
@@ -146,11 +168,11 @@
         "latest_date": "2026-10-29",
         "momentum_value": 0.2229,
         "momentum_pct": 22.3,
-        "revenue_yoy_value": 50.7,
-        "revenue_yoy_pct": 50.7,
+        "revenue_yoy_value": 59.0,
+        "revenue_yoy_pct": 59.0,
         "roe_value": 2.8,
         "roe_pct": 2.8,
-        "total_score": 1.29,
+        "total_score": 1.19,
         "highlights": [
           "🔥 營收強勁高成長",
           "✨ 本業獲利穩固",
@@ -159,7 +181,7 @@
         "warning_tag": null
       },
       {
-        "rank": 6,
+        "rank": 7,
         "stock_id": "3035",
         "stock_name": "智原",
         "name": "智原",
@@ -168,35 +190,13 @@
         "latest_date": "2026-10-29",
         "momentum_value": 0.2057,
         "momentum_pct": 20.6,
-        "revenue_yoy_value": 4.4,
-        "revenue_yoy_pct": 4.4,
+        "revenue_yoy_value": 70.2,
+        "revenue_yoy_pct": 70.2,
         "roe_value": 1.2,
         "roe_pct": 1.2,
-        "total_score": 1.0,
+        "total_score": 1.04,
         "highlights": [
-          "📈 營收穩健成長",
-          "✨ 本業獲利穩固",
-          "🚀 強勢動能領跑"
-        ],
-        "warning_tag": null
-      },
-      {
-        "rank": 7,
-        "stock_id": "4720",
-        "stock_name": "德淵",
-        "name": "德淵",
-        "latest_close": 29.25,
-        "close": 29.25,
-        "latest_date": "2026-10-29",
-        "momentum_value": 0.1988,
-        "momentum_pct": 19.9,
-        "revenue_yoy_value": 33.0,
-        "revenue_yoy_pct": 33.0,
-        "roe_value": 0.5,
-        "roe_pct": 0.5,
-        "total_score": 0.99,
-        "highlights": [
-          "📈 營收穩健成長",
+          "🔥 營收強勁高成長",
           "✨ 本業獲利穩固",
           "🚀 強勢動能領跑"
         ],
@@ -204,28 +204,6 @@
       },
       {
         "rank": 8,
-        "stock_id": "7750",
-        "stock_name": "新代",
-        "name": "新代",
-        "latest_close": 2090.0,
-        "close": 2090.0,
-        "latest_date": "2026-10-29",
-        "momentum_value": 0.1515,
-        "momentum_pct": 15.2,
-        "revenue_yoy_value": 125.1,
-        "revenue_yoy_pct": 125.1,
-        "roe_value": 11.0,
-        "roe_pct": 11.0,
-        "total_score": 0.99,
-        "highlights": [
-          "🔥 營收翻倍暴增",
-          "💎 獲利體質極佳",
-          "🚀 強勢動能領跑"
-        ],
-        "warning_tag": null
-      },
-      {
-        "rank": 9,
         "stock_id": "5351",
         "stock_name": "鈺創",
         "name": "鈺創",
@@ -238,10 +216,32 @@
         "revenue_yoy_pct": 500.3,
         "roe_value": 14.9,
         "roe_pct": 14.9,
-        "total_score": 0.94,
+        "total_score": 0.9,
         "highlights": [
           "🔥 營收翻倍暴增",
           "💎 獲利體質極佳"
+        ],
+        "warning_tag": null
+      },
+      {
+        "rank": 9,
+        "stock_id": "4720",
+        "stock_name": "德淵",
+        "name": "德淵",
+        "latest_close": 29.25,
+        "close": 29.25,
+        "latest_date": "2026-10-29",
+        "momentum_value": 0.1988,
+        "momentum_pct": 19.9,
+        "revenue_yoy_value": 30.3,
+        "revenue_yoy_pct": 30.3,
+        "roe_value": 0.5,
+        "roe_pct": 0.5,
+        "total_score": 0.88,
+        "highlights": [
+          "📈 營收穩健成長",
+          "✨ 本業獲利穩固",
+          "🚀 強勢動能領跑"
         ],
         "warning_tag": null
       }
@@ -249,6 +249,49 @@
     "buffer_10_15": [
       {
         "rank": 10,
+        "stock_id": "7750",
+        "stock_name": "新代",
+        "name": "新代",
+        "latest_close": 2090.0,
+        "close": 2090.0,
+        "latest_date": "2026-10-29",
+        "momentum_value": 0.1515,
+        "momentum_pct": 15.2,
+        "revenue_yoy_value": 125.1,
+        "revenue_yoy_pct": 125.1,
+        "roe_value": 11.0,
+        "roe_pct": 11.0,
+        "total_score": 0.88,
+        "highlights": [
+          "🔥 營收翻倍暴增",
+          "💎 獲利體質極佳",
+          "🚀 強勢動能領跑"
+        ],
+        "warning_tag": null
+      },
+      {
+        "rank": 11,
+        "stock_id": "4967",
+        "stock_name": "十銓",
+        "name": "十銓",
+        "latest_close": 286.5,
+        "close": 286.5,
+        "latest_date": "2026-10-29",
+        "momentum_value": 0.0894,
+        "momentum_pct": 8.9,
+        "revenue_yoy_value": 270.3,
+        "revenue_yoy_pct": 270.3,
+        "roe_value": 21.1,
+        "roe_pct": 21.1,
+        "total_score": 0.85,
+        "highlights": [
+          "🔥 營收翻倍暴增",
+          "💎 獲利體質極佳"
+        ],
+        "warning_tag": null
+      },
+      {
+        "rank": 12,
         "stock_id": "2451",
         "stock_name": "創見",
         "name": "創見",
@@ -257,11 +300,11 @@
         "latest_date": "2026-10-29",
         "momentum_value": 0.0652,
         "momentum_pct": 6.5,
-        "revenue_yoy_value": 290.4,
-        "revenue_yoy_pct": 290.4,
+        "revenue_yoy_value": 250.2,
+        "revenue_yoy_pct": 250.2,
         "roe_value": 26.0,
         "roe_pct": 26.0,
-        "total_score": 0.8,
+        "total_score": 0.7,
         "highlights": [
           "🔥 營收翻倍暴增",
           "💎 獲利體質極佳"
@@ -269,7 +312,7 @@
         "warning_tag": null
       },
       {
-        "rank": 11,
+        "rank": 13,
         "stock_id": "8299",
         "stock_name": "群聯",
         "name": "群聯",
@@ -282,49 +325,7 @@
         "revenue_yoy_pct": 370.3,
         "roe_value": 20.3,
         "roe_pct": 20.3,
-        "total_score": 0.76,
-        "highlights": [
-          "🔥 營收翻倍暴增",
-          "💎 獲利體質極佳"
-        ],
-        "warning_tag": null
-      },
-      {
-        "rank": 12,
-        "stock_id": "3498",
-        "stock_name": "陽程",
-        "name": "陽程",
-        "latest_close": 256.0,
-        "close": 256.0,
-        "latest_date": "2026-10-29",
-        "momentum_value": 0.1011,
-        "momentum_pct": 10.1,
-        "revenue_yoy_value": 283.6,
-        "revenue_yoy_pct": 283.6,
-        "roe_value": 3.9,
-        "roe_pct": 3.9,
-        "total_score": 0.75,
-        "highlights": [
-          "🔥 營收翻倍暴增",
-          "✨ 本業獲利穩固"
-        ],
-        "warning_tag": null
-      },
-      {
-        "rank": 13,
-        "stock_id": "4967",
-        "stock_name": "十銓",
-        "name": "十銓",
-        "latest_close": 286.5,
-        "close": 286.5,
-        "latest_date": "2026-10-29",
-        "momentum_value": 0.0894,
-        "momentum_pct": 8.9,
-        "revenue_yoy_value": 109.7,
-        "revenue_yoy_pct": 109.7,
-        "roe_value": 21.1,
-        "roe_pct": 21.1,
-        "total_score": 0.61,
+        "total_score": 0.66,
         "highlights": [
           "🔥 營收翻倍暴增",
           "💎 獲利體質極佳"
@@ -333,22 +334,22 @@
       },
       {
         "rank": 14,
-        "stock_id": "3147",
-        "stock_name": "大綜",
-        "name": "大綜",
-        "latest_close": 311.5,
-        "close": 311.5,
+        "stock_id": "4566",
+        "stock_name": "時碩工業",
+        "name": "時碩工業",
+        "latest_close": 87.8,
+        "close": 87.8,
         "latest_date": "2026-10-29",
-        "momentum_value": 0.0631,
-        "momentum_pct": 6.3,
-        "revenue_yoy_value": 287.9,
-        "revenue_yoy_pct": 287.9,
-        "roe_value": 12.7,
-        "roe_pct": 12.7,
-        "total_score": 0.6,
+        "momentum_value": 0.1447,
+        "momentum_pct": 14.5,
+        "revenue_yoy_value": 59.8,
+        "revenue_yoy_pct": 59.8,
+        "roe_value": 1.1,
+        "roe_pct": 1.1,
+        "total_score": 0.5,
         "highlights": [
-          "🔥 營收翻倍暴增",
-          "💎 獲利體質極佳"
+          "🔥 營收強勁高成長",
+          "✨ 本業獲利穩固"
         ],
         "warning_tag": null
       },
@@ -366,7 +367,7 @@
         "revenue_yoy_pct": 18.4,
         "roe_value": 3.2,
         "roe_pct": 3.2,
-        "total_score": 0.57,
+        "total_score": 0.48,
         "highlights": [
           "📈 營收穩健成長",
           "✨ 本業獲利穩固"
@@ -379,7 +380,7 @@
         "stock_id": "6221",
         "name": "晉泰",
         "prev_rank": 5,
-        "new_rank": 32,
+        "new_rank": 34,
         "close": 38.45,
         "reason": "動能轉弱跌出前15名，參考紀律為汰弱換取現金"
       },
@@ -395,7 +396,7 @@
         "stock_id": "3406",
         "name": "玉晶光",
         "prev_rank": 7,
-        "new_rank": 87,
+        "new_rank": 85,
         "close": 1200.0,
         "reason": "動能轉弱跌出前15名，參考紀律為汰弱換取現金"
       },
@@ -403,16 +404,24 @@
         "stock_id": "5426",
         "name": "振發",
         "prev_rank": 8,
-        "new_rank": 19,
+        "new_rank": 18,
         "close": 31.8,
         "reason": "動能轉弱跌出前15名，參考紀律為汰弱換取現金"
       },
       {
-        "stock_id": "4566",
-        "name": "時碩工業",
-        "prev_rank": 14,
-        "new_rank": 16,
-        "close": 87.8,
+        "stock_id": "3147",
+        "name": "大綜",
+        "prev_rank": 11,
+        "new_rank": 28,
+        "close": 311.5,
+        "reason": "動能轉弱跌出前15名，參考紀律為汰弱換取現金"
+      },
+      {
+        "stock_id": "3498",
+        "name": "陽程",
+        "prev_rank": 15,
+        "new_rank": 20,
+        "close": 256.0,
         "reason": "動能轉弱跌出前15名，參考紀律為汰弱換取現金"
       }
     ],
@@ -424,7 +433,7 @@
           "stock_id": "6221",
           "name": "晉泰",
           "prev_rank": 5,
-          "current_rank": 32,
+          "current_rank": 34,
           "close": 38.45,
           "action_sop": "明日 09:00 開盤以市價單 (MOO) 無條件賣出換現金"
         },
@@ -440,7 +449,7 @@
           "stock_id": "3406",
           "name": "玉晶光",
           "prev_rank": 7,
-          "current_rank": 87,
+          "current_rank": 85,
           "close": 1200.0,
           "action_sop": "明日 09:00 開盤以市價單 (MOO) 無條件賣出換現金"
         },
@@ -448,30 +457,56 @@
           "stock_id": "5426",
           "name": "振發",
           "prev_rank": 8,
-          "current_rank": 19,
+          "current_rank": 18,
           "close": 31.8,
           "action_sop": "明日 09:00 開盤以市價單 (MOO) 無條件賣出換現金"
         },
         {
-          "stock_id": "4566",
-          "name": "時碩工業",
-          "prev_rank": 14,
-          "current_rank": 16,
-          "close": 87.8,
+          "stock_id": "3147",
+          "name": "大綜",
+          "prev_rank": 11,
+          "current_rank": 28,
+          "close": 311.5,
+          "action_sop": "明日 09:00 開盤以市價單 (MOO) 無條件賣出換現金"
+        },
+        {
+          "stock_id": "3498",
+          "name": "陽程",
+          "prev_rank": 15,
+          "current_rank": 20,
+          "close": 256.0,
           "action_sop": "明日 09:00 開盤以市價單 (MOO) 無條件賣出換現金"
         }
       ],
       "buys": [
         {
+          "stock_id": "2465",
+          "name": "麗臺",
+          "prev_rank": "不在名單內",
+          "prev_rank_raw": 999,
+          "current_rank": 4,
+          "close": 113.0,
+          "momentum_pct": 26.4,
+          "revenue_yoy_pct": 309.4,
+          "roe_pct": 9.6,
+          "highlights": [
+            "🔥 營收翻倍暴增",
+            "💎 高ROE優等生",
+            "🚀 強勢動能領跑"
+          ],
+          "warning_tag": null,
+          "action_sop": "開高跳空等待 13:25 尾盤市價買 / 平低盤 09:00 開盤市價買"
+        },
+        {
           "stock_id": "3006",
           "name": "晶豪科",
           "prev_rank": "第 10 名",
           "prev_rank_raw": 10,
-          "current_rank": 4,
+          "current_rank": 5,
           "close": 282.5,
           "momentum_pct": 16.7,
-          "revenue_yoy_pct": 470.2,
-          "roe_pct": 21.0,
+          "revenue_yoy_pct": 504.1,
+          "roe_pct": 33.3,
           "highlights": [
             "🔥 營收翻倍暴增",
             "💎 獲利體質極佳",
@@ -485,32 +520,14 @@
           "name": "智原",
           "prev_rank": "不在名單內",
           "prev_rank_raw": 999,
-          "current_rank": 6,
+          "current_rank": 7,
           "close": 231.5,
           "momentum_pct": 20.6,
-          "revenue_yoy_pct": 4.4,
+          "revenue_yoy_pct": 70.2,
           "roe_pct": 1.2,
           "highlights": [
-            "📈 營收穩健成長",
+            "🔥 營收強勁高成長",
             "✨ 本業獲利穩固",
-            "🚀 強勢動能領跑"
-          ],
-          "warning_tag": null,
-          "action_sop": "開高跳空等待 13:25 尾盤市價買 / 平低盤 09:00 開盤市價買"
-        },
-        {
-          "stock_id": "7750",
-          "name": "新代",
-          "prev_rank": "不在名單內",
-          "prev_rank_raw": 999,
-          "current_rank": 8,
-          "close": 2090.0,
-          "momentum_pct": 15.2,
-          "revenue_yoy_pct": 125.1,
-          "roe_pct": 11.0,
-          "highlights": [
-            "🔥 營收翻倍暴增",
-            "💎 獲利體質極佳",
             "🚀 強勢動能領跑"
           ],
           "warning_tag": null,
@@ -521,7 +538,7 @@
           "name": "鈺創",
           "prev_rank": "不在名單內",
           "prev_rank_raw": 999,
-          "current_rank": 9,
+          "current_rank": 8,
           "close": 113.0,
           "momentum_pct": 5.1,
           "revenue_yoy_pct": 500.3,
@@ -540,7 +557,7 @@
           "name": "創見",
           "prev_rank": "第 13 名",
           "prev_rank_raw": 13,
-          "current_rank": 10,
+          "current_rank": 12,
           "close": 294.0,
           "highlights": [
             "🔥 營收翻倍暴增",
@@ -550,29 +567,15 @@
           "action_sop": "安穩續抱！不必賣出換股，亦無須追高加碼"
         },
         {
-          "stock_id": "3498",
-          "name": "陽程",
-          "prev_rank": "第 15 名",
-          "prev_rank_raw": 15,
-          "current_rank": 12,
-          "close": 256.0,
-          "highlights": [
-            "🔥 營收翻倍暴增",
-            "✨ 本業獲利穩固"
-          ],
-          "warning_tag": null,
-          "action_sop": "安穩續抱！不必賣出換股，亦無須追高加碼"
-        },
-        {
-          "stock_id": "3147",
-          "name": "大綜",
-          "prev_rank": "第 11 名",
-          "prev_rank_raw": 11,
+          "stock_id": "4566",
+          "name": "時碩工業",
+          "prev_rank": "第 14 名",
+          "prev_rank_raw": 14,
           "current_rank": 14,
-          "close": 311.5,
+          "close": 87.8,
           "highlights": [
-            "🔥 營收翻倍暴增",
-            "💎 獲利體質極佳"
+            "🔥 營收強勁高成長",
+            "✨ 本業獲利穩固"
           ],
           "warning_tag": null,
           "action_sop": "安穩續抱！不必賣出換股，亦無須追高加碼"
@@ -610,7 +613,7 @@
         "optimal_mdd": "<= 28.9%"
       }
     },
-    "is_weekend_or_holiday": false,
+    "is_weekend_or_holiday": true,
     "last_closed_date": "2026-10-29",
     "next_trading_date": "2026-10-30",
     "total_active_disposals_count": 16,
@@ -624,15 +627,15 @@
         "disp_cum_ret": 6.8,
         "vol_ratio": 0.5,
         "turnover_str": "6007萬",
-        "action_timing": "今日收盤進場",
+        "action_timing": "週五 (10/30) 13:25 尾盤進場",
         "countdown_desc": "T-2 (11/03)",
         "ma5": 364.7,
-        "status": "🔥 策略 B (T-2 搶跑買入)",
+        "status": "🔥 策略 B 預警 (週五收盤搶跑買入)",
         "priority": 1,
         "is_hit_b": true,
         "is_hit_c": false,
         "td_to_exit": 2,
-        "entry_sop": "今日收盤買進 ｜ 明日(T-1)收盤賣50% ｜ 出關日(T)開盤賣50% ｜ 破5MA停損"
+        "entry_sop": "週五收盤前買進 ｜ 次一交易日(T-1)收盤賣50% ｜ 出關日(T)09:00 開盤賣出剩餘 50% ｜ 破5MA停損"
       }
     ],
     "next_day_c_triggers": [],
@@ -720,7 +723,7 @@
         "base_date": "2026-10-29",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3287",
@@ -752,7 +755,7 @@
         "base_date": "2026-10-29",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3167",
@@ -784,7 +787,7 @@
         "base_date": "2026-10-29",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "8358",
@@ -811,12 +814,12 @@
         "is_hit_b": 0,
         "is_hit_c": 0,
         "action_timing": "觀望",
-        "entry_sop": "處置中持續觀察，預計 11/03 出關",
-        "exit_sop": "處置中持續觀察，預計 11/03 出關",
+        "entry_sop": "處置中持續觀察，預計 11/03 出關 ｜ 次一交易日 (10/30) 收盤將進入 T-2 搶跑點",
+        "exit_sop": "處置中持續觀察，預計 11/03 出關 ｜ 次一交易日 (10/30) 收盤將進入 T-2 搶跑點",
         "base_date": "2026-10-29",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "4542",
@@ -843,12 +846,12 @@
         "is_hit_b": 0,
         "is_hit_c": 0,
         "action_timing": "觀望",
-        "entry_sop": "處置中持續觀察，預計 11/03 出關",
-        "exit_sop": "處置中持續觀察，預計 11/03 出關",
+        "entry_sop": "處置中持續觀察，預計 11/03 出關 ｜ 次一交易日 (10/30) 收盤將進入 T-2 搶跑點",
+        "exit_sop": "處置中持續觀察，預計 11/03 出關 ｜ 次一交易日 (10/30) 收盤將進入 T-2 搶跑點",
         "base_date": "2026-10-29",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "8437",
@@ -875,12 +878,12 @@
         "is_hit_b": 0,
         "is_hit_c": 0,
         "action_timing": "觀望",
-        "entry_sop": "處置中持續觀察，預計 11/03 出關",
-        "exit_sop": "處置中持續觀察，預計 11/03 出關",
+        "entry_sop": "處置中持續觀察，預計 11/03 出關 ｜ 次一交易日 (10/30) 收盤將進入 T-2 搶跑點",
+        "exit_sop": "處置中持續觀察，預計 11/03 出關 ｜ 次一交易日 (10/30) 收盤將進入 T-2 搶跑點",
         "base_date": "2026-10-29",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "5205",
@@ -907,12 +910,12 @@
         "is_hit_b": 0,
         "is_hit_c": 0,
         "action_timing": "觀望",
-        "entry_sop": "處置中持續觀察，預計 11/03 出關",
-        "exit_sop": "處置中持續觀察，預計 11/03 出關",
+        "entry_sop": "處置中持續觀察，預計 11/03 出關 ｜ 次一交易日 (10/30) 收盤將進入 T-2 搶跑點",
+        "exit_sop": "處置中持續觀察，預計 11/03 出關 ｜ 次一交易日 (10/30) 收盤將進入 T-2 搶跑點",
         "base_date": "2026-10-29",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "5475",
@@ -944,7 +947,7 @@
         "base_date": "2026-10-29",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "6925",
@@ -976,7 +979,7 @@
         "base_date": "2026-10-29",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3354",
@@ -1008,7 +1011,7 @@
         "base_date": "2026-10-29",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "6751",
@@ -1040,7 +1043,7 @@
         "base_date": "2026-10-29",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3441",
@@ -1072,7 +1075,7 @@
         "base_date": "2026-10-29",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "4526",
@@ -1104,7 +1107,7 @@
         "base_date": "2026-10-29",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "2466",
@@ -1136,7 +1139,7 @@
         "base_date": "2026-10-29",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "4577",
@@ -1168,7 +1171,7 @@
         "base_date": "2026-10-29",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3055",
@@ -1200,7 +1203,7 @@
         "base_date": "2026-10-29",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       }
     ],
     "next_trading_disposals_list": [
@@ -1224,17 +1227,17 @@
         "td_to_exit": 2,
         "countdown_desc": "T-2 (11/03)",
         "countdown_days": 2,
-        "status": "🔥 策略 B (T-2 搶跑買入)",
+        "status": "🔥 策略 B 預警 (週五收盤搶跑買入)",
         "priority": 1,
         "is_hit_b": 1,
         "is_hit_c": 0,
-        "action_timing": "今日收盤進場",
-        "entry_sop": "今日收盤買進 ｜ 明日(T-1)收盤賣50% ｜ 出關日(T)開盤賣50% ｜ 破5MA停損",
-        "exit_sop": "今日收盤買進 ｜ 明日(T-1)收盤賣50% ｜ 出關日(T)開盤賣50% ｜ 破5MA停損",
+        "action_timing": "週五 (10/30) 13:25 尾盤進場",
+        "entry_sop": "週五收盤前買進 ｜ 次一交易日(T-1)收盤賣50% ｜ 出關日(T)09:00 開盤賣出剩餘 50% ｜ 破5MA停損",
+        "exit_sop": "週五收盤前買進 ｜ 次一交易日(T-1)收盤賣50% ｜ 出關日(T)09:00 開盤賣出剩餘 50% ｜ 破5MA停損",
         "base_date": "2026-10-30",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3287",
@@ -1266,7 +1269,7 @@
         "base_date": "2026-10-30",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "8358",
@@ -1298,7 +1301,7 @@
         "base_date": "2026-10-30",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "8437",
@@ -1330,7 +1333,7 @@
         "base_date": "2026-10-30",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "5205",
@@ -1362,7 +1365,7 @@
         "base_date": "2026-10-30",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "2424",
@@ -1394,7 +1397,7 @@
         "base_date": "2026-10-30",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "5475",
@@ -1421,12 +1424,12 @@
         "is_hit_b": 0,
         "is_hit_c": 0,
         "action_timing": "觀望",
-        "entry_sop": "處置中持續觀察，預計 11/04 出關",
-        "exit_sop": "處置中持續觀察，預計 11/04 出關",
+        "entry_sop": "處置中持續觀察，預計 11/04 出關 ｜ 次一交易日 (10/30) 收盤將進入 T-2 搶跑點",
+        "exit_sop": "處置中持續觀察，預計 11/04 出關 ｜ 次一交易日 (10/30) 收盤將進入 T-2 搶跑點",
         "base_date": "2026-10-30",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "6925",
@@ -1453,12 +1456,12 @@
         "is_hit_b": 0,
         "is_hit_c": 0,
         "action_timing": "觀望",
-        "entry_sop": "處置中持續觀察，預計 11/04 出關",
-        "exit_sop": "處置中持續觀察，預計 11/04 出關",
+        "entry_sop": "處置中持續觀察，預計 11/04 出關 ｜ 次一交易日 (10/30) 收盤將進入 T-2 搶跑點",
+        "exit_sop": "處置中持續觀察，預計 11/04 出關 ｜ 次一交易日 (10/30) 收盤將進入 T-2 搶跑點",
         "base_date": "2026-10-30",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3354",
@@ -1485,12 +1488,12 @@
         "is_hit_b": 0,
         "is_hit_c": 0,
         "action_timing": "觀望",
-        "entry_sop": "處置中持續觀察，預計 11/04 出關",
-        "exit_sop": "處置中持續觀察，預計 11/04 出關",
+        "entry_sop": "處置中持續觀察，預計 11/04 出關 ｜ 次一交易日 (10/30) 收盤將進入 T-2 搶跑點",
+        "exit_sop": "處置中持續觀察，預計 11/04 出關 ｜ 次一交易日 (10/30) 收盤將進入 T-2 搶跑點",
         "base_date": "2026-10-30",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "6751",
@@ -1517,12 +1520,12 @@
         "is_hit_b": 0,
         "is_hit_c": 0,
         "action_timing": "觀望",
-        "entry_sop": "處置中持續觀察，預計 11/04 出關",
-        "exit_sop": "處置中持續觀察，預計 11/04 出關",
+        "entry_sop": "處置中持續觀察，預計 11/04 出關 ｜ 次一交易日 (10/30) 收盤將進入 T-2 搶跑點",
+        "exit_sop": "處置中持續觀察，預計 11/04 出關 ｜ 次一交易日 (10/30) 收盤將進入 T-2 搶跑點",
         "base_date": "2026-10-30",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3441",
@@ -1554,7 +1557,7 @@
         "base_date": "2026-10-30",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "4526",
@@ -1586,7 +1589,7 @@
         "base_date": "2026-10-30",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "2466",
@@ -1618,7 +1621,7 @@
         "base_date": "2026-10-30",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "4577",
@@ -1650,7 +1653,7 @@
         "base_date": "2026-10-30",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3055",
@@ -1682,7 +1685,7 @@
         "base_date": "2026-10-30",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3167",
@@ -1714,24 +1717,24 @@
         "base_date": "2026-10-30",
         "last_closed_date": "2026-10-29",
         "next_trading_date": "2026-10-30",
-        "is_market_closed": 0
+        "is_market_closed": 1
       }
     ]
   },
   "all_searchable_stocks": {
-    "3691": {
-      "stock_id": "3691",
-      "name": "碩禾",
-      "rank": 1,
-      "status": "TOP_9",
-      "close": 144.0
-    },
     "6925": {
       "stock_id": "6925",
       "name": "意藍",
-      "rank": 2,
+      "rank": 1,
       "status": "TOP_9",
       "close": 127.0
+    },
+    "3691": {
+      "stock_id": "3691",
+      "name": "碩禾",
+      "rank": 2,
+      "status": "TOP_9",
+      "close": 144.0
     },
     "6756": {
       "stock_id": "6756",
@@ -1740,82 +1743,82 @@
       "status": "TOP_9",
       "close": 132.5
     },
+    "2465": {
+      "stock_id": "2465",
+      "name": "麗臺",
+      "rank": 4,
+      "status": "TOP_9",
+      "close": 113.0
+    },
     "3006": {
       "stock_id": "3006",
       "name": "晶豪科",
-      "rank": 4,
+      "rank": 5,
       "status": "TOP_9",
       "close": 282.5
     },
     "6415": {
       "stock_id": "6415",
       "name": "矽力*-KY",
-      "rank": 5,
+      "rank": 6,
       "status": "TOP_9",
       "close": 524.0
     },
     "3035": {
       "stock_id": "3035",
       "name": "智原",
-      "rank": 6,
+      "rank": 7,
       "status": "TOP_9",
       "close": 231.5
+    },
+    "5351": {
+      "stock_id": "5351",
+      "name": "鈺創",
+      "rank": 8,
+      "status": "TOP_9",
+      "close": 113.0
     },
     "4720": {
       "stock_id": "4720",
       "name": "德淵",
-      "rank": 7,
+      "rank": 9,
       "status": "TOP_9",
       "close": 29.25
     },
     "7750": {
       "stock_id": "7750",
       "name": "新代",
-      "rank": 8,
-      "status": "TOP_9",
+      "rank": 10,
+      "status": "BUFFER_10_15",
       "close": 2090.0
     },
-    "5351": {
-      "stock_id": "5351",
-      "name": "鈺創",
-      "rank": 9,
-      "status": "TOP_9",
-      "close": 113.0
+    "4967": {
+      "stock_id": "4967",
+      "name": "十銓",
+      "rank": 11,
+      "status": "BUFFER_10_15",
+      "close": 286.5
     },
     "2451": {
       "stock_id": "2451",
       "name": "創見",
-      "rank": 10,
+      "rank": 12,
       "status": "BUFFER_10_15",
       "close": 294.0
     },
     "8299": {
       "stock_id": "8299",
       "name": "群聯",
-      "rank": 11,
+      "rank": 13,
       "status": "BUFFER_10_15",
       "close": 2050.0
     },
-    "3498": {
-      "stock_id": "3498",
-      "name": "陽程",
-      "rank": 12,
-      "status": "BUFFER_10_15",
-      "close": 256.0
-    },
-    "4967": {
-      "stock_id": "4967",
-      "name": "十銓",
-      "rank": 13,
-      "status": "BUFFER_10_15",
-      "close": 286.5
-    },
-    "3147": {
-      "stock_id": "3147",
-      "name": "大綜",
+    "4566": {
+      "stock_id": "4566",
+      "name": "時碩工業",
       "rank": 14,
       "status": "BUFFER_10_15",
-      "close": 311.5
+      "close": 87.8
     },
     "6277": {
       "stock_id": "6277",
@@ -1824,12 +1827,12 @@
       "status": "BUFFER_10_15",
       "close": 93.1
     },
-    "4566": {
-      "stock_id": "4566",
-      "name": "時碩工業",
+    "4770": {
+      "stock_id": "4770",
+      "name": "上品",
       "rank": 16,
-      "status": "DROPPED",
-      "close": 87.8
+      "status": "OUTSIDE",
+      "close": 301.0
     },
     "9933": {
       "stock_id": "9933",
@@ -1838,33 +1841,33 @@
       "status": "OUTSIDE",
       "close": 47.9
     },
-    "4770": {
-      "stock_id": "4770",
-      "name": "上品",
-      "rank": 18,
-      "status": "OUTSIDE",
-      "close": 301.0
-    },
     "5426": {
       "stock_id": "5426",
       "name": "振發",
-      "rank": 19,
+      "rank": 18,
       "status": "DROPPED",
       "close": 31.8
-    },
-    "2344": {
-      "stock_id": "2344",
-      "name": "華邦電",
-      "rank": 20,
-      "status": "OUTSIDE",
-      "close": 170.5
     },
     "2352": {
       "stock_id": "2352",
       "name": "佳世達",
-      "rank": 21,
+      "rank": 19,
       "status": "OUTSIDE",
       "close": 32.8
+    },
+    "3498": {
+      "stock_id": "3498",
+      "name": "陽程",
+      "rank": 20,
+      "status": "DROPPED",
+      "close": 256.0
+    },
+    "2344": {
+      "stock_id": "2344",
+      "name": "華邦電",
+      "rank": 21,
+      "status": "OUTSIDE",
+      "close": 170.5
     },
     "6805": {
       "stock_id": "6805",
@@ -1880,96 +1883,96 @@
       "status": "DROPPED",
       "close": 51.1
     },
-    "6199": {
-      "stock_id": "6199",
-      "name": "天品",
-      "rank": 24,
-      "status": "OUTSIDE",
-      "close": 158.5
-    },
     "3034": {
       "stock_id": "3034",
       "name": "聯詠",
-      "rank": 25,
+      "rank": 24,
       "status": "OUTSIDE",
       "close": 596.0
     },
-    "6672": {
-      "stock_id": "6672",
-      "name": "騰輝電子-KY",
-      "rank": 26,
+    "6199": {
+      "stock_id": "6199",
+      "name": "天品",
+      "rank": 25,
       "status": "OUTSIDE",
-      "close": 566.0
+      "close": 158.5
     },
     "6245": {
       "stock_id": "6245",
       "name": "立端",
-      "rank": 27,
+      "rank": 26,
       "status": "OUTSIDE",
       "close": 97.1
+    },
+    "4977": {
+      "stock_id": "4977",
+      "name": "眾達-KY",
+      "rank": 27,
+      "status": "OUTSIDE",
+      "close": 183.5
+    },
+    "3147": {
+      "stock_id": "3147",
+      "name": "大綜",
+      "rank": 28,
+      "status": "DROPPED",
+      "close": 311.5
     },
     "6446": {
       "stock_id": "6446",
       "name": "藥華藥",
-      "rank": 28,
+      "rank": 29,
       "status": "OUTSIDE",
       "close": 1240.0
     },
     "8213": {
       "stock_id": "8213",
       "name": "志超",
-      "rank": 29,
+      "rank": 30,
       "status": "OUTSIDE",
       "close": 41.9
     },
     "2492": {
       "stock_id": "2492",
       "name": "華新科",
-      "rank": 30,
+      "rank": 31,
       "status": "OUTSIDE",
       "close": 423.0
     },
     "2356": {
       "stock_id": "2356",
       "name": "英業達",
-      "rank": 31,
+      "rank": 32,
       "status": "OUTSIDE",
       "close": 61.4
+    },
+    "6672": {
+      "stock_id": "6672",
+      "name": "騰輝電子-KY",
+      "rank": 33,
+      "status": "OUTSIDE",
+      "close": 566.0
     },
     "6221": {
       "stock_id": "6221",
       "name": "晉泰",
-      "rank": 32,
+      "rank": 34,
       "status": "DROPPED",
       "close": 38.45
     },
     "3045": {
       "stock_id": "3045",
       "name": "台灣大",
-      "rank": 33,
+      "rank": 35,
       "status": "OUTSIDE",
       "close": 134.5
-    },
-    "4977": {
-      "stock_id": "4977",
-      "name": "眾達-KY",
-      "rank": 34,
-      "status": "OUTSIDE",
-      "close": 183.5
     },
     "4961": {
       "stock_id": "4961",
       "name": "天鈺",
-      "rank": 35,
-      "status": "OUTSIDE",
-      "close": 195.0
-    },
-    "1815": {
-      "stock_id": "1815",
-      "name": "富喬",
       "rank": 36,
       "status": "OUTSIDE",
-      "close": 137.0
+      "close": 195.0
     },
     "2886": {
       "stock_id": "2886",
@@ -1978,47 +1981,47 @@
       "status": "OUTSIDE",
       "close": 54.8
     },
-    "2801": {
-      "stock_id": "2801",
-      "name": "彰銀",
+    "1815": {
+      "stock_id": "1815",
+      "name": "富喬",
       "rank": 38,
       "status": "OUTSIDE",
-      "close": 30.5
-    },
-    "2412": {
-      "stock_id": "2412",
-      "name": "中華電",
-      "rank": 39,
-      "status": "OUTSIDE",
-      "close": 158.0
-    },
-    "3105": {
-      "stock_id": "3105",
-      "name": "穩懋",
-      "rank": 40,
-      "status": "OUTSIDE",
-      "close": 594.0
+      "close": 137.0
     },
     "4916": {
       "stock_id": "4916",
       "name": "事欣科",
-      "rank": 41,
+      "rank": 39,
       "status": "OUTSIDE",
       "close": 104.0
+    },
+    "2801": {
+      "stock_id": "2801",
+      "name": "彰銀",
+      "rank": 40,
+      "status": "OUTSIDE",
+      "close": 30.5
+    },
+    "3105": {
+      "stock_id": "3105",
+      "name": "穩懋",
+      "rank": 41,
+      "status": "OUTSIDE",
+      "close": 594.0
+    },
+    "2412": {
+      "stock_id": "2412",
+      "name": "中華電",
+      "rank": 42,
+      "status": "OUTSIDE",
+      "close": 158.0
     },
     "6409": {
       "stock_id": "6409",
       "name": "旭隼",
-      "rank": 42,
-      "status": "OUTSIDE",
-      "close": 903.0
-    },
-    "1101": {
-      "stock_id": "1101",
-      "name": "台泥",
       "rank": 43,
       "status": "OUTSIDE",
-      "close": 28.2
+      "close": 903.0
     },
     "2379": {
       "stock_id": "2379",
@@ -2027,40 +2030,40 @@
       "status": "OUTSIDE",
       "close": 794.0
     },
+    "1101": {
+      "stock_id": "1101",
+      "name": "台泥",
+      "rank": 45,
+      "status": "OUTSIDE",
+      "close": 28.2
+    },
+    "4903": {
+      "stock_id": "4903",
+      "name": "聯光通",
+      "rank": 46,
+      "status": "OUTSIDE",
+      "close": 51.9
+    },
     "6214": {
       "stock_id": "6214",
       "name": "精誠",
-      "rank": 45,
+      "rank": 47,
       "status": "OUTSIDE",
       "close": 202.0
-    },
-    "3293": {
-      "stock_id": "3293",
-      "name": "鈊象",
-      "rank": 46,
-      "status": "OUTSIDE",
-      "close": 808.0
     },
     "6770": {
       "stock_id": "6770",
       "name": "力積電",
-      "rank": 47,
+      "rank": 48,
       "status": "OUTSIDE",
       "close": 69.5
     },
-    "4904": {
-      "stock_id": "4904",
-      "name": "遠傳",
-      "rank": 48,
-      "status": "OUTSIDE",
-      "close": 113.0
-    },
-    "2347": {
-      "stock_id": "2347",
-      "name": "聯強",
+    "3293": {
+      "stock_id": "3293",
+      "name": "鈊象",
       "rank": 49,
       "status": "OUTSIDE",
-      "close": 102.0
+      "close": 808.0
     },
     "3374": {
       "stock_id": "3374",
@@ -2069,12 +2072,12 @@
       "status": "OUTSIDE",
       "close": 487.5
     },
-    "2406": {
-      "stock_id": "2406",
-      "name": "國碩",
+    "2347": {
+      "stock_id": "2347",
+      "name": "聯強",
       "rank": 51,
       "status": "OUTSIDE",
-      "close": 30.0
+      "close": 102.0
     },
     "5876": {
       "stock_id": "5876",
@@ -2083,47 +2086,47 @@
       "status": "OUTSIDE",
       "close": 54.5
     },
+    "3231": {
+      "stock_id": "3231",
+      "name": "緯創",
+      "rank": 53,
+      "status": "OUTSIDE",
+      "close": 188.5
+    },
     "2884": {
       "stock_id": "2884",
       "name": "玉山金",
-      "rank": 53,
+      "rank": 54,
       "status": "OUTSIDE",
       "close": 49.0
     },
-    "2891": {
-      "stock_id": "2891",
-      "name": "中信金",
-      "rank": 54,
+    "2406": {
+      "stock_id": "2406",
+      "name": "國碩",
+      "rank": 55,
       "status": "OUTSIDE",
-      "close": 75.3
+      "close": 30.0
     },
     "6209": {
       "stock_id": "6209",
       "name": "今國光",
-      "rank": 55,
+      "rank": 56,
       "status": "OUTSIDE",
       "close": 93.6
     },
     "2027": {
       "stock_id": "2027",
       "name": "大成鋼",
-      "rank": 56,
+      "rank": 57,
       "status": "OUTSIDE",
       "close": 50.4
     },
-    "2885": {
-      "stock_id": "2885",
-      "name": "元大金",
-      "rank": 57,
-      "status": "OUTSIDE",
-      "close": 73.4
-    },
-    "3231": {
-      "stock_id": "3231",
-      "name": "緯創",
+    "6278": {
+      "stock_id": "6278",
+      "name": "台表科",
       "rank": 58,
       "status": "OUTSIDE",
-      "close": 188.5
+      "close": 275.0
     },
     "5904": {
       "stock_id": "5904",
@@ -2132,12 +2135,12 @@
       "status": "OUTSIDE",
       "close": 72.8
     },
-    "6278": {
-      "stock_id": "6278",
-      "name": "台表科",
+    "3005": {
+      "stock_id": "3005",
+      "name": "神基",
       "rank": 60,
       "status": "OUTSIDE",
-      "close": 275.0
+      "close": 123.0
     },
     "8069": {
       "stock_id": "8069",
@@ -2146,19 +2149,19 @@
       "status": "OUTSIDE",
       "close": 153.0
     },
-    "2317": {
-      "stock_id": "2317",
-      "name": "鴻海",
+    "1476": {
+      "stock_id": "1476",
+      "name": "儒鴻",
       "rank": 62,
       "status": "OUTSIDE",
-      "close": 248.0
+      "close": 322.0
     },
-    "3005": {
-      "stock_id": "3005",
-      "name": "神基",
+    "6234": {
+      "stock_id": "6234",
+      "name": "高僑",
       "rank": 63,
       "status": "OUTSIDE",
-      "close": 123.0
+      "close": 45.65
     },
     "2912": {
       "stock_id": "2912",
@@ -2167,47 +2170,47 @@
       "status": "OUTSIDE",
       "close": 222.0
     },
+    "2317": {
+      "stock_id": "2317",
+      "name": "鴻海",
+      "rank": 65,
+      "status": "OUTSIDE",
+      "close": 248.0
+    },
     "2355": {
       "stock_id": "2355",
       "name": "敬鵬",
-      "rank": 65,
-      "status": "OUTSIDE",
-      "close": 52.5
-    },
-    "1476": {
-      "stock_id": "1476",
-      "name": "儒鴻",
       "rank": 66,
       "status": "OUTSIDE",
-      "close": 322.0
-    },
-    "4540": {
-      "stock_id": "4540",
-      "name": "全球傳動",
-      "rank": 67,
-      "status": "OUTSIDE",
-      "close": 62.6
-    },
-    "6234": {
-      "stock_id": "6234",
-      "name": "高僑",
-      "rank": 68,
-      "status": "OUTSIDE",
-      "close": 45.65
-    },
-    "2890": {
-      "stock_id": "2890",
-      "name": "永豐金",
-      "rank": 69,
-      "status": "OUTSIDE",
-      "close": 46.45
+      "close": 52.5
     },
     "4938": {
       "stock_id": "4938",
       "name": "和碩",
-      "rank": 70,
+      "rank": 67,
       "status": "OUTSIDE",
       "close": 104.5
+    },
+    "2353": {
+      "stock_id": "2353",
+      "name": "宏碁",
+      "rank": 68,
+      "status": "OUTSIDE",
+      "close": 32.0
+    },
+    "4540": {
+      "stock_id": "4540",
+      "name": "全球傳動",
+      "rank": 69,
+      "status": "OUTSIDE",
+      "close": 62.6
+    },
+    "2426": {
+      "stock_id": "2426",
+      "name": "鼎元",
+      "rank": 70,
+      "status": "OUTSIDE",
+      "close": 97.0
     },
     "1216": {
       "stock_id": "1216",
@@ -2216,19 +2219,19 @@
       "status": "OUTSIDE",
       "close": 79.0
     },
-    "6491": {
-      "stock_id": "6491",
-      "name": "晶碩",
+    "3036": {
+      "stock_id": "3036",
+      "name": "文曄",
       "rank": 72,
       "status": "OUTSIDE",
-      "close": 422.5
+      "close": 214.0
     },
-    "2426": {
-      "stock_id": "2426",
-      "name": "鼎元",
+    "2890": {
+      "stock_id": "2890",
+      "name": "永豐金",
       "rank": 73,
       "status": "OUTSIDE",
-      "close": 97.0
+      "close": 46.45
     },
     "3714": {
       "stock_id": "3714",
@@ -2237,12 +2240,12 @@
       "status": "OUTSIDE",
       "close": 62.9
     },
-    "3036": {
-      "stock_id": "3036",
-      "name": "文曄",
+    "6491": {
+      "stock_id": "6491",
+      "name": "晶碩",
       "rank": 75,
       "status": "OUTSIDE",
-      "close": 214.0
+      "close": 422.5
     },
     "2049": {
       "stock_id": "2049",
@@ -2251,33 +2254,33 @@
       "status": "OUTSIDE",
       "close": 337.0
     },
+    "2324": {
+      "stock_id": "2324",
+      "name": "仁寶",
+      "rank": 77,
+      "status": "OUTSIDE",
+      "close": 36.65
+    },
+    "3305": {
+      "stock_id": "3305",
+      "name": "昇貿",
+      "rank": 78,
+      "status": "OUTSIDE",
+      "close": 109.0
+    },
     "6538": {
       "stock_id": "6538",
       "name": "倉和",
-      "rank": 77,
+      "rank": 79,
       "status": "OUTSIDE",
       "close": 316.0
     },
     "3533": {
       "stock_id": "3533",
       "name": "嘉澤",
-      "rank": 78,
-      "status": "OUTSIDE",
-      "close": 1900.0
-    },
-    "4903": {
-      "stock_id": "4903",
-      "name": "聯光通",
-      "rank": 79,
-      "status": "OUTSIDE",
-      "close": 51.9
-    },
-    "2324": {
-      "stock_id": "2324",
-      "name": "仁寶",
       "rank": 80,
       "status": "OUTSIDE",
-      "close": 36.65
+      "close": 1900.0
     },
     "5498": {
       "stock_id": "5498",
@@ -2286,103 +2289,75 @@
       "status": "OUTSIDE",
       "close": 52.8
     },
-    "3305": {
-      "stock_id": "3305",
-      "name": "昇貿",
-      "rank": 82,
-      "status": "OUTSIDE",
-      "close": 109.0
-    },
-    "2353": {
-      "stock_id": "2353",
-      "name": "宏碁",
-      "rank": 83,
-      "status": "OUTSIDE",
-      "close": 32.0
-    },
     "1102": {
       "stock_id": "1102",
       "name": "亞泥",
-      "rank": 84,
+      "rank": 82,
       "status": "OUTSIDE",
       "close": 37.8
+    },
+    "2312": {
+      "stock_id": "2312",
+      "name": "金寶",
+      "rank": 83,
+      "status": "OUTSIDE",
+      "close": 31.3
     },
     "6155": {
       "stock_id": "6155",
       "name": "鈞寶",
-      "rank": 85,
+      "rank": 84,
       "status": "OUTSIDE",
       "close": 70.5
-    },
-    "2377": {
-      "stock_id": "2377",
-      "name": "微星",
-      "rank": 86,
-      "status": "OUTSIDE",
-      "close": 160.0
     },
     "3406": {
       "stock_id": "3406",
       "name": "玉晶光",
-      "rank": 87,
+      "rank": 85,
       "status": "DROPPED",
       "close": 1200.0
     },
     "6148": {
       "stock_id": "6148",
       "name": "驊宏資",
-      "rank": 88,
+      "rank": 86,
       "status": "OUTSIDE",
       "close": 39.0
-    },
-    "2312": {
-      "stock_id": "2312",
-      "name": "金寶",
-      "rank": 89,
-      "status": "OUTSIDE",
-      "close": 31.3
     },
     "2002": {
       "stock_id": "2002",
       "name": "中鋼",
-      "rank": 90,
+      "rank": 87,
       "status": "OUTSIDE",
       "close": 19.45
     },
     "2834": {
       "stock_id": "2834",
       "name": "臺企銀",
-      "rank": 91,
+      "rank": 88,
       "status": "OUTSIDE",
       "close": 18.0
     },
     "1802": {
       "stock_id": "1802",
       "name": "台玻",
-      "rank": 92,
+      "rank": 89,
       "status": "OUTSIDE",
       "close": 62.0
-    },
-    "2880": {
-      "stock_id": "2880",
-      "name": "華南金",
-      "rank": 93,
-      "status": "OUTSIDE",
-      "close": 50.1
     },
     "2105": {
       "stock_id": "2105",
       "name": "正新",
-      "rank": 94,
+      "rank": 90,
       "status": "OUTSIDE",
       "close": 31.15
     },
-    "5871": {
-      "stock_id": "5871",
-      "name": "中租-KY",
-      "rank": 95,
+    "2880": {
+      "stock_id": "2880",
+      "name": "華南金",
+      "rank": 91,
       "status": "OUTSIDE",
-      "close": 107.0
+      "close": 50.1
     }
   }
 }

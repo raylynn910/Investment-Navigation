@@ -1012,34 +1012,34 @@
     "2026-10-29": {
       "date": "2026-10-29",
       "stock_ids": [
-        "3691",
         "6925",
+        "3691",
         "6756",
+        "2465",
         "3006",
         "6415",
         "3035",
+        "5351",
         "4720",
         "7750",
-        "5351",
+        "4967",
         "2451",
         "8299",
-        "3498",
-        "4967",
-        "3147",
+        "4566",
         "6277"
       ],
       "top15": [
         {
           "rank": 1,
-          "stock_id": "3691",
-          "stock_name": "碩禾",
-          "latest_close": 144.0
-        },
-        {
-          "rank": 2,
           "stock_id": "6925",
           "stock_name": "意藍",
           "latest_close": 127.0
+        },
+        {
+          "rank": 2,
+          "stock_id": "3691",
+          "stock_name": "碩禾",
+          "latest_close": 144.0
         },
         {
           "rank": 3,
@@ -1049,69 +1049,69 @@
         },
         {
           "rank": 4,
+          "stock_id": "2465",
+          "stock_name": "麗臺",
+          "latest_close": 113.0
+        },
+        {
+          "rank": 5,
           "stock_id": "3006",
           "stock_name": "晶豪科",
           "latest_close": 282.5
         },
         {
-          "rank": 5,
+          "rank": 6,
           "stock_id": "6415",
           "stock_name": "矽力*-KY",
           "latest_close": 524.0
         },
         {
-          "rank": 6,
+          "rank": 7,
           "stock_id": "3035",
           "stock_name": "智原",
           "latest_close": 231.5
         },
         {
-          "rank": 7,
-          "stock_id": "4720",
-          "stock_name": "德淵",
-          "latest_close": 29.25
-        },
-        {
           "rank": 8,
-          "stock_id": "7750",
-          "stock_name": "新代",
-          "latest_close": 2090.0
-        },
-        {
-          "rank": 9,
           "stock_id": "5351",
           "stock_name": "鈺創",
           "latest_close": 113.0
         },
         {
+          "rank": 9,
+          "stock_id": "4720",
+          "stock_name": "德淵",
+          "latest_close": 29.25
+        },
+        {
           "rank": 10,
-          "stock_id": "2451",
-          "stock_name": "創見",
-          "latest_close": 294.0
+          "stock_id": "7750",
+          "stock_name": "新代",
+          "latest_close": 2090.0
         },
         {
           "rank": 11,
-          "stock_id": "8299",
-          "stock_name": "群聯",
-          "latest_close": 2050.0
-        },
-        {
-          "rank": 12,
-          "stock_id": "3498",
-          "stock_name": "陽程",
-          "latest_close": 256.0
-        },
-        {
-          "rank": 13,
           "stock_id": "4967",
           "stock_name": "十銓",
           "latest_close": 286.5
         },
         {
+          "rank": 12,
+          "stock_id": "2451",
+          "stock_name": "創見",
+          "latest_close": 294.0
+        },
+        {
+          "rank": 13,
+          "stock_id": "8299",
+          "stock_name": "群聯",
+          "latest_close": 2050.0
+        },
+        {
           "rank": 14,
-          "stock_id": "3147",
-          "stock_name": "大綜",
-          "latest_close": 311.5
+          "stock_id": "4566",
+          "stock_name": "時碩工業",
+          "latest_close": 87.8
         },
         {
           "rank": 15,

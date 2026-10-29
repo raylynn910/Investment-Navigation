@@ -253,13 +253,16 @@ def execute_smart_sync_pipeline():
         except Exception as e:
             print(f"[SmartSync] sync_disposals notice: {e}")
 
-        # 4. 月營收
-        progress_bar.progress(65, text="4/6 正在比對最新月營收數據...")
+        # 4. 月營收與財報
+        progress_bar.progress(65, text="4/6 正在全量同步月營收與季財報 (FinMind API)...")
         try:
-            from moneydj_revenue_scraper import scrape_moneydj_revenue
-            scrape_moneydj_revenue()
+            api_client.update_revenue()
         except Exception as e:
-            print(f"[SmartSync] scrape_moneydj_revenue notice: {e}")
+            print(f"[SmartSync] update_revenue notice: {e}")
+        try:
+            api_client.update_financials()
+        except Exception as e:
+            print(f"[SmartSync] update_financials notice: {e}")
 
         # 5. 全市場重新跑分
         progress_bar.progress(80, text="5/6 正在執行 1,900+ 檔截面 Z-Score 動能跑分...")
@@ -559,24 +562,30 @@ def render_veteran_war_room(portfolio_data, market_regime):
                     try:
                         from moneydj_revenue_scraper import scrape_moneydj_revenue
                         res = scrape_moneydj_revenue()
-                        st.success(f"爬取營收 {res.get('count')} 檔！")
+                        st.success(f"今日快報已更新 {res.get('count', 0)} 檔！")
                         st.cache_data.clear()
                     except Exception as e:
                         st.error(f"錯誤: {e}")
             with c4:
-                if st.button("🏢 OpenAPI營收", use_container_width=True):
+                if st.button("⚡ FinMind營收", use_container_width=True):
                     try:
-                        from update_revenue_openapi import fetch_and_update_openapi_revenue
-                        res = fetch_and_update_openapi_revenue()
-                        st.success(res.get("message", "營收同步完畢"))
+                        res = api_client.update_revenue()
+                        if isinstance(res, dict) and res.get("status") == "success":
+                            st.success(res.get("message", "全市場月營收同步成功！"))
+                        else:
+                            st.info("全市場月營收同步完成！")
                         st.cache_data.clear()
                     except Exception as e:
                         st.error(f"錯誤: {e}")
             with c5:
-                if st.button("📊 OpenAPI財報", use_container_width=True):
+                if st.button("📊 FinMind財報", use_container_width=True):
                     try:
-                        api_client.update_financials()
-                        st.success("財報更新已啟動")
+                        res = api_client.update_financials()
+                        if isinstance(res, dict) and res.get("status") == "success":
+                            st.success(res.get("message", "全市場財報與ROE同步成功！"))
+                        else:
+                            st.info("全市場季財報同步完成！")
+                        st.cache_data.clear()
                     except Exception as e:
                         st.error(f"錯誤: {e}")
             with c6:
