@@ -224,65 +224,46 @@ st.markdown(CSS, unsafe_allow_html=True)
 
 
 # ============================================================
-# 執行一鍵全自動盤後同步管線 (Smart Pipeline)
+# 執行一鍵全自動盤後同步管線 (Smart Pipeline - 智能時效核驗與精準同步)
 # ============================================================
 def execute_smart_sync_pipeline():
-    """依序自動執行：大盤夜盤 -> K線 -> 處置名單 -> 月營收 -> 財報ROE -> 跑分 -> 親友版發布"""
-    progress_bar = st.progress(0, text="🚀 啟動全自動盤後同步管線...")
+    """自動核對 DuckDB 新鮮度 -> FinMind API 按需下載/清洗/寫入 -> 跑分 -> 雲端發布"""
+    progress_bar = st.progress(0, text="🔍 正在自動核驗本地 DuckDB 資料時效性...")
     try:
-        # 1. 大盤與夜盤
-        progress_bar.progress(15, text="1/6 正在更新大盤與台指期夜盤 (TXF / TXF_NIGHT)...")
-        try:
-            api_client.update_taiex()
-        except Exception as e:
-            print(f"[SmartSync] update_taiex notice: {e}")
+        from data_providers.smart_sync_manager import run_smart_sync_and_publish
 
-        # 2. 全市場 K 線
-        progress_bar.progress(35, text="2/6 正在校正全市場 K 線歷史與除權息跳空...")
-        try:
-            api_client.sync_daily_market_data()
-        except Exception as e:
-            print(f"[SmartSync] sync_daily_market_data notice: {e}")
+        def on_progress(pct: int, msg: str):
+            progress_bar.progress(pct, text=msg)
 
-        # 3. 處置名單
-        progress_bar.progress(50, text="3/6 正在同步上市櫃處置出關名單...")
-        try:
-            from disposal_event_scanner import DisposalEventScanner
-            scanner = DisposalEventScanner()
-            scanner.sync_disposals()
-        except Exception as e:
-            print(f"[SmartSync] sync_disposals notice: {e}")
+        res = run_smart_sync_and_publish(force_all=False, progress_callback=on_progress)
+        st.session_state.smart_sync_result = res
 
-        # 4. 月營收與財報
-        progress_bar.progress(65, text="4/6 正在全量同步月營收與季財報 (FinMind API)...")
-        try:
-            api_client.update_revenue()
-        except Exception as e:
-            print(f"[SmartSync] update_revenue notice: {e}")
-        try:
-            api_client.update_financials()
-        except Exception as e:
-            print(f"[SmartSync] update_financials notice: {e}")
+        # 讀取發布結果供 UI 狀態卡片展示
+        from signal_publisher import SIGNALS_FILE
+        sig_data = {}
+        if os.path.exists(SIGNALS_FILE):
+            with open(SIGNALS_FILE, "r", encoding="utf-8") as f:
+                sig_data = json.load(f)
 
-        # 5. 全市場重新跑分
-        progress_bar.progress(80, text="5/6 正在執行 1,900+ 檔截面 Z-Score 動能跑分...")
-        try:
-            api_client.run_screener()
-        except Exception as e:
-            print(f"[SmartSync] run_screener notice: {e}")
+        c1 = sig_data.get("core_1_swing", {})
+        c3 = sig_data.get("core_3_disposal", {})
 
-        # 6. 發布最新訊號與 Git 推送
-        progress_bar.progress(95, text="6/6 正在產出親友版訊號快照並執行 Git 推送...")
-        from signal_publisher import export_and_publish_signals
-        res = export_and_publish_signals()
-        st.session_state.export_signal_result = res
-
-        progress_bar.progress(100, text="✅ 全自動盤後同步與發布全部完成！")
-        st.session_state.sync_success_msg = f"🎉 全自動盤後同步完成！資料日期: {res.get('data_date')}，Top 9 名單與處置狙擊已全量更新發布！"
+        export_res = {
+            "success": res.get("success", True),
+            "data_date": res.get("data_date", sig_data.get("data_date", "")),
+            "top_9_count": len(c1.get("top_9", [])),
+            "buffer_count": len(c1.get("buffer_10_15", [])),
+            "hits_b_count": len(c3.get("strategy_b_preemptive", [])),
+            "git_status": res.get("git_status", {}),
+            "actions_taken": res.get("actions_taken", []),
+            "audit_report": res.get("audit_report", {})
+        }
+        st.session_state.export_signal_result = export_res
+        st.session_state.sync_success_msg = f"🎉 盤後智能核對與同步完成！資料基準: {export_res.get('data_date')}，Top 9 名單與處置狙擊已全面推送雲端！"
         st.cache_data.clear()
 
     except Exception as e:
-        st.session_state.sync_success_msg = f"❌ 同步過程發生異常: {str(e)}"
+        st.session_state.sync_success_msg = f"❌ 智能同步管線異常: {str(e)}"
     finally:
         st.session_state.is_syncing_all = False
 
@@ -606,6 +587,8 @@ def render_veteran_war_room(portfolio_data, market_regime):
             commit_hash = git_info.get("commit_hash", "")
             cloud_url = git_info.get("cloud_url", "https://investment-navigation.streamlit.app")
             
+            actions = res.get("actions_taken", [])
+            actions_html = f"<div style='font-size: 12px; color: #94a3b8; margin-top: 5px; border-top: 1px dashed rgba(255,255,255,0.12); padding-top: 4px;'>🔍 <b>智能核驗行動:</b> {' ｜ '.join(actions)}</div>" if actions else ""
             c_msg, c_btn, c_close = st.columns([0.68, 0.22, 0.10])
             with c_msg:
                 st.markdown(f"""
@@ -617,6 +600,7 @@ def render_veteran_war_room(portfolio_data, market_regime):
                         📅 資料基準: <b>{res.get('data_date')}</b> ｜ ⏱️ 推送時間: <b>{pushed_at}</b> ｜ 🔀 Commit: <code>{commit_hash or 'latest'}</code><br>
                         📊 前 9 強 <b>{res.get('top_9_count')}</b> 檔 ｜ 緩衝 <b>{res.get('buffer_count')}</b> 檔 ｜ 處置策略B <b>{res.get('hits_b_count')}</b> 檔 ｜ 休市公告已全面同步
                     </div>
+                    {actions_html}
                 </div>
                 """, unsafe_allow_html=True)
             with c_btn:
