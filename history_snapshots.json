@@ -1120,6 +1120,118 @@
           "latest_close": 93.1
         }
       ]
+    },
+    "2026-10-30": {
+      "date": "2026-10-30",
+      "stock_ids": [
+        "8099",
+        "6925",
+        "3691",
+        "2465",
+        "6418",
+        "3006",
+        "6756",
+        "6199",
+        "2468",
+        "2352",
+        "4967",
+        "2451",
+        "1569",
+        "4566",
+        "7750"
+      ],
+      "top15": [
+        {
+          "rank": 1,
+          "stock_id": "8099",
+          "stock_name": "大世科",
+          "latest_close": 111.5
+        },
+        {
+          "rank": 2,
+          "stock_id": "6925",
+          "stock_name": "意藍",
+          "latest_close": 126.0
+        },
+        {
+          "rank": 3,
+          "stock_id": "3691",
+          "stock_name": "碩禾",
+          "latest_close": 141.0
+        },
+        {
+          "rank": 4,
+          "stock_id": "2465",
+          "stock_name": "麗臺",
+          "latest_close": 102.0
+        },
+        {
+          "rank": 5,
+          "stock_id": "6418",
+          "stock_name": "詠昇",
+          "latest_close": 44.3
+        },
+        {
+          "rank": 6,
+          "stock_id": "3006",
+          "stock_name": "晶豪科",
+          "latest_close": 277.0
+        },
+        {
+          "rank": 7,
+          "stock_id": "6756",
+          "stock_name": "威鋒電子",
+          "latest_close": 120.0
+        },
+        {
+          "rank": 8,
+          "stock_id": "6199",
+          "stock_name": "天品",
+          "latest_close": 160.5
+        },
+        {
+          "rank": 9,
+          "stock_id": "2468",
+          "stock_name": "華經",
+          "latest_close": 53.2
+        },
+        {
+          "rank": 10,
+          "stock_id": "2352",
+          "stock_name": "佳世達",
+          "latest_close": 33.8
+        },
+        {
+          "rank": 11,
+          "stock_id": "4967",
+          "stock_name": "十銓",
+          "latest_close": 279.0
+        },
+        {
+          "rank": 12,
+          "stock_id": "2451",
+          "stock_name": "創見",
+          "latest_close": 284.0
+        },
+        {
+          "rank": 13,
+          "stock_id": "1569",
+          "stock_name": "濱川",
+          "latest_close": 92.2
+        },
+        {
+          "rank": 14,
+          "stock_id": "4566",
+          "stock_name": "時碩工業",
+          "latest_close": 86.4
+        },
+        {
+          "rank": 15,
+          "stock_id": "7750",
+          "stock_name": "新代",
+          "latest_close": 2035.0
+        }
+      ]
     }
   }
 }
