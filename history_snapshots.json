@@ -1232,6 +1232,118 @@
           "latest_close": 2035.0
         }
       ]
+    },
+    "2026-11-02": {
+      "date": "2026-11-02",
+      "stock_ids": [
+        "8099",
+        "3691",
+        "2465",
+        "7704",
+        "6233",
+        "6756",
+        "2468",
+        "3006",
+        "6221",
+        "6234",
+        "5426",
+        "2408",
+        "3105",
+        "6199",
+        "5351"
+      ],
+      "top15": [
+        {
+          "rank": 1,
+          "stock_id": "8099",
+          "stock_name": "大世科",
+          "latest_close": 122.5
+        },
+        {
+          "rank": 2,
+          "stock_id": "3691",
+          "stock_name": "碩禾",
+          "latest_close": 145.0
+        },
+        {
+          "rank": 3,
+          "stock_id": "2465",
+          "stock_name": "麗臺",
+          "latest_close": 112.0
+        },
+        {
+          "rank": 4,
+          "stock_id": "7704",
+          "stock_name": "明遠精密",
+          "latest_close": 85.0
+        },
+        {
+          "rank": 5,
+          "stock_id": "6233",
+          "stock_name": "旺玖",
+          "latest_close": 35.2
+        },
+        {
+          "rank": 6,
+          "stock_id": "6756",
+          "stock_name": "威鋒電子",
+          "latest_close": 132.0
+        },
+        {
+          "rank": 7,
+          "stock_id": "2468",
+          "stock_name": "華經",
+          "latest_close": 58.5
+        },
+        {
+          "rank": 8,
+          "stock_id": "3006",
+          "stock_name": "晶豪科",
+          "latest_close": 261.0
+        },
+        {
+          "rank": 9,
+          "stock_id": "6221",
+          "stock_name": "晉泰",
+          "latest_close": 41.25
+        },
+        {
+          "rank": 10,
+          "stock_id": "6234",
+          "stock_name": "高僑",
+          "latest_close": 53.2
+        },
+        {
+          "rank": 11,
+          "stock_id": "5426",
+          "stock_name": "振發",
+          "latest_close": 32.85
+        },
+        {
+          "rank": 12,
+          "stock_id": "2408",
+          "stock_name": "南亞科",
+          "latest_close": 456.5
+        },
+        {
+          "rank": 13,
+          "stock_id": "3105",
+          "stock_name": "穩懋",
+          "latest_close": 588.0
+        },
+        {
+          "rank": 14,
+          "stock_id": "6199",
+          "stock_name": "天品",
+          "latest_close": 162.5
+        },
+        {
+          "rank": 15,
+          "stock_id": "5351",
+          "stock_name": "鈺創",
+          "latest_close": 104.5
+        }
+      ]
     }
   }
 }
