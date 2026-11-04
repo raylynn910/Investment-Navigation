@@ -1463,18 +1463,18 @@
         "8099",
         "3691",
         "6697",
-        "5013",
         "7704",
+        "5013",
         "4720",
+        "3147",
         "2468",
-        "2221",
         "6199",
+        "2221",
         "6221",
         "1569",
-        "4977",
-        "4967",
         "6233",
-        "6446"
+        "4977",
+        "4967"
       ],
       "top15": [
         {
@@ -1497,15 +1497,15 @@
         },
         {
           "rank": 4,
-          "stock_id": "5013",
-          "stock_name": "強新",
-          "latest_close": 62.9
-        },
-        {
-          "rank": 5,
           "stock_id": "7704",
           "stock_name": "明遠精密",
           "latest_close": 83.2
+        },
+        {
+          "rank": 5,
+          "stock_id": "5013",
+          "stock_name": "強新",
+          "latest_close": 62.9
         },
         {
           "rank": 6,
@@ -1515,15 +1515,15 @@
         },
         {
           "rank": 7,
-          "stock_id": "2468",
-          "stock_name": "華經",
-          "latest_close": 60.8
+          "stock_id": "3147",
+          "stock_name": "大綜",
+          "latest_close": 316.5
         },
         {
           "rank": 8,
-          "stock_id": "2221",
-          "stock_name": "大甲",
-          "latest_close": 141.0
+          "stock_id": "2468",
+          "stock_name": "華經",
+          "latest_close": 60.8
         },
         {
           "rank": 9,
@@ -1533,39 +1533,39 @@
         },
         {
           "rank": 10,
+          "stock_id": "2221",
+          "stock_name": "大甲",
+          "latest_close": 141.0
+        },
+        {
+          "rank": 11,
           "stock_id": "6221",
           "stock_name": "晉泰",
           "latest_close": 43.15
         },
         {
-          "rank": 11,
+          "rank": 12,
           "stock_id": "1569",
           "stock_name": "濱川",
           "latest_close": 89.1
         },
         {
-          "rank": 12,
-          "stock_id": "4977",
-          "stock_name": "眾達-KY",
-          "latest_close": 183.5
-        },
-        {
           "rank": 13,
-          "stock_id": "4967",
-          "stock_name": "十銓",
-          "latest_close": 266.0
-        },
-        {
-          "rank": 14,
           "stock_id": "6233",
           "stock_name": "旺玖",
           "latest_close": 31.4
         },
         {
+          "rank": 14,
+          "stock_id": "4977",
+          "stock_name": "眾達-KY",
+          "latest_close": 183.5
+        },
+        {
           "rank": 15,
-          "stock_id": "6446",
-          "stock_name": "藥華藥",
-          "latest_close": 1250.0
+          "stock_id": "4967",
+          "stock_name": "十銓",
+          "latest_close": 266.0
         }
       ]
     }

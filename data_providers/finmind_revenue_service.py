@@ -111,19 +111,27 @@ def _sync_official_twse_tpex_revenues() -> dict:
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
     }
     twse_data, tpex_data = [], []
-    try:
-        r1 = requests.get("https://openapi.twse.com.tw/v1/opendata/t187ap05_L", headers=headers, verify=False, timeout=20)
-        if r1.status_code == 200:
-            twse_data = r1.json()
-    except Exception as e:
-        print(f"  [TWSE OpenAPI 警告] {e}")
+    for attempt in range(3):
+        try:
+            r1 = requests.get("https://openapi.twse.com.tw/v1/opendata/t187ap05_L", headers=headers, verify=False, timeout=25)
+            if r1.status_code == 200:
+                twse_data = r1.json()
+                break
+        except Exception as e:
+            if attempt == 2:
+                print(f"  [TWSE OpenAPI 警告] {e}")
+            time.sleep(1)
 
-    try:
-        r2 = requests.get("https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap05_O", headers=headers, verify=False, timeout=20)
-        if r2.status_code == 200:
-            tpex_data = r2.json()
-    except Exception as e:
-        print(f"  [TPEx OpenAPI 警告] {e}")
+    for attempt in range(3):
+        try:
+            r2 = requests.get("https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap05_O", headers=headers, verify=False, timeout=25)
+            if r2.status_code == 200:
+                tpex_data = r2.json()
+                break
+        except Exception as e:
+            if attempt == 2:
+                print(f"  [TPEx OpenAPI 警告] {e}")
+            time.sleep(1)
 
     all_rows = (twse_data or []) + (tpex_data or [])
     if not all_rows:
@@ -245,6 +253,95 @@ def _sync_official_twse_tpex_revenues() -> dict:
     }
 
 
+def _normalize_legacy_openapi_date_tags():
+    """
+    修復歷史舊版 update_revenue_openapi.py 將 11509 (2026年9月營收) 存於 2026-09-10、
+    以及舊版 FinMind 腳本使用 .shift(12) 造成 2026-10-10 (9月營收) 誤對齊 2025-10-10 (10月營收) 的問題。
+    完全基於 DuckDB 內已存在之官方證交所/櫃買中心真實申報數據進行精準日期標籤歸位，絕不產生任何虛擬數值。
+    """
+    conn = duckdb.connect(DB_PATH)
+    try:
+        # Step A: 針對 2026-10-10 與 2026-09-10 營收值重複之個股 (因舊版 openapi 將 9月營收寫入 2026-09-10)
+        # 先將 2026-09-10 內含之官方 9月 MoM/YoY/去年同月 歸位至 2026-10-10，再將 2026-09-10 還原為 8月營收
+        conn.execute("""
+            UPDATE revenues AS r10
+            SET revenue_last_month = r9.revenue_last_month,
+                revenue_last_year = r9.revenue_last_year,
+                revenue_mom_pct = r9.revenue_mom_pct,
+                revenue_yoy_pct = r9.revenue_yoy_pct,
+                cumulative_revenue = COALESCE(r9.cumulative_revenue, r10.cumulative_revenue)
+            FROM revenues AS r9
+            WHERE r10.date = '2026-10-10'
+              AND r9.stock_id = r10.stock_id AND r9.date = '2026-09-10'
+              AND r10.revenue = r9.revenue
+              AND r9.revenue_last_month IS NOT NULL
+              AND r9.revenue != r9.revenue_last_month
+        """)
+        conn.execute("""
+            UPDATE revenues AS r9
+            SET revenue = r9.revenue_last_month
+            FROM revenues AS r10
+            WHERE r9.date = '2026-09-10'
+              AND r10.stock_id = r9.stock_id AND r10.date = '2026-10-10'
+              AND r10.revenue = r9.revenue
+              AND r9.revenue_last_month IS NOT NULL
+              AND r9.revenue != r9.revenue_last_month
+        """)
+
+        # Step B: 針對尚未建立 2026-10-10，但官方 9月營收 (11509) 已由舊版 openapi 存入 2026-09-10 之個股 (468 檔上櫃股)
+        mig_cnt = conn.execute("""
+            SELECT COUNT(*) FROM revenues r9
+            WHERE r9.date = '2026-09-10'
+              AND NOT EXISTS (SELECT 1 FROM revenues r10 WHERE r10.stock_id = r9.stock_id AND r10.date = '2026-10-10')
+        """).fetchone()[0]
+        if mig_cnt > 0:
+            conn.execute("""
+                INSERT INTO revenues (
+                    stock_id, date, revenue, revenue_last_month, revenue_last_year,
+                    revenue_mom_pct, revenue_yoy_pct, cumulative_revenue
+                )
+                SELECT
+                    r9.stock_id, CAST('2026-10-10' AS DATE), r9.revenue, r9.revenue_last_month, r9.revenue_last_year,
+                    r9.revenue_mom_pct, r9.revenue_yoy_pct, r9.cumulative_revenue
+                FROM revenues r9
+                WHERE r9.date = '2026-09-10'
+                  AND NOT EXISTS (SELECT 1 FROM revenues r10 WHERE r10.stock_id = r9.stock_id AND r10.date = '2026-10-10')
+            """)
+            # 將原本 2026-09-10 還原為真實 8月營收 (r8)
+            conn.execute("""
+                UPDATE revenues AS r9
+                SET revenue = COALESCE(r8.revenue, r9.revenue_last_month),
+                    revenue_last_month = r8.revenue_last_month,
+                    revenue_last_year = r8.revenue_last_year,
+                    revenue_mom_pct = r8.revenue_mom_pct,
+                    revenue_yoy_pct = r8.revenue_yoy_pct,
+                    cumulative_revenue = r8.cumulative_revenue
+                FROM revenues AS r8, revenues AS r10
+                WHERE r9.date = '2026-09-10'
+                  AND r8.stock_id = r9.stock_id AND r8.date = '2026-08-10'
+                  AND r10.stock_id = r9.stock_id AND r10.date = '2026-10-10'
+                  AND r9.revenue = r10.revenue
+                  AND r9.revenue != r8.revenue
+            """)
+            print(f"  ✅ [官方標籤對齊] 已將 {mig_cnt} 檔原存於 2026-09-10 之官方 9月營收歸位至 2026-10-10！")
+
+        # Step C: 修正舊版 FinMind .shift(12) 將 2026-10-10 (2026年9月營收) 誤對齊至 2025-10-10 (2025年10月營收) 的去年同月偏差
+        conn.execute("""
+            UPDATE revenues AS r10
+            SET revenue_last_year = ly_sep.revenue,
+                revenue_yoy_pct = CASE WHEN ly_sep.revenue > 0 THEN (r10.revenue - ly_sep.revenue) / ly_sep.revenue * 100.0 ELSE r10.revenue_yoy_pct END
+            FROM revenues AS ly_oct, revenues AS ly_sep
+            WHERE r10.date = '2026-10-10'
+              AND ly_oct.stock_id = r10.stock_id AND ly_oct.date = '2025-10-10'
+              AND ly_sep.stock_id = r10.stock_id AND ly_sep.date = '2025-09-10'
+              AND ABS(COALESCE(r10.revenue_last_year, 0) - ly_oct.revenue) < 1000
+              AND ABS(ly_sep.revenue - ly_oct.revenue) >= 1000
+        """)
+        conn.commit()
+    finally:
+        conn.close()
+
+
 def sync_finmind_revenues(start_date="2026-08-01", max_workers=3):
     """
     全量同步最新月營收：
@@ -257,9 +354,10 @@ def sync_finmind_revenues(start_date="2026-08-01", max_workers=3):
     print("=" * 68)
 
     # -------------------------------------------------------------
-    # Stage 1: 官方 TWSE / TPEx 全量同步
+    # Stage 1: 官方 TWSE / TPEx 全量同步 + 歷史日期標籤對齊
     # -------------------------------------------------------------
     off_res = _sync_official_twse_tpex_revenues()
+    _normalize_legacy_openapi_date_tags()
     target_pub_date = off_res.get("publish_date") or "2026-10-10"
 
     # -------------------------------------------------------------
