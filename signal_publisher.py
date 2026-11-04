@@ -13,6 +13,8 @@ signal_publisher.py
 """
 
 import os
+import sys
+import time
 import json
 import subprocess
 import datetime
@@ -583,6 +585,31 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
                     "td_to_exit": int(r.get("td_to_exit", 1)),
                     "entry_sop": str(r["entry_sop"])
                 })
+
+            # 將次一交易日進入 T-0 / T-1 / T-2 的標的（如 4526 東台）同步併入 imminent_pool_list
+            imm_by_id = {x["stock_id"]: x for x in imminent_pool_list}
+            df_imm_next = df_next[df_next['td_to_exit'].isin([0, 1, 2])]
+            for _, r in df_imm_next.iterrows():
+                sid_n = str(r["stock_id"])
+                if sid_n not in imm_by_id or bool(r.get("is_hit_b", False)) or bool(r.get("is_hit_c", False)):
+                    imm_by_id[sid_n] = {
+                        "stock_id": sid_n,
+                        "name": str(r["name"]),
+                        "countdown_desc": str(r["countdown_desc"]),
+                        "td_to_exit": int(r["td_to_exit"]),
+                        "latest_price": float(r["latest_price"]),
+                        "disp_cum_ret": round(float(r["disp_cum_ret"]), 1),
+                        "turnover_str": str(r["turnover_str"]),
+                        "vol_ratio": round(float(r["vol_ratio"]), 2),
+                        "status": str(r["status"]),
+                        "priority": int(r.get("priority", 3)),
+                        "is_hit_b": bool(r.get("is_hit_b", False)),
+                        "is_hit_c": bool(r.get("is_hit_c", False)),
+                        "action_timing": str(r.get("action_timing", "觀望")),
+                        "ma5": round(float(r.get("ma5", r["latest_price"])), 2),
+                        "entry_sop": str(r["entry_sop"])
+                    }
+            imminent_pool_list = list(imm_by_id.values())
     except Exception as e:
         print(f"[signal_publisher] 處置模組讀取警示: {e}")
 
@@ -849,8 +876,8 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
         "top_9_count": len(top_9_list),
         "buffer_count": len(buffer_10_15_list),
         "dropped_count": len(dropped_from_top15),
-        "hits_b_count": len(hits_b_list),
-        "hits_c_count": len(hits_c_list),
+        "hits_b_count": len({x["stock_id"] for x in (hits_b_list + next_day_b_list) if x.get("stock_id")}),
+        "hits_c_count": len({x["stock_id"] for x in (hits_c_list + next_day_c_list) if x.get("stock_id")}),
         "git_status": git_status
     }
 
@@ -881,6 +908,9 @@ def run_git_sync(data_date: str) -> dict:
         "family_app.py",
         "dashboard_ui.py",
         "components_weapons.py",
+        "signal_publisher.py",
+        "launcher.py",
+        "data_providers/smart_sync_manager.py",
         "tools/market_calendar.py",
         "tools/__init__.py",
         ".gitignore"

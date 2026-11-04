@@ -246,14 +246,16 @@ def execute_smart_sync_pipeline():
                 sig_data = json.load(f)
 
         c1 = sig_data.get("core_1_swing", {})
-        c3 = sig_data.get("core_3_disposal", {})
+        c2 = sig_data.get("core_2_disposal", {})
+        b_all = c2.get("strategy_b_triggers", []) + c2.get("next_day_b_triggers", [])
+        hits_b_cnt = len({x.get("stock_id") for x in b_all if x.get("stock_id")})
 
         export_res = {
             "success": res.get("success", True),
             "data_date": res.get("data_date", sig_data.get("data_date", "")),
             "top_9_count": len(c1.get("top_9", [])),
             "buffer_count": len(c1.get("buffer_10_15", [])),
-            "hits_b_count": len(c3.get("strategy_b_preemptive", [])),
+            "hits_b_count": hits_b_cnt,
             "git_status": res.get("git_status", {}),
             "actions_taken": res.get("actions_taken", []),
             "audit_report": res.get("audit_report", {})
@@ -477,6 +479,57 @@ def render_companion_view():
         </div>
         """)
 
+    # 5. 處置出關狙擊 (策略 B 搶跑 / 策略 C 出關空)
+    st.markdown("<div class='companion-hero-title' style='font-size: 24px; margin-top: 24px;'>⚡ 處置出關狙擊（實戰觸發門檻打勾檢核）</div>", unsafe_allow_html=True)
+    b_list = core2.get("strategy_b_triggers", []) + core2.get("next_day_b_triggers", [])
+    c_list = core2.get("strategy_c_triggers", []) + core2.get("next_day_c_triggers", [])
+    seen_b = set()
+    dedup_b = []
+    for x in b_list:
+        sid = str(x.get("stock_id", ""))
+        if sid and sid not in seen_b:
+            seen_b.add(sid)
+            dedup_b.append(x)
+    seen_c = set()
+    dedup_c = []
+    for x in c_list:
+        sid = str(x.get("stock_id", ""))
+        if sid and sid not in seen_c:
+            seen_c.add(sid)
+            dedup_c.append(x)
+
+    if not dedup_b and not dedup_c:
+        render_html("""
+        <div class='companion-card' style='border-left: 6px solid #10b981;'>
+            <div style='font-size: 20px; font-weight: 900; color: #10b981;'>🟢 今日處置股無觸發進場門檻！空手看戲！</div>
+        </div>
+        """)
+    else:
+        for r in dedup_b:
+            l_p = float(r.get("latest_price", 0.0))
+            ma5_v = float(r.get("ma5", l_p))
+            cum_r = float(r.get("disp_cum_ret", 0.0))
+            t_s = str(r.get("turnover_str", "-"))
+            c_d = str(r.get("countdown_desc", "T-2"))
+            a_t = str(r.get("action_timing", ""))
+            render_html(f"""
+            <div class='companion-card' style='border: 1.5px solid #10b981; border-left: 6px solid #10b981; background: rgba(16, 185, 129, 0.08);'>
+                <div style='font-size: 24px; font-weight: 900; color: #10b981;'>
+                    🔥 策略 B 觸發（T-2 搶跑買入）：{r['stock_id']} {r['name']}
+                </div>
+                <div style='font-size: 16px; color: #cbd5e1; margin: 8px 0;'>
+                    現價: <b>{l_p:.2f}</b> ｜ 5MA: <b>{ma5_v:.2f}</b> ｜ 處置累積: <b style='color:#10b981;'>{cum_r:+.1f}%</b> ｜ 成交: <b>{t_s}</b> ｜ 時機: <b style='color:#10b981;'>{a_t}</b>
+                </div>
+                <div style='background: rgba(17, 24, 39, 0.9); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 10px; padding: 12px 14px; margin: 10px 0; font-size: 15px; color: #a7f3d0; line-height: 1.7;'>
+                    ✅ <b>門檻 ① 出關倒數 2 天 (T-2)</b>：已達標（{c_d}）<br>
+                    ✅ <b>門檻 ② 處置累積漲幅介於 -5%~+12%</b>：已達標（目前 {cum_r:+.1f}%）<br>
+                    ✅ <b>門檻 ③ 收盤站上 5MA</b>：已達標（現價 {l_p:.2f} &ge; 5MA {ma5_v:.2f}）<br>
+                    ✅ <b>門檻 ④ 成交金額 &ge; 3,000 萬</b>：已達標（目前 {t_s}）
+                </div>
+                <div style='font-size: 15px; color: #d1fae5;'>👉 <b>SOP：</b>{r.get('entry_sop', '')}</div>
+            </div>
+            """)
+
 
 # ============================================================
 # 老手量化實戰作戰室視圖 (Veteran War Room View)
@@ -484,6 +537,9 @@ def render_companion_view():
 def render_veteran_war_room(portfolio_data, market_regime):
     # 1. 頂部 N7 終極本金守護者 HUD
     components.render_n7_guardian_hud(market_regime)
+
+    # 1.5 DuckDB 月份核驗 & 最近一期跑分四大因子日期標籤智慧提醒 HUD
+    components.render_duckdb_freshness_hud()
 
     # 2. 智能極簡盤後同步列 (收斂為一鍵全自動 + 即時推送雲端 + 個別抽屜)
     col_main_sync, col_pub_btn, col_adv_btn = st.columns([0.44, 0.38, 0.18])

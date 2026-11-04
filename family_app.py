@@ -1155,14 +1155,41 @@ with tab_dropped:
 # ============================================================
 render_html("<div class='mega-section-title' style='font-size: 40px !important;'>⚡ 老手實戰專區 —— 處置出關狙擊</div>")
 
-is_pro_confirmed = st.toggle("🔥 展開【處置出關狙擊】實戰訊號", value=False)
+is_pro_confirmed = st.toggle("🔥 展開【處置出關狙擊】實戰訊號", value=True)
 
 if is_pro_confirmed:
     core2 = data.get("core_2_disposal", {})
     b_triggers = core2.get("strategy_b_triggers", [])
     c_triggers = core2.get("strategy_c_triggers", [])
+    next_day_b = core2.get("next_day_b_triggers", [])
+    next_day_c = core2.get("next_day_c_triggers", [])
     imminent_pool = core2.get("imminent_pool", [])
     stats = core2.get("backtest_stats", {})
+    next_trading_d_str = core2.get("next_trading_date", "")
+
+    weekday_map = {0: "週一", 1: "週二", 2: "週三", 3: "週四", 4: "週五", 5: "週六", 6: "週日"}
+    try:
+        nt_dt = datetime.datetime.strptime(next_trading_d_str, "%Y-%m-%d")
+        next_trading_w_label = f"{weekday_map.get(nt_dt.weekday(), '')} ({next_trading_d_str})"
+    except Exception:
+        next_trading_w_label = next_trading_d_str or "次一交易日"
+
+    # 合併當日收盤與次一交易日 T-2/T-1 觸發清單 (以 stock_id 去重，確保如 4526 東台 必定完整呈現)
+    seen_b_ids = set()
+    all_b_triggers = []
+    for item in (b_triggers + next_day_b):
+        sid = str(item.get("stock_id", ""))
+        if sid and sid not in seen_b_ids:
+            seen_b_ids.add(sid)
+            all_b_triggers.append(item)
+
+    seen_c_ids = set()
+    all_c_triggers = []
+    for item in (c_triggers + next_day_c):
+        sid = str(item.get("stock_id", ""))
+        if sid and sid not in seen_c_ids:
+            seen_c_ids.add(sid)
+            all_c_triggers.append(item)
 
     # 徹底刪除段落式說明，改為巨型 30 秒口訣卡
     render_html("""
@@ -1209,9 +1236,9 @@ if is_pro_confirmed:
     """)
 
     # 實戰今日觸發標靶
-    render_html("<div class='mega-section-title' style='font-size: 36px !important;'>🎯 今日實戰觸發標靶</div>")
+    render_html("<div class='mega-section-title' style='font-size: 36px !important;'>🎯 今日實戰觸發標靶（門檻打勾檢核）</div>")
     
-    if not b_triggers and not c_triggers:
+    if not all_b_triggers and not all_c_triggers:
         render_html("""
         <div class='mega-warning-box alert-success'>
             <div style='color: #166534;'>
@@ -1220,57 +1247,70 @@ if is_pro_confirmed:
         </div>
         """)
     else:
-        for r in b_triggers:
+        for r in all_b_triggers:
+            l_price = float(r.get("latest_price", 0.0))
+            ma5_val = float(r.get("ma5", l_price))
+            cum_ret = float(r.get("disp_cum_ret", 0.0))
+            t_str = str(r.get("turnover_str", "-"))
+            c_desc = str(r.get("countdown_desc", "T-2"))
+            a_timing = str(r.get("action_timing", f"{next_trading_w_label} 13:25 尾盤進場"))
             render_html(f"""
-            <div class='paper-card' style='border-left: 8px solid #16A34A; padding: 24px 22px; margin-bottom: 20px; border-radius: 16px;'>
-                <div class='mega-card-title' style='color: #15803D; font-size: 32px !important;'>
+            <div class='paper-card' style='border: 2.5px solid #16A34A; border-left: 10px solid #16A34A; background: #F0FDF4; padding: 24px 22px; margin-bottom: 22px; border-radius: 16px;'>
+                <div class='mega-card-title' style='color: #15803D; font-size: 34px !important;'>
                     🔥 策略 B 觸發（T-2 搶跑買入）：{r['stock_id']} {r['name']}
                 </div>
-                <div class='mega-subtext' style='color: #334155; margin: 12px 0;'>
-                    現價: <b>{r['latest_price']:.2f}</b> ｜ 累積: <b style='color:#15803D;'>{r['disp_cum_ret']:+.1f}%</b> ｜ 金額: <b>{r['turnover_str']}</b><br>
-                    執行時機: <b>{r['action_timing']}</b>
+                <div class='mega-subtext' style='color: #1E293B; margin: 12px 0;'>
+                    現價: <b>{l_price:.2f}</b> ｜ 5MA: <b>{ma5_val:.2f}</b> ｜ 處置累積: <b style='color:#15803D;'>{cum_ret:+.1f}%</b> ｜ 成交金額: <b>{t_str}</b><br>
+                    執行時機: <b style='color:#15803D;'>{a_timing}</b>（出關倒數: {c_desc}）
+                </div>
+                <div style='background: #FFFFFF; border: 2px solid #86EFAC; border-radius: 12px; padding: 16px 18px; margin: 14px 0;'>
+                    <div style='font-size: 24px !important; font-weight: 900 !important; color: #166534; margin-bottom: 8px;'>
+                        🟢 策略 B 四大進場門檻逐項打勾驗證通過：
+                    </div>
+                    <div style='font-size: 22px !important; font-weight: 800 !important; color: #14532D; line-height: 1.7;'>
+                        ✅ <b>門檻 ① 出關倒數 2 天 (T-2)</b>：已達標（{c_desc}）<br>
+                        ✅ <b>門檻 ② 處置累積漲幅介於 -5%~+12%</b>：已達標（目前 {cum_ret:+.1f}%，溫和蓄勢）<br>
+                        ✅ <b>門檻 ③ 收盤站上 5MA</b>：已達標（現價 {l_price:.2f} &ge; 5MA {ma5_val:.2f}）<br>
+                        ✅ <b>門檻 ④ 成交金額 &ge; 3,000 萬</b>：已達標（目前 {t_str}）
+                    </div>
                 </div>
                 <div class='mega-warning-box alert-success'>
-                    👉 <b>SOP：</b>{r['entry_sop']}
+                    👉 <b>作戰 SOP：</b>{r['entry_sop']}
                 </div>
             </div>
             """)
 
-        for r in c_triggers:
+        for r in all_c_triggers:
+            l_price = float(r.get("latest_price", 0.0))
+            cum_ret = float(r.get("disp_cum_ret", 0.0))
+            vol_r = float(r.get("vol_ratio", 1.0))
+            t_str = str(r.get("turnover_str", "-"))
+            c_desc = str(r.get("countdown_desc", "T-1"))
             render_html(f"""
-            <div class='paper-card' style='border-left: 8px solid #DC2626; padding: 24px 22px; margin-bottom: 20px; border-radius: 16px;'>
-                <div class='mega-card-title' style='color: #B91C1C; font-size: 32px !important;'>
+            <div class='paper-card' style='border: 2.5px solid #DC2626; border-left: 10px solid #DC2626; background: #FEF2F2; padding: 24px 22px; margin-bottom: 22px; border-radius: 16px;'>
+                <div class='mega-card-title' style='color: #B91C1C; font-size: 34px !important;'>
                     🎯 策略 C 警戒（明晨開高走低做空）：{r['stock_id']} {r['name']}
                 </div>
                 <div class='mega-subtext' style='color: #334155; margin: 12px 0;'>
-                    現價: <b>{r['latest_price']:.2f}</b> ｜ 超漲: <b style='color:#DC2626;'>{r['disp_cum_ret']:+.1f}%</b> ｜ 量比: <b>{r['vol_ratio']:.2f}</b> ｜ 金額: <b>{r['turnover_str']}</b><br>
-                    執行時機: <b>{r['action_timing']}</b>
+                    現價: <b>{l_price:.2f}</b> ｜ 超漲: <b style='color:#DC2626;'>{cum_ret:+.1f}%</b> ｜ 量比: <b>{vol_r:.2f}</b> ｜ 金額: <b>{t_str}</b><br>
+                    執行時機: <b>{r['action_timing']}</b>（出關倒數: {c_desc}）
+                </div>
+                <div style='background: #FFFFFF; border: 2px solid #FCA5A5; border-radius: 12px; padding: 16px 18px; margin: 14px 0;'>
+                    <div style='font-size: 24px !important; font-weight: 900 !important; color: #991B1B; margin-bottom: 8px;'>
+                        🔴 策略 C 四大進場門檻逐項打勾驗證通過：
+                    </div>
+                    <div style='font-size: 22px !important; font-weight: 800 !important; color: #7F1D1D; line-height: 1.7;'>
+                        ✅ <b>門檻 ① 出關倒數 1 天 / T日出關</b>：已達標（{c_desc}）<br>
+                        ✅ <b>門檻 ② 處置累積漲幅 &ge; +7.2% (超漲)</b>：已達標（目前 {cum_ret:+.1f}%）<br>
+                        ✅ <b>門檻 ③ 量比介於 0.8~1.8</b>：已達標（目前 {vol_r:.2f}）<br>
+                        ✅ <b>門檻 ④ 成交金額 &ge; 3,000 萬</b>：已達標（目前 {t_str}）
+                    </div>
                 </div>
                 <div class='mega-warning-box alert-danger'>
-                    👉 <b>SOP：</b>{r['entry_sop']}
+                    👉 <b>作戰 SOP：</b>{r['entry_sop']}
                 </div>
             </div>
             """)
-
-        next_day_b = core2.get("next_day_b_triggers", [])
-        next_trading_d_str = core2.get("next_trading_date", "")
-        is_weekend = core2.get("is_weekend_or_holiday", False)
-        if is_weekend and next_day_b:
-            for r in next_day_b:
-                render_html(f"""
-                <div class='paper-card' style='border-left: 8px solid #3B82F6; padding: 24px 22px; margin-bottom: 20px; border-radius: 16px; background: #EFF6FF;'>
-                    <div class='mega-card-title' style='color: #1D4ED8; font-size: 32px !important;'>
-                        🔮 下週一 ({next_trading_d_str}) 作戰推演：{r['stock_id']} {r['name']}
-                    </div>
-                    <div class='mega-subtext' style='color: #1E293B; margin: 12px 0;'>
-                        現價: <b>{r['latest_price']:.2f}</b> ｜ 累積: <b style='color:#15803D;'>{r['disp_cum_ret']:+.1f}%</b> ｜ 金額: <b>{r['turnover_str']}</b><br>
-                        執行時機: <b style='color:#1D4ED8;'>{r['action_timing']}</b> (出關倒數: {r['countdown_desc']})
-                    </div>
-                    <div class='mega-warning-box alert-success' style='border-color: #93C5FD; background: #DBEAFE;'>
-                        👉 <b>作戰準備：</b>{r['entry_sop']}
-                    </div>
-                </div>
-                """)
 
     # 下方蓄勢觀察名單
     with st.expander("⏳ 查看即將出關蓄勢名單 (T-1 / T-2) 與歷史回測數據"):

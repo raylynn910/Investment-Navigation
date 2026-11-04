@@ -183,6 +183,131 @@ def render_macro_gap_indicator(regime_data):
     render_n7_guardian_hud(regime_data)
 
 
+def render_duckdb_freshness_hud():
+    """
+    【DuckDB 資料庫月份核驗 & 最近一期跑分四大因子日期標籤智慧提醒 HUD】
+    於啟動伺服器與進入作戰中心時，自動核對目前 DuckDB 最新更新到哪個月份，
+    並穿透檢視最近一期跑分 (Top 9 / Top 15) 四大因子的真實日期標籤，智慧提醒現在應為幾月份營收與幾季度財報 ROE。
+    """
+    try:
+        report = api_client.audit_duckdb()
+        if not report or not isinstance(report, dict):
+            return
+
+        targets = report.get("expected_targets", {})
+        db_stat = report.get("db_status", {})
+        decisions = report.get("sync_decisions", {})
+        reminders = report.get("smart_reminders", {})
+        fp = report.get("factor_penetration", {})
+        rev_sum = report.get("monthly_rev_summary", [])
+        fin_sum = report.get("quarterly_fin_summary", [])
+
+        is_all_fresh = decisions.get("is_all_fresh", True)
+        border_col = "#10b981" if is_all_fresh else "#f59e0b"
+        badge_bg = "rgba(16, 185, 129, 0.16)" if is_all_fresh else "rgba(245, 158, 11, 0.18)"
+        badge_text = "🟢 全庫存時效合規" if is_all_fresh else "⚠️ 偵測到待補齊資料"
+
+        rev_pills = " ｜ ".join([
+            f"<b style='color:#f8fafc;'>{x['rev_month_label']}</b>: <span style='color:#10b981; font-weight:700;'>{x['count']:,}檔</span>"
+            for x in rev_sum[:3]
+        ]) or "無資料"
+
+        fin_pills = " ｜ ".join([
+            f"<b style='color:#f8fafc;'>{x['quarter_label']}</b>: <span style='color:#38bdf8; font-weight:700;'>{x['count']:,}檔</span>"
+            for x in fin_sum[:3]
+        ]) or "無資料"
+
+        rev_tip = reminders.get(
+            "revenue_tip",
+            f"現在法定基準應為【{targets.get('revenue_label', '-')}】（已收錄 {db_stat.get('revenue_target_count', 0)} 檔）"
+        )
+        fin_tip = reminders.get(
+            "financial_tip",
+            f"現在法定基準應為【{targets.get('financial_label', '-')}】（已收錄 {db_stat.get('financial_target_count', 0)} 檔）"
+        )
+
+        mom_tag = fp.get("momentum_tag", f"{db_stat.get('kline_max_date', '-')} 收盤 (還原動能)")
+        yoy_tag = fp.get("yoy_mom_tag", targets.get("revenue_label", "-"))
+        roe_tag = fp.get("roe_tag", targets.get("financial_label", "-"))
+        screener_time = fp.get("screener_updated_at", "-")
+
+        render_html(f"""
+        <div style='background: #111827; border: 1px solid {border_col}; border-left: 5px solid {border_col}; border-radius: 14px; padding: 14px 18px; margin-bottom: 14px; box-shadow: 0 4px 18px rgba(0,0,0,0.45);'>
+            <div style='display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;'>
+                <div style='display: flex; align-items: center; gap: 10px; flex-wrap: wrap;'>
+                    <span style='font-size: 15px; font-weight: 800; color: #f8fafc;'>🦆 DuckDB 月份核驗 & 最近一期跑分四大因子日期標籤智慧提醒</span>
+                    <span style='background: {badge_bg}; color: {border_col}; padding: 2px 9px; border-radius: 6px; font-size: 11.5px; font-weight: 800;'>{badge_text}</span>
+                </div>
+                <div style='font-size: 11.5px; color: #94a3b8;'>
+                    🕒 核驗時間: <b>{report.get('audit_time', '-')}</b> ｜ 🚀 最近一期跑分: <b style='color:#38bdf8;'>{screener_time}</b>
+                </div>
+            </div>
+
+            <div style='display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 10px;'>
+                <div style='background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.22); border-radius: 10px; padding: 10px 12px;'>
+                    <div style='font-size: 12.5px; font-weight: 800; color: #10b981; margin-bottom: 4px;'>
+                        💡 智慧提醒（現在應該是幾月份的營收？）
+                    </div>
+                    <div style='font-size: 12px; color: #e2e8f0; line-height: 1.5; margin-bottom: 6px;'>
+                        {rev_tip}
+                    </div>
+                    <div style='font-size: 11.5px; color: #94a3b8; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 5px;'>
+                        📦 <b>DuckDB 月營收庫存</b>：{rev_pills}
+                    </div>
+                </div>
+
+                <div style='background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.22); border-radius: 10px; padding: 10px 12px;'>
+                    <div style='font-size: 12.5px; font-weight: 800; color: #38bdf8; margin-bottom: 4px;'>
+                        💡 智慧提醒（現在應該是幾月份/第幾季的財報 ROE？）
+                    </div>
+                    <div style='font-size: 12px; color: #e2e8f0; line-height: 1.5; margin-bottom: 6px;'>
+                        {fin_tip}
+                    </div>
+                    <div style='font-size: 11.5px; color: #94a3b8; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 5px;'>
+                        📦 <b>DuckDB 季財報庫存</b>：{fin_pills}
+                    </div>
+                </div>
+            </div>
+
+            <div style='display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px;'>
+                <div style='background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 8px 10px;'>
+                    <div style='font-size: 11px; color: #94a3b8;'>① 動能因子 (權重 70%)</div>
+                    <div style='font-size: 12.5px; font-weight: 800; color: #10b981; margin-top: 2px;'>{mom_tag}</div>
+                </div>
+                <div style='background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 8px 10px;'>
+                    <div style='font-size: 11px; color: #94a3b8;'>② 月營收 YoY (權重 20%)</div>
+                    <div style='font-size: 12.5px; font-weight: 800; color: #f59e0b; margin-top: 2px;'>{yoy_tag}</div>
+                </div>
+                <div style='background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 8px 10px;'>
+                    <div style='font-size: 11px; color: #94a3b8;'>③ 月營收 MoM (底線 &gt; -20%)</div>
+                    <div style='font-size: 12.5px; font-weight: 800; color: #fbbf24; margin-top: 2px;'>{yoy_tag}</div>
+                </div>
+                <div style='background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 8px 10px;'>
+                    <div style='font-size: 11px; color: #94a3b8;'>④ 財報 ROE (權重 10% 單季均化)</div>
+                    <div style='font-size: 12.5px; font-weight: 800; color: #38bdf8; margin-top: 2px;'>{roe_tag}</div>
+                </div>
+            </div>
+        </div>
+        """)
+
+        top_stocks = fp.get("top_stocks", [])
+        if top_stocks:
+            with st.expander("🔍 點擊展開：檢視最近一期跑分 Top 9 / Top 15 個股採用之「四大因子日期標籤」逐檔穿透表", expanded=False):
+                df_fp = pd.DataFrame(top_stocks)
+                df_fp_show = df_fp.rename(columns={
+                    "rank": "排名",
+                    "stock_id": "代號",
+                    "stock_name": "股票名稱",
+                    "kline_date": "動能K線基準日",
+                    "rev_month": "採用月營收月份 (YoY/MoM)",
+                    "rev_publish_date": "營收資料標籤日",
+                    "roe_quarter": "採用財報ROE季度"
+                })
+                st.dataframe(df_fp_show, use_container_width=True, hide_index=True)
+    except Exception as e:
+        st.caption(f"ℹ️ DuckDB 月份核驗模組載入提示: {e}")
+
+
 import os
 import glob
 
@@ -655,17 +780,24 @@ def render_weapon3_disposal():
         total_disp = len(df_disp)
         hits_b = df_disp[df_disp['is_hit_b'] == True]
         hits_c = df_disp[df_disp['is_hit_c'] == True]
-        imminent = df_disp[df_disp['td_to_exit'].isin([0, 1, 2])]
-        total_signals = len(hits_b) + len(hits_c)
 
         hits_next_b = df_next[df_next['is_hit_b'] == True] if not df_next.empty else pd.DataFrame()
         hits_next_c = df_next[df_next['is_hit_c'] == True] if not df_next.empty else pd.DataFrame()
+
+        # 合併當日收盤與次一交易日 T-2/T-1 觸發名單（以 stock_id 去重），確保 4526 東台等次日搶跑股計入觸發統計與下方打勾清單
+        combined_b = pd.concat([hits_b, hits_next_b], ignore_index=True).drop_duplicates(subset=['stock_id'], keep='first') if (not hits_b.empty or not hits_next_b.empty) else pd.DataFrame()
+        combined_c = pd.concat([hits_c, hits_next_c], ignore_index=True).drop_duplicates(subset=['stock_id'], keep='first') if (not hits_c.empty or not hits_next_c.empty) else pd.DataFrame()
+        total_signals = len(combined_b) + len(combined_c)
+
+        imm_disp = df_disp[df_disp['td_to_exit'].isin([0, 1, 2])]
+        imm_next = df_next[df_next['td_to_exit'].isin([0, 1, 2])] if not df_next.empty else pd.DataFrame()
+        imminent = pd.concat([imm_disp, imm_next], ignore_index=True).drop_duplicates(subset=['stock_id'], keep='last') if (not imm_disp.empty or not imm_next.empty) else pd.DataFrame()
 
         sig_color = "#10b981" if total_signals > 0 else "#94a3b8"
         imm_color = "#f59e0b" if len(imminent) > 0 else "#94a3b8"
 
         # 頂部 4 個高保定深色 KPI 方塊 (無橫向捲軸，自適應 4 等分)
-        kpi_title_text = f"🎯 {last_closed_w}收盤訊號 (策略B/C)" if is_closed else "🎯 今日收盤訊號 (策略B/C)"
+        kpi_title_text = f"🎯 實戰觸發訊號 (策略B/C)"
         kpi_html = f"""
         <div style='display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 8px 0 14px 0;'>
             <div style='background: #111827; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px 14px; text-align: center;'>
@@ -689,7 +821,7 @@ def render_weapon3_disposal():
         render_html(kpi_html)
 
         # 實戰即時標靶專區 (收盤已觸發標的)
-        if total_signals > 0:
+        if not hits_b.empty or not hits_c.empty:
             for idx, r in hits_b.iterrows():
                 render_html(f"""
                 <div style='background: rgba(16, 185, 129, 0.12); border-left: 4px solid #10b981; border-radius: 8px; padding: 12px 16px; margin-bottom: 10px;'>
@@ -722,8 +854,8 @@ def render_weapon3_disposal():
                 </div>
                 """)
 
-        # 次一交易日作戰推演卡片 (例如 3597 映興)
-        if is_closed and not hits_next_b.empty:
+        # 次一交易日作戰推演卡片 (例如 4526 東台、3597 映興)
+        if not hits_next_b.empty:
             for idx, r in hits_next_b.iterrows():
                 render_html(f"""
                 <div style='background: rgba(56, 189, 248, 0.10); border-left: 4px solid #38bdf8; border-radius: 8px; padding: 12px 16px; margin-bottom: 10px;'>
@@ -740,16 +872,99 @@ def render_weapon3_disposal():
                 </div>
                 """)
 
+        def _render_threshold_checkmarks(target_df: pd.DataFrame):
+            """將符合策略 B 或策略 C 的標的，於下方綠色檢核區塊逐項打勾呈現"""
+            for _, r in target_df.iterrows():
+                sid = r.get("stock_id", "")
+                sname = r.get("name", "")
+                l_price = float(r.get("latest_price", 0.0))
+                ma5_val = float(r.get("ma5", l_price))
+                cum_ret = float(r.get("disp_cum_ret", 0.0))
+                vol_r = float(r.get("vol_ratio", 1.0))
+                t_str = str(r.get("turnover_str", "-"))
+                c_desc = str(r.get("countdown_desc", "T-2"))
+                a_time = str(r.get("action_timing", ""))
+                sop_txt = str(r.get("entry_sop", ""))
+
+                if bool(r.get("is_hit_b", False)):
+                    render_html(f"""
+                    <div style='background: rgba(16, 185, 129, 0.08); border: 1.5px solid #10b981; border-left: 6px solid #10b981; border-radius: 12px; padding: 14px 18px; margin: 8px 0 12px 0;'>
+                        <div style='display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;'>
+                            <div style='font-size: 15px; font-weight: 800; color: #10b981;'>
+                                🟢 【策略 B (T-2 搶跑買入)】觸發門檻逐項打勾驗證通過：{sid} {sname}
+                            </div>
+                            <span style='background: rgba(16, 185, 129, 0.2); color: #a7f3d0; border: 1px solid #10b981; padding: 2px 10px; border-radius: 6px; font-size: 12px; font-weight: 800;'>
+                                🎯 {a_time}
+                            </span>
+                        </div>
+                        <div style='display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-bottom: 8px;'>
+                            <div style='background: rgba(17, 24, 39, 0.85); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 8px; padding: 8px 10px;'>
+                                <div style='font-size: 11px; color: #94a3b8;'>門檻 ① 出關倒數 2 天</div>
+                                <div style='font-size: 13px; font-weight: 800; color: #10b981; margin-top: 2px;'>✅ 達標 ({c_desc})</div>
+                            </div>
+                            <div style='background: rgba(17, 24, 39, 0.85); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 8px; padding: 8px 10px;'>
+                                <div style='font-size: 11px; color: #94a3b8;'>門檻 ② 處置累積 -5%~+12%</div>
+                                <div style='font-size: 13px; font-weight: 800; color: #10b981; margin-top: 2px;'>✅ 達標 ({cum_ret:+.1f}%)</div>
+                            </div>
+                            <div style='background: rgba(17, 24, 39, 0.85); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 8px; padding: 8px 10px;'>
+                                <div style='font-size: 11px; color: #94a3b8;'>門檻 ③ 收盤站上 5MA</div>
+                                <div style='font-size: 13px; font-weight: 800; color: #10b981; margin-top: 2px;'>✅ 達標 ({l_price:.2f} &ge; {ma5_val:.2f})</div>
+                            </div>
+                            <div style='background: rgba(17, 24, 39, 0.85); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 8px; padding: 8px 10px;'>
+                                <div style='font-size: 11px; color: #94a3b8;'>門檻 ④ 成交金額 &ge; 3,000 萬</div>
+                                <div style='font-size: 13px; font-weight: 800; color: #10b981; margin-top: 2px;'>✅ 達標 ({t_str})</div>
+                            </div>
+                        </div>
+                        <div style='font-size: 12.5px; color: #d1fae5;'>
+                            👉 <b>實戰執行 SOP</b>：{sop_txt}
+                        </div>
+                    </div>
+                    """)
+                elif bool(r.get("is_hit_c", False)):
+                    render_html(f"""
+                    <div style='background: rgba(244, 63, 94, 0.08); border: 1.5px solid #f43f5e; border-left: 6px solid #f43f5e; border-radius: 12px; padding: 14px 18px; margin: 8px 0 12px 0;'>
+                        <div style='display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;'>
+                            <div style='font-size: 15px; font-weight: 800; color: #f43f5e;'>
+                                🔴 【策略 C (出關開高走低做空)】觸發門檻逐項打勾驗證通過：{sid} {sname}
+                            </div>
+                            <span style='background: rgba(244, 63, 94, 0.2); color: #fecdd3; border: 1px solid #f43f5e; padding: 2px 10px; border-radius: 6px; font-size: 12px; font-weight: 800;'>
+                                🎯 {a_time}
+                            </span>
+                        </div>
+                        <div style='display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-bottom: 8px;'>
+                            <div style='background: rgba(17, 24, 39, 0.85); border: 1px solid rgba(244, 63, 94, 0.35); border-radius: 8px; padding: 8px 10px;'>
+                                <div style='font-size: 11px; color: #94a3b8;'>門檻 ① 出關倒數 1 天 / T日</div>
+                                <div style='font-size: 13px; font-weight: 800; color: #f43f5e; margin-top: 2px;'>✅ 達標 ({c_desc})</div>
+                            </div>
+                            <div style='background: rgba(17, 24, 39, 0.85); border: 1px solid rgba(244, 63, 94, 0.35); border-radius: 8px; padding: 8px 10px;'>
+                                <div style='font-size: 11px; color: #94a3b8;'>門檻 ② 處置超漲 &ge; +7.2%</div>
+                                <div style='font-size: 13px; font-weight: 800; color: #f43f5e; margin-top: 2px;'>✅ 達標 ({cum_ret:+.1f}%)</div>
+                            </div>
+                            <div style='background: rgba(17, 24, 39, 0.85); border: 1px solid rgba(244, 63, 94, 0.35); border-radius: 8px; padding: 8px 10px;'>
+                                <div style='font-size: 11px; color: #94a3b8;'>門檻 ③ 量比 0.8~1.8</div>
+                                <div style='font-size: 13px; font-weight: 800; color: #f43f5e; margin-top: 2px;'>✅ 達標 ({vol_r:.2f})</div>
+                            </div>
+                            <div style='background: rgba(17, 24, 39, 0.85); border: 1px solid rgba(244, 63, 94, 0.35); border-radius: 8px; padding: 8px 10px;'>
+                                <div style='font-size: 11px; color: #94a3b8;'>門檻 ④ 成交金額 &ge; 3,000 萬</div>
+                                <div style='font-size: 13px; font-weight: 800; color: #f43f5e; margin-top: 2px;'>✅ 達標 ({t_str})</div>
+                            </div>
+                        </div>
+                        <div style='font-size: 12.5px; color: #fecdd3;'>
+                            👉 <b>實戰執行 SOP</b>：{sop_txt}
+                        </div>
+                    </div>
+                    """)
+
         if is_closed:
             tab_hits, tab_next_tab, tab_all, tab_quant = st.tabs([
-                f"📌 {last_closed_w}收盤已觸發 ({last_closed_d.strftime('%m/%d')} 結算)", 
+                f"📌 實戰觸發門檻檢核 ({last_closed_d.strftime('%m/%d')} 收盤 & {next_trading_d.strftime('%m/%d')} 搶跑)", 
                 f"🚀 次一交易日作戰推演 ({next_trading_d.strftime('%m/%d')} {next_trading_w})",
                 "📋 全市場處置監控池 (出關倒數排序)", 
                 "📊 蒙地卡羅 1,000 次尋優與回測驗證"
             ])
         else:
             tab_hits, tab_all, tab_quant = st.tabs([
-                "🎯 策略 B / C 實戰命中名單", 
+                "🎯 策略 B / C 實戰命中與門檻打勾清單", 
                 "📋 全市場處置監控池 (出關倒數排序)", 
                 "📊 蒙地卡羅 1,000 次尋優與回測驗證"
             ])
@@ -757,10 +972,16 @@ def render_weapon3_disposal():
 
 
         # ----------------------------------------------------
-        # Tab 1: 策略 B / C 實戰命中名單
+        # Tab 1: 策略 B / C 實戰命中名單 (整合當日收盤與次一交易日 T-2 搶跑觸發股)
         # ----------------------------------------------------
         with tab_hits:
-            hit_df = df_disp[(df_disp['is_hit_b'] == True) | (df_disp['is_hit_c'] == True) | (df_disp['priority'].isin([1, 2]))].copy()
+            hit_closed_df = df_disp[(df_disp['is_hit_b'] == True) | (df_disp['is_hit_c'] == True) | (df_disp['priority'].isin([1, 2]))].copy()
+            hit_next_only_df = df_next[(df_next['is_hit_b'] == True) | (df_next['is_hit_c'] == True) | (df_next['priority'].isin([1, 2]))].copy() if not df_next.empty else pd.DataFrame()
+            if not hit_closed_df.empty or not hit_next_only_df.empty:
+                hit_df = pd.concat([hit_closed_df, hit_next_only_df], ignore_index=True).drop_duplicates(subset=['stock_id'], keep='last')
+            else:
+                hit_df = pd.DataFrame()
+
             if hit_df.empty:
                 st.markdown("""
                 <div style='background: rgba(16, 185, 129, 0.04); border: 1px solid rgba(16, 185, 129, 0.15); border-radius: 12px; padding: 18px 20px; margin: 8px 0;'>
@@ -775,6 +996,8 @@ def render_weapon3_disposal():
                 </div>
                 """, unsafe_allow_html=True)
             else:
+                _render_threshold_checkmarks(hit_df)
+
                 hit_cols = ["stock_id", "name", "countdown_desc", "latest_price", "disp_cum_ret", "turnover_str", "vol_ratio", "action_timing", "status", "entry_sop"]
                 safe_hit_cols = [c for c in hit_cols if c in hit_df.columns]
                 df_hit_show = hit_df[safe_hit_cols].copy()
@@ -822,6 +1045,7 @@ def render_weapon3_disposal():
                     </div>
                     """, unsafe_allow_html=True)
                 else:
+                    _render_threshold_checkmarks(hit_next_df)
                     st.markdown(f"""
                     <div style='font-size:12.5px; color:#38bdf8; margin-bottom:8px;'>
                         🚀 <b>次一交易日 {next_trading_w} ({next_trading_d.strftime('%m/%d')}) 開盤/收盤作戰推演清單</b>（共 {len(hit_next_df)} 檔，提早部署{next_trading_w}尾盤買點與次日放空標的）：
