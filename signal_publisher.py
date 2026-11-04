@@ -910,7 +910,11 @@ def run_git_sync(data_date: str) -> dict:
         "components_weapons.py",
         "signal_publisher.py",
         "launcher.py",
+        "update_revenue_openapi.py",
+        "moneydj_revenue_scraper.py",
         "data_providers/smart_sync_manager.py",
+        "data_providers/finmind_revenue_service.py",
+        "data_providers/finmind_financials_service.py",
         "tools/market_calendar.py",
         "tools/__init__.py",
         ".gitignore"
