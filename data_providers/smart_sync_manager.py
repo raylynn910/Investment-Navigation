@@ -35,7 +35,7 @@ if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
 from db_utils import safe_duckdb_connect
-from tools.market_calendar import is_trading_day, get_last_trading_day
+from tools.market_calendar import is_trading_day, get_last_trading_day, get_next_trading_day
 
 logger = logging.getLogger(__name__)
 DB_PATH = os.path.join(PROJECT_ROOT, "data", "market_data.duckdb")
@@ -78,21 +78,18 @@ def audit_duckdb_freshness(now: Optional[datetime.datetime] = None) -> Dict[str,
     # -------------------------------------------------------------
     expected_txf_date = expected_kline_date
 
-    # 台指期夜盤：15:00 ~ 次日 05:00
-    # FinMind 以夜盤開盤所在之日曆日作為 date 標籤 (例如 10/29 15:00 開打的夜盤，date 為 2026-10-29)
-    if now.hour >= 15 and today_is_trading:
-        expected_night_date = today_str
-    elif now.hour < 5:
-        # 05:00 前夜盤仍在進行或剛結束，屬於前一有效交易日
-        yesterday = (now - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
-        expected_night_date = get_last_trading_day(yesterday)
+    # 台指期夜盤：交易日 D 的 15:00 ~ 次一日曆日 05:00
+    # [實測校正 2026-11-05] FinMind TaiwanFuturesDaily 與期交所 OpenAPI 皆以「夜盤所歸屬之次一交易日」作為 date 標籤：
+    #   11/03(二) 15:00 ~ 11/04(三) 05:00 之夜盤 -> date = 2026-11-04
+    #   11/04(三) 15:00 ~ 11/05(四) 05:00 之夜盤 -> date = 2026-11-05
+    # 舊邏輯誤以「開盤日曆日」為標籤，導致 11/05 07:44 判定期望值為 11/04 而略過同步。
+    # 規則：找出「夜盤已收盤 (已過 05:00)」之最近一個開盤交易日 D，期望標籤 = D 的次一交易日。
+    if now.hour >= 5:
+        night_anchor_ref = (now - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
     else:
-        # 05:00 ~ 15:00，夜盤已於 05:00 結算完畢，屬於前一交易日
-        if today_is_trading:
-            yesterday = (now - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
-            expected_night_date = get_last_trading_day(yesterday)
-        else:
-            expected_night_date = get_last_trading_day(today_str)
+        night_anchor_ref = (now - datetime.timedelta(days=2)).strftime("%Y-%m-%d")
+    night_anchor_day = get_last_trading_day(night_anchor_ref)
+    expected_night_date = get_next_trading_day(night_anchor_day)
 
     # -------------------------------------------------------------
     # 3. 月營收 (revenues) 目標月份判定
