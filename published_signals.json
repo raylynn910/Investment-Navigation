@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-11-05 23:41:57",
+  "generated_at": "2026-11-06 00:09:38",
   "data_date": "2026-11-05",
   "holiday_notice": {
     "is_active": false,
@@ -58,13 +58,13 @@
         "latest_date": "2026-11-05",
         "momentum_value": 1.375,
         "momentum_pct": 137.5,
-        "revenue_yoy_value": 123.5,
-        "revenue_yoy_pct": 123.5,
+        "revenue_yoy_value": 87.0,
+        "revenue_yoy_pct": 87.0,
         "roe_value": 4.8,
         "roe_pct": 4.8,
-        "total_score": 3.74,
+        "total_score": 3.57,
         "highlights": [
-          "🔥 營收翻倍暴增",
+          "🔥 營收強勁高成長",
           "✨ 本業獲利穩固",
           "⚡ 動能飆速衝刺"
         ],
@@ -84,7 +84,7 @@
         "revenue_yoy_pct": 64.2,
         "roe_value": 82.3,
         "roe_pct": 82.3,
-        "total_score": 1.59,
+        "total_score": 1.6,
         "highlights": [
           "🔥 營收強勁高成長",
           "💎 獲利體質極佳",
@@ -128,7 +128,7 @@
         "revenue_yoy_pct": 68.8,
         "roe_value": 50.0,
         "roe_pct": 50.0,
-        "total_score": 0.58,
+        "total_score": 0.59,
         "highlights": [
           "🔥 營收強勁高成長",
           "💎 獲利體質極佳",
@@ -150,7 +150,7 @@
         "revenue_yoy_pct": 146.6,
         "roe_value": 6.4,
         "roe_pct": 6.4,
-        "total_score": 0.52,
+        "total_score": 0.56,
         "highlights": [
           "🔥 營收翻倍暴增",
           "💎 高ROE優等生"
@@ -193,7 +193,7 @@
         "revenue_yoy_pct": 109.7,
         "roe_value": 17.3,
         "roe_pct": 17.3,
-        "total_score": 0.11,
+        "total_score": 0.14,
         "highlights": [
           "🔥 營收翻倍暴增",
           "💎 獲利體質極佳"
@@ -214,7 +214,7 @@
         "revenue_yoy_pct": 47.3,
         "roe_value": 3.4,
         "roe_pct": 3.4,
-        "total_score": 0.1,
+        "total_score": 0.11,
         "highlights": [
           "🔥 營收強勁高成長",
           "✨ 本業獲利穩固",
@@ -281,7 +281,7 @@
         "revenue_yoy_pct": 125.8,
         "roe_value": 1.4,
         "roe_pct": 1.4,
-        "total_score": 0.04,
+        "total_score": 0.07,
         "highlights": [
           "🔥 營收翻倍暴增",
           "✨ 本業獲利穩固"
@@ -298,11 +298,11 @@
         "latest_date": "2026-11-05",
         "momentum_value": 0.026,
         "momentum_pct": 2.6,
-        "revenue_yoy_value": 100.0,
-        "revenue_yoy_pct": 100.0,
+        "revenue_yoy_value": 102.0,
+        "revenue_yoy_pct": 102.0,
         "roe_value": 6.4,
         "roe_pct": 6.4,
-        "total_score": -0.07,
+        "total_score": -0.04,
         "highlights": [
           "🔥 營收翻倍暴增",
           "💎 高ROE優等生"
@@ -344,7 +344,7 @@
         "revenue_yoy_pct": 33.0,
         "roe_value": 0.5,
         "roe_pct": 0.5,
-        "total_score": -0.09,
+        "total_score": -0.08,
         "highlights": [
           "📈 營收穩健成長",
           "✨ 本業獲利穩固"
@@ -365,7 +365,7 @@
         "revenue_yoy_pct": 32.9,
         "roe_value": 56.4,
         "roe_pct": 56.4,
-        "total_score": -0.1,
+        "total_score": -0.09,
         "highlights": [
           "📈 營收穩健成長",
           "💎 獲利體質極佳"
@@ -545,7 +545,7 @@
         "optimal_mdd": "<= 28.9%"
       }
     },
-    "is_weekend_or_holiday": false,
+    "is_weekend_or_holiday": true,
     "last_closed_date": "2026-11-05",
     "next_trading_date": "2026-11-06",
     "total_active_disposals_count": 19,
@@ -688,7 +688,7 @@
         "base_date": "2026-11-05",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "4577",
@@ -720,7 +720,7 @@
         "base_date": "2026-11-05",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3374",
@@ -752,7 +752,7 @@
         "base_date": "2026-11-05",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3691",
@@ -784,7 +784,7 @@
         "base_date": "2026-11-05",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3441",
@@ -816,7 +816,7 @@
         "base_date": "2026-11-05",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "8291",
@@ -843,12 +843,12 @@
         "is_hit_b": 0,
         "is_hit_c": 0,
         "action_timing": "觀望",
-        "entry_sop": "處置中持續觀察，預計 11/10 出關",
-        "exit_sop": "處置中持續觀察，預計 11/10 出關",
+        "entry_sop": "處置中持續觀察，預計 11/10 出關 ｜ 次一交易日 (11/06) 收盤將進入 T-2 搶跑點",
+        "exit_sop": "處置中持續觀察，預計 11/10 出關 ｜ 次一交易日 (11/06) 收盤將進入 T-2 搶跑點",
         "base_date": "2026-11-05",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "2466",
@@ -880,7 +880,7 @@
         "base_date": "2026-11-05",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "6213",
@@ -912,7 +912,7 @@
         "base_date": "2026-11-05",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "8099",
@@ -944,7 +944,7 @@
         "base_date": "2026-11-05",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "8272",
@@ -976,7 +976,7 @@
         "base_date": "2026-11-05",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3287",
@@ -1008,7 +1008,7 @@
         "base_date": "2026-11-05",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "8358",
@@ -1040,7 +1040,7 @@
         "base_date": "2026-11-05",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "4542",
@@ -1072,7 +1072,7 @@
         "base_date": "2026-11-05",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "8437",
@@ -1104,7 +1104,7 @@
         "base_date": "2026-11-05",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "5205",
@@ -1136,7 +1136,7 @@
         "base_date": "2026-11-05",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "5475",
@@ -1168,7 +1168,7 @@
         "base_date": "2026-11-05",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3354",
@@ -1200,7 +1200,7 @@
         "base_date": "2026-11-05",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "6925",
@@ -1232,7 +1232,7 @@
         "base_date": "2026-11-05",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "6751",
@@ -1264,7 +1264,7 @@
         "base_date": "2026-11-05",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       }
     ],
     "next_trading_disposals_list": [
@@ -1298,7 +1298,7 @@
         "base_date": "2026-11-06",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3691",
@@ -1330,7 +1330,7 @@
         "base_date": "2026-11-06",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "8291",
@@ -1362,7 +1362,7 @@
         "base_date": "2026-11-06",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "4526",
@@ -1394,7 +1394,7 @@
         "base_date": "2026-11-06",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "4577",
@@ -1426,7 +1426,7 @@
         "base_date": "2026-11-06",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "2466",
@@ -1453,12 +1453,12 @@
         "is_hit_b": 0,
         "is_hit_c": 0,
         "action_timing": "觀望",
-        "entry_sop": "處置中持續觀察，預計 11/11 出關",
-        "exit_sop": "處置中持續觀察，預計 11/11 出關",
+        "entry_sop": "處置中持續觀察，預計 11/11 出關 ｜ 次一交易日 (11/06) 收盤將進入 T-2 搶跑點",
+        "exit_sop": "處置中持續觀察，預計 11/11 出關 ｜ 次一交易日 (11/06) 收盤將進入 T-2 搶跑點",
         "base_date": "2026-11-06",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "6213",
@@ -1490,7 +1490,7 @@
         "base_date": "2026-11-06",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "8099",
@@ -1522,7 +1522,7 @@
         "base_date": "2026-11-06",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "8272",
@@ -1554,7 +1554,7 @@
         "base_date": "2026-11-06",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "8358",
@@ -1586,7 +1586,7 @@
         "base_date": "2026-11-06",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "4542",
@@ -1618,7 +1618,7 @@
         "base_date": "2026-11-06",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "8437",
@@ -1650,7 +1650,7 @@
         "base_date": "2026-11-06",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "5205",
@@ -1682,7 +1682,7 @@
         "base_date": "2026-11-06",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "5475",
@@ -1714,7 +1714,7 @@
         "base_date": "2026-11-06",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3354",
@@ -1746,7 +1746,7 @@
         "base_date": "2026-11-06",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "6925",
@@ -1778,7 +1778,7 @@
         "base_date": "2026-11-06",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "6751",
@@ -1810,7 +1810,7 @@
         "base_date": "2026-11-06",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3441",
@@ -1842,7 +1842,7 @@
         "base_date": "2026-11-06",
         "last_closed_date": "2026-11-05",
         "next_trading_date": "2026-11-06",
-        "is_market_closed": 0
+        "is_market_closed": 1
       }
     ]
   },
@@ -2043,19 +2043,19 @@
       "status": "OUTSIDE",
       "close": 74.9
     },
-    "1477": {
-      "stock_id": "1477",
-      "name": "聚陽",
-      "rank": 29,
-      "status": "OUTSIDE",
-      "close": 214.5
-    },
     "5426": {
       "stock_id": "5426",
       "name": "振發",
-      "rank": 30,
+      "rank": 29,
       "status": "OUTSIDE",
       "close": 27.95
+    },
+    "1477": {
+      "stock_id": "1477",
+      "name": "聚陽",
+      "rank": 30,
+      "status": "OUTSIDE",
+      "close": 214.5
     },
     "5904": {
       "stock_id": "5904",
