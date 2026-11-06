@@ -1680,6 +1680,118 @@
           "latest_close": 45.1
         }
       ]
+    },
+    "2026-11-06": {
+      "date": "2026-11-06",
+      "stock_ids": [
+        "8099",
+        "3691",
+        "6697",
+        "2468",
+        "6199",
+        "4967",
+        "6446",
+        "6221",
+        "6609",
+        "2221",
+        "7704",
+        "5013",
+        "2610",
+        "3287",
+        "2412"
+      ],
+      "top15": [
+        {
+          "rank": 1,
+          "stock_id": "8099",
+          "stock_name": "大世科",
+          "latest_close": 148.5
+        },
+        {
+          "rank": 2,
+          "stock_id": "3691",
+          "stock_name": "碩禾",
+          "latest_close": 135.0
+        },
+        {
+          "rank": 3,
+          "stock_id": "6697",
+          "stock_name": "東捷資訊",
+          "latest_close": 54.9
+        },
+        {
+          "rank": 4,
+          "stock_id": "2468",
+          "stock_name": "華經",
+          "latest_close": 60.2
+        },
+        {
+          "rank": 5,
+          "stock_id": "6199",
+          "stock_name": "天品",
+          "latest_close": 163.5
+        },
+        {
+          "rank": 6,
+          "stock_id": "4967",
+          "stock_name": "十銓",
+          "latest_close": 268.0
+        },
+        {
+          "rank": 7,
+          "stock_id": "6446",
+          "stock_name": "藥華藥",
+          "latest_close": 1270.0
+        },
+        {
+          "rank": 8,
+          "stock_id": "6221",
+          "stock_name": "晉泰",
+          "latest_close": 37.55
+        },
+        {
+          "rank": 9,
+          "stock_id": "6609",
+          "stock_name": "瀧澤科",
+          "latest_close": 43.1
+        },
+        {
+          "rank": 10,
+          "stock_id": "2221",
+          "stock_name": "大甲",
+          "latest_close": 143.5
+        },
+        {
+          "rank": 11,
+          "stock_id": "7704",
+          "stock_name": "明遠精密",
+          "latest_close": 68.6
+        },
+        {
+          "rank": 12,
+          "stock_id": "5013",
+          "stock_name": "強新",
+          "latest_close": 62.0
+        },
+        {
+          "rank": 13,
+          "stock_id": "2610",
+          "stock_name": "華航",
+          "latest_close": 21.2
+        },
+        {
+          "rank": 14,
+          "stock_id": "3287",
+          "stock_name": "廣寰科",
+          "latest_close": 73.3
+        },
+        {
+          "rank": 15,
+          "stock_id": "2412",
+          "stock_name": "中華電",
+          "latest_close": 163.5
+        }
+      ]
     }
   }
 }
