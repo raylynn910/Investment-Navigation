@@ -1904,6 +1904,118 @@
           "latest_close": 86.4
         }
       ]
+    },
+    "2026-11-10": {
+      "date": "2026-11-10",
+      "stock_ids": [
+        "2465",
+        "1416",
+        "5013",
+        "3691",
+        "6697",
+        "3147",
+        "2221",
+        "6609",
+        "6148",
+        "3701",
+        "3141",
+        "5475",
+        "6199",
+        "6112",
+        "4977"
+      ],
+      "top15": [
+        {
+          "rank": 1,
+          "stock_id": "2465",
+          "stock_name": "麗臺",
+          "latest_close": 136.0
+        },
+        {
+          "rank": 2,
+          "stock_id": "1416",
+          "stock_name": "廣豐",
+          "latest_close": 18.35
+        },
+        {
+          "rank": 3,
+          "stock_id": "5013",
+          "stock_name": "強新",
+          "latest_close": 66.2
+        },
+        {
+          "rank": 4,
+          "stock_id": "3691",
+          "stock_name": "碩禾",
+          "latest_close": 146.0
+        },
+        {
+          "rank": 5,
+          "stock_id": "6697",
+          "stock_name": "東捷資訊",
+          "latest_close": 62.3
+        },
+        {
+          "rank": 6,
+          "stock_id": "3147",
+          "stock_name": "大綜",
+          "latest_close": 351.0
+        },
+        {
+          "rank": 7,
+          "stock_id": "2221",
+          "stock_name": "大甲",
+          "latest_close": 152.0
+        },
+        {
+          "rank": 8,
+          "stock_id": "6609",
+          "stock_name": "瀧澤科",
+          "latest_close": 49.15
+        },
+        {
+          "rank": 9,
+          "stock_id": "6148",
+          "stock_name": "驊宏資",
+          "latest_close": 48.3
+        },
+        {
+          "rank": 10,
+          "stock_id": "3701",
+          "stock_name": "大眾控",
+          "latest_close": 57.5
+        },
+        {
+          "rank": 11,
+          "stock_id": "3141",
+          "stock_name": "晶宏",
+          "latest_close": 83.1
+        },
+        {
+          "rank": 12,
+          "stock_id": "5475",
+          "stock_name": "德宏",
+          "latest_close": 185.5
+        },
+        {
+          "rank": 13,
+          "stock_id": "6199",
+          "stock_name": "天品",
+          "latest_close": 167.5
+        },
+        {
+          "rank": 14,
+          "stock_id": "6112",
+          "stock_name": "邁達特",
+          "latest_close": 57.0
+        },
+        {
+          "rank": 15,
+          "stock_id": "4977",
+          "stock_name": "眾達-KY",
+          "latest_close": 187.0
+        }
+      ]
     }
   }
 }
