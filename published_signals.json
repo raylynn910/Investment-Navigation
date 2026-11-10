@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-11-10 08:46:10",
+  "generated_at": "2026-11-10 12:12:02",
   "data_date": "2026-11-09",
   "holiday_notice": {
     "is_active": false,
@@ -24,26 +24,26 @@
     "recommended_equity_pct": 0,
     "recommended_cash_pct": 100,
     "halt_new_buys": true,
-    "halt_reason": "🚨 08:30 夜盤買單攔截：夜盤收 40,298 重挫 -2.72% 摜破季線 (46,451)！強制凍結今日新買單 (買單上限 0%)！",
+    "halt_reason": "大盤處於防守水位，依 N7 守護者紀律暫停買進新股票",
     "n7_guardian": {
       "target_equity_pct": 0,
       "effective_equity_pct": 0,
       "spot_status": "空頭斷電 (全面空手 0%)",
       "spot_reason": "TXF 處於季線下且跌破 5MA，空頭排列確認，100% 清倉變現空手避險！",
-      "night_intercept_active": true,
+      "night_intercept_active": false,
       "night_buy_cap": 0,
-      "night_intercept_reason": "🚨 08:30 夜盤買單攔截：夜盤收 40,298 重挫 -2.72% 摜破季線 (46,451)！強制凍結今日新買單 (買單上限 0%)！",
-      "mod_c_triggered": true,
-      "mod_c_reason": "⚡ 觸發 09:00 開盤防雙巴：夜盤重挫 -2.72% 且 KD 極度超賣 (K=24.7) 貼近支撐！09:00 減碼單先砍 50%，日盤反彈站回即取消剩餘 50% 砍單，防砍在阿呆谷！",
+      "night_intercept_reason": "夜盤波動平穩 (+2.70%)，無觸發破線攔截，正常放行買單。",
+      "mod_c_triggered": false,
+      "mod_c_reason": "未觸發極端超賣緩衝條件，按常規紀律執行。",
       "txf_close": 41423.0,
       "txf_ma5": 41940.8,
       "txf_ma20": 45833.1,
       "txf_ma60": 46451.2,
       "txf_k_val": 23.3,
-      "night_close": 40298.0,
-      "night_ret_pct": -2.72,
-      "night_date": "2026-11-09",
-      "night_k_val": 24.7
+      "night_close": 42542.0,
+      "night_ret_pct": 2.7,
+      "night_date": "2026-11-10",
+      "night_k_val": 32.5
     }
   },
   "core_1_swing": {
