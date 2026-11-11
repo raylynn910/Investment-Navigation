@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-11-11 11:37:04",
+  "generated_at": "2026-11-11 18:50:13",
   "data_date": "2026-11-10",
   "holiday_notice": {
     "is_active": false,
@@ -62,7 +62,7 @@
         "revenue_yoy_pct": 340.6,
         "roe_value": 12.2,
         "roe_pct": 12.2,
-        "total_score": 2.88,
+        "total_score": 2.86,
         "highlights": [
           "🔥 營收翻倍暴增",
           "💎 獲利體質極佳",
@@ -84,7 +84,7 @@
         "revenue_yoy_pct": 45.5,
         "roe_value": 55.0,
         "roe_pct": 55.0,
-        "total_score": 1.98,
+        "total_score": 1.97,
         "highlights": [
           "🔥 營收強勁高成長",
           "💎 獲利體質極佳",
@@ -106,7 +106,7 @@
         "revenue_yoy_pct": 39.9,
         "roe_value": 2.9,
         "roe_pct": 2.9,
-        "total_score": 1.9,
+        "total_score": 1.88,
         "highlights": [
           "📈 營收穩健成長",
           "✨ 本業獲利穩固",
@@ -150,7 +150,7 @@
         "revenue_yoy_pct": 8.1,
         "roe_value": 4.2,
         "roe_pct": 4.2,
-        "total_score": 0.71,
+        "total_score": 0.69,
         "highlights": [
           "📈 營收穩健成長",
           "✨ 本業獲利穩固",
@@ -172,7 +172,7 @@
         "revenue_yoy_pct": 43.3,
         "roe_value": 50.0,
         "roe_pct": 50.0,
-        "total_score": 0.53,
+        "total_score": 0.52,
         "highlights": [
           "🔥 營收強勁高成長",
           "💎 獲利體質極佳",
@@ -194,7 +194,7 @@
         "revenue_yoy_pct": 95.4,
         "roe_value": 33.6,
         "roe_pct": 33.6,
-        "total_score": 0.49,
+        "total_score": 0.48,
         "highlights": [
           "🔥 營收強勁高成長",
           "💎 獲利體質極佳",
@@ -216,7 +216,7 @@
         "revenue_yoy_pct": 115.4,
         "roe_value": 0.2,
         "roe_pct": 0.2,
-        "total_score": 0.31,
+        "total_score": 0.29,
         "highlights": [
           "🔥 營收翻倍暴增",
           "✨ 本業獲利穩固"
@@ -225,29 +225,6 @@
       },
       {
         "rank": 9,
-        "stock_id": "6148",
-        "stock_name": "驊宏資",
-        "name": "驊宏資",
-        "latest_close": 48.3,
-        "close": 48.3,
-        "latest_date": "2026-11-10",
-        "momentum_value": 0.1233,
-        "momentum_pct": 12.3,
-        "revenue_yoy_value": 145.1,
-        "revenue_yoy_pct": 145.1,
-        "roe_value": 0.7,
-        "roe_pct": 0.7,
-        "total_score": 0.29,
-        "highlights": [
-          "🔥 營收翻倍暴增",
-          "✨ 本業獲利穩固"
-        ],
-        "warning_tag": null
-      }
-    ],
-    "buffer_10_15": [
-      {
-        "rank": 10,
         "stock_id": "3701",
         "stock_name": "大眾控",
         "name": "大眾控",
@@ -260,10 +237,33 @@
         "revenue_yoy_pct": 94.0,
         "roe_value": 65.1,
         "roe_pct": 65.1,
-        "total_score": 0.27,
+        "total_score": 0.28,
         "highlights": [
           "🔥 營收強勁高成長",
           "💎 獲利體質極佳"
+        ],
+        "warning_tag": null
+      }
+    ],
+    "buffer_10_15": [
+      {
+        "rank": 10,
+        "stock_id": "6148",
+        "stock_name": "驊宏資",
+        "name": "驊宏資",
+        "latest_close": 48.3,
+        "close": 48.3,
+        "latest_date": "2026-11-10",
+        "momentum_value": 0.1233,
+        "momentum_pct": 12.3,
+        "revenue_yoy_value": 145.1,
+        "revenue_yoy_pct": 145.1,
+        "roe_value": 0.7,
+        "roe_pct": 0.7,
+        "total_score": 0.27,
+        "highlights": [
+          "🔥 營收翻倍暴增",
+          "✨ 本業獲利穩固"
         ],
         "warning_tag": null
       },
@@ -281,7 +281,7 @@
         "revenue_yoy_pct": 54.0,
         "roe_value": 3.7,
         "roe_pct": 3.7,
-        "total_score": 0.25,
+        "total_score": 0.24,
         "highlights": [
           "🔥 營收強勁高成長",
           "✨ 本業獲利穩固",
@@ -303,7 +303,7 @@
         "revenue_yoy_pct": 388.1,
         "roe_value": 7.0,
         "roe_pct": 7.0,
-        "total_score": 0.15,
+        "total_score": 0.14,
         "highlights": [
           "🔥 營收翻倍暴增",
           "💎 高ROE優等生"
@@ -324,7 +324,7 @@
         "revenue_yoy_pct": 143.5,
         "roe_value": 6.4,
         "roe_pct": 6.4,
-        "total_score": 0.12,
+        "total_score": 0.1,
         "highlights": [
           "🔥 營收翻倍暴增",
           "💎 高ROE優等生"
@@ -345,7 +345,7 @@
         "revenue_yoy_pct": 27.1,
         "roe_value": 2.8,
         "roe_pct": 2.8,
-        "total_score": 0.11,
+        "total_score": 0.1,
         "highlights": [
           "📈 營收穩健成長",
           "✨ 本業獲利穩固"
@@ -366,7 +366,7 @@
         "revenue_yoy_pct": 117.4,
         "roe_value": 1.4,
         "roe_pct": 1.4,
-        "total_score": 0.06,
+        "total_score": 0.05,
         "highlights": [
           "🔥 營收翻倍暴增",
           "✨ 本業獲利穩固"
@@ -387,7 +387,7 @@
         "stock_id": "6446",
         "name": "藥華藥",
         "prev_rank": 7,
-        "new_rank": 18,
+        "new_rank": 17,
         "close": 1280.0,
         "reason": "動能轉弱跌出前15名，參考紀律為汰弱換取現金"
       },
@@ -440,7 +440,7 @@
           "stock_id": "6446",
           "name": "藥華藥",
           "prev_rank": 7,
-          "current_rank": 18,
+          "current_rank": 17,
           "close": 1280.0,
           "action_sop": "明日 09:00 開盤以市價單 (MOO) 無條件賣出換現金"
         },
@@ -515,18 +515,18 @@
           "action_sop": "開高跳空等待 13:25 尾盤市價買 / 平低盤 09:00 開盤市價買"
         },
         {
-          "stock_id": "6148",
-          "name": "驊宏資",
+          "stock_id": "3701",
+          "name": "大眾控",
           "prev_rank": "不在名單內",
           "prev_rank_raw": 999,
           "current_rank": 9,
-          "close": 48.3,
-          "momentum_pct": 12.3,
-          "revenue_yoy_pct": 145.1,
-          "roe_pct": 0.7,
+          "close": 57.5,
+          "momentum_pct": 9.9,
+          "revenue_yoy_pct": 94.0,
+          "roe_pct": 65.1,
           "highlights": [
-            "🔥 營收翻倍暴增",
-            "✨ 本業獲利穩固"
+            "🔥 營收強勁高成長",
+            "💎 獲利體質極佳"
           ],
           "warning_tag": null,
           "action_sop": "開高跳空等待 13:25 尾盤市價買 / 平低盤 09:00 開盤市價買"
@@ -1129,7 +1129,7 @@
         "name": "精材",
         "market": "上櫃",
         "disposal_tier": "2分盤",
-        "prepay_type": "門檻預收(單筆10張/累計30張)",
+        "prepay_type": "逐筆全額預收",
         "regulatory_regime": "新制 (5日/2分盤)",
         "latest_price": 424.5,
         "disp_cum_ret": -13.01,
@@ -1547,7 +1547,7 @@
         "name": "精材",
         "market": "上櫃",
         "disposal_tier": "2分盤",
-        "prepay_type": "門檻預收(單筆10張/累計30張)",
+        "prepay_type": "逐筆全額預收",
         "regulatory_regime": "新制 (5日/2分盤)",
         "latest_price": 424.5,
         "disp_cum_ret": -13.01,
@@ -1665,19 +1665,19 @@
       "status": "TOP_9",
       "close": 49.15
     },
-    "6148": {
-      "stock_id": "6148",
-      "name": "驊宏資",
-      "rank": 9,
-      "status": "TOP_9",
-      "close": 48.3
-    },
     "3701": {
       "stock_id": "3701",
       "name": "大眾控",
+      "rank": 9,
+      "status": "TOP_9",
+      "close": 57.5
+    },
+    "6148": {
+      "stock_id": "6148",
+      "name": "驊宏資",
       "rank": 10,
       "status": "BUFFER_10_15",
-      "close": 57.5
+      "close": 48.3
     },
     "3141": {
       "stock_id": "3141",
@@ -1721,19 +1721,19 @@
       "status": "OUTSIDE",
       "close": 22.8
     },
-    "2618": {
-      "stock_id": "2618",
-      "name": "長榮航",
-      "rank": 17,
-      "status": "OUTSIDE",
-      "close": 46.15
-    },
     "6446": {
       "stock_id": "6446",
       "name": "藥華藥",
-      "rank": 18,
+      "rank": 17,
       "status": "DROPPED",
       "close": 1280.0
+    },
+    "2471": {
+      "stock_id": "2471",
+      "name": "資通",
+      "rank": 18,
+      "status": "OUTSIDE",
+      "close": 54.4
     },
     "6782": {
       "stock_id": "6782",
@@ -1742,33 +1742,33 @@
       "status": "OUTSIDE",
       "close": 288.0
     },
-    "2471": {
-      "stock_id": "2471",
-      "name": "資通",
-      "rank": 20,
-      "status": "OUTSIDE",
-      "close": 54.4
-    },
     "2355": {
       "stock_id": "2355",
       "name": "敬鵬",
-      "rank": 21,
+      "rank": 20,
       "status": "OUTSIDE",
       "close": 52.5
     },
     "1802": {
       "stock_id": "1802",
       "name": "台玻",
-      "rank": 22,
+      "rank": 21,
       "status": "OUTSIDE",
       "close": 69.8
     },
     "1476": {
       "stock_id": "1476",
       "name": "儒鴻",
-      "rank": 23,
+      "rank": 22,
       "status": "OUTSIDE",
       "close": 348.5
+    },
+    "2618": {
+      "stock_id": "2618",
+      "name": "長榮航",
+      "rank": 23,
+      "status": "OUTSIDE",
+      "close": 46.15
     },
     "1569": {
       "stock_id": "1569",
@@ -1798,12 +1798,12 @@
       "status": "OUTSIDE",
       "close": 1305.0
     },
-    "6689": {
-      "stock_id": "6689",
-      "name": "伊雲谷",
+    "3576": {
+      "stock_id": "3576",
+      "name": "聯合再生",
       "rank": 28,
       "status": "OUTSIDE",
-      "close": 75.9
+      "close": 17.35
     },
     "9933": {
       "stock_id": "9933",
@@ -1812,12 +1812,12 @@
       "status": "OUTSIDE",
       "close": 47.9
     },
-    "3576": {
-      "stock_id": "3576",
-      "name": "聯合再生",
+    "6689": {
+      "stock_id": "6689",
+      "name": "伊雲谷",
       "rank": 30,
       "status": "OUTSIDE",
-      "close": 17.35
+      "close": 75.9
     },
     "5340": {
       "stock_id": "5340",
@@ -1833,40 +1833,40 @@
       "status": "DROPPED",
       "close": 41.35
     },
-    "1528": {
-      "stock_id": "1528",
-      "name": "恩德",
-      "rank": 33,
-      "status": "OUTSIDE",
-      "close": 25.65
-    },
     "8111": {
       "stock_id": "8111",
       "name": "立碁",
-      "rank": 34,
+      "rank": 33,
       "status": "OUTSIDE",
       "close": 79.0
     },
     "1477": {
       "stock_id": "1477",
       "name": "聚陽",
-      "rank": 35,
+      "rank": 34,
       "status": "OUTSIDE",
       "close": 215.5
     },
     "4770": {
       "stock_id": "4770",
       "name": "上品",
-      "rank": 36,
+      "rank": 35,
       "status": "OUTSIDE",
       "close": 295.5
     },
     "6244": {
       "stock_id": "6244",
       "name": "茂迪",
-      "rank": 37,
+      "rank": 36,
       "status": "OUTSIDE",
       "close": 21.1
+    },
+    "2412": {
+      "stock_id": "2412",
+      "name": "中華電",
+      "rank": 37,
+      "status": "OUTSIDE",
+      "close": 159.5
     },
     "2352": {
       "stock_id": "2352",
@@ -1875,17 +1875,10 @@
       "status": "OUTSIDE",
       "close": 29.9
     },
-    "2412": {
-      "stock_id": "2412",
-      "name": "中華電",
-      "rank": 39,
-      "status": "OUTSIDE",
-      "close": 159.5
-    },
     "9904": {
       "stock_id": "9904",
       "name": "寶成",
-      "rank": 40,
+      "rank": 39,
       "status": "OUTSIDE",
       "close": 26.0
     },
