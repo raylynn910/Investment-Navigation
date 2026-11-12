@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-11-12 08:47:05",
+  "generated_at": "2026-11-12 23:09:39",
   "data_date": "2026-11-11",
   "holiday_notice": {
     "is_active": false,
@@ -62,7 +62,7 @@
         "revenue_yoy_pct": 340.6,
         "roe_value": 12.2,
         "roe_pct": 12.2,
-        "total_score": 2.64,
+        "total_score": 2.69,
         "highlights": [
           "🔥 營收翻倍暴增",
           "💎 獲利體質極佳",
@@ -84,7 +84,7 @@
         "revenue_yoy_pct": 45.5,
         "roe_value": 55.0,
         "roe_pct": 55.0,
-        "total_score": 2.35,
+        "total_score": 2.42,
         "highlights": [
           "🔥 營收強勁高成長",
           "💎 獲利體質極佳",
@@ -106,7 +106,7 @@
         "revenue_yoy_pct": 39.9,
         "roe_value": 2.9,
         "roe_pct": 2.9,
-        "total_score": 1.17,
+        "total_score": 1.2,
         "highlights": [
           "📈 營收穩健成長",
           "✨ 本業獲利穩固",
@@ -128,7 +128,7 @@
         "revenue_yoy_pct": 8.1,
         "roe_value": 4.2,
         "roe_pct": 4.2,
-        "total_score": 1.14,
+        "total_score": 1.17,
         "highlights": [
           "📈 營收穩健成長",
           "✨ 本業獲利穩固",
@@ -148,9 +148,9 @@
         "momentum_pct": 27.6,
         "revenue_yoy_value": 145.1,
         "revenue_yoy_pct": 145.1,
-        "roe_value": 0.7,
-        "roe_pct": 0.7,
-        "total_score": 1.1,
+        "roe_value": 1.3,
+        "roe_pct": 1.3,
+        "total_score": 1.13,
         "highlights": [
           "🔥 營收翻倍暴增",
           "✨ 本業獲利穩固",
@@ -172,7 +172,7 @@
         "revenue_yoy_pct": 35.6,
         "roe_value": 2.7,
         "roe_pct": 2.7,
-        "total_score": 0.77,
+        "total_score": 0.8,
         "highlights": [
           "📈 營收穩健成長",
           "✨ 本業獲利穩固",
@@ -194,7 +194,7 @@
         "revenue_yoy_pct": 335.8,
         "roe_value": 0.6,
         "roe_pct": 0.6,
-        "total_score": 0.61,
+        "total_score": 0.63,
         "highlights": [
           "🔥 營收翻倍暴增",
           "✨ 本業獲利穩固"
@@ -203,28 +203,6 @@
       },
       {
         "rank": 8,
-        "stock_id": "2471",
-        "stock_name": "資通",
-        "name": "資通",
-        "latest_close": 59.8,
-        "close": 59.8,
-        "latest_date": "2026-11-11",
-        "momentum_value": 0.1865,
-        "momentum_pct": 18.6,
-        "revenue_yoy_value": 5.3,
-        "revenue_yoy_pct": 5.3,
-        "roe_value": 50.0,
-        "roe_pct": 50.0,
-        "total_score": 0.47,
-        "highlights": [
-          "📈 營收穩健成長",
-          "💎 獲利體質極佳",
-          "🚀 強勢動能領跑"
-        ],
-        "warning_tag": null
-      },
-      {
-        "rank": 9,
         "stock_id": "5475",
         "stock_name": "德宏",
         "name": "德宏",
@@ -237,10 +215,32 @@
         "revenue_yoy_pct": 388.1,
         "roe_value": 7.0,
         "roe_pct": 7.0,
-        "total_score": 0.44,
+        "total_score": 0.46,
         "highlights": [
           "🔥 營收翻倍暴增",
           "💎 高ROE優等生"
+        ],
+        "warning_tag": null
+      },
+      {
+        "rank": 9,
+        "stock_id": "2471",
+        "stock_name": "資通",
+        "name": "資通",
+        "latest_close": 59.8,
+        "close": 59.8,
+        "latest_date": "2026-11-11",
+        "momentum_value": 0.1865,
+        "momentum_pct": 18.6,
+        "revenue_yoy_value": 5.3,
+        "revenue_yoy_pct": 5.3,
+        "roe_value": 5.2,
+        "roe_pct": 5.2,
+        "total_score": 0.29,
+        "highlights": [
+          "📈 營收穩健成長",
+          "💎 高ROE優等生",
+          "🚀 強勢動能領跑"
         ],
         "warning_tag": null
       }
@@ -248,28 +248,6 @@
     "buffer_10_15": [
       {
         "rank": 10,
-        "stock_id": "2221",
-        "stock_name": "大甲",
-        "name": "大甲",
-        "latest_close": 167.0,
-        "close": 167.0,
-        "latest_date": "2026-11-11",
-        "momentum_value": 0.1517,
-        "momentum_pct": 15.2,
-        "revenue_yoy_value": 95.4,
-        "revenue_yoy_pct": 95.4,
-        "roe_value": 33.6,
-        "roe_pct": 33.6,
-        "total_score": 0.38,
-        "highlights": [
-          "🔥 營收強勁高成長",
-          "💎 獲利體質極佳",
-          "🚀 強勢動能領跑"
-        ],
-        "warning_tag": null
-      },
-      {
-        "rank": 11,
         "stock_id": "1802",
         "stock_name": "台玻",
         "name": "台玻",
@@ -282,6 +260,28 @@
         "revenue_yoy_pct": 56.5,
         "roe_value": 2.8,
         "roe_pct": 2.8,
+        "total_score": 0.29,
+        "highlights": [
+          "🔥 營收強勁高成長",
+          "✨ 本業獲利穩固",
+          "🚀 強勢動能領跑"
+        ],
+        "warning_tag": null
+      },
+      {
+        "rank": 11,
+        "stock_id": "2221",
+        "stock_name": "大甲",
+        "name": "大甲",
+        "latest_close": 167.0,
+        "close": 167.0,
+        "latest_date": "2026-11-11",
+        "momentum_value": 0.1517,
+        "momentum_pct": 15.2,
+        "revenue_yoy_value": 95.4,
+        "revenue_yoy_pct": 95.4,
+        "roe_value": 4.7,
+        "roe_pct": 4.7,
         "total_score": 0.27,
         "highlights": [
           "🔥 營收強勁高成長",
@@ -304,7 +304,7 @@
         "revenue_yoy_pct": 94.0,
         "roe_value": 65.1,
         "roe_pct": 65.1,
-        "total_score": 0.2,
+        "total_score": 0.25,
         "highlights": [
           "🔥 營收強勁高成長",
           "💎 獲利體質極佳"
@@ -313,27 +313,6 @@
       },
       {
         "rank": 13,
-        "stock_id": "3147",
-        "stock_name": "大綜",
-        "name": "大綜",
-        "latest_close": 356.0,
-        "close": 356.0,
-        "latest_date": "2026-11-11",
-        "momentum_value": 0.1266,
-        "momentum_pct": 12.7,
-        "revenue_yoy_value": 43.3,
-        "revenue_yoy_pct": 43.3,
-        "roe_value": 50.0,
-        "roe_pct": 50.0,
-        "total_score": 0.19,
-        "highlights": [
-          "🔥 營收強勁高成長",
-          "💎 獲利體質極佳"
-        ],
-        "warning_tag": null
-      },
-      {
-        "rank": 14,
         "stock_id": "6112",
         "stock_name": "邁達特",
         "name": "邁達特",
@@ -346,7 +325,7 @@
         "revenue_yoy_pct": 27.1,
         "roe_value": 2.8,
         "roe_pct": 2.8,
-        "total_score": 0.15,
+        "total_score": 0.17,
         "highlights": [
           "📈 營收穩健成長",
           "✨ 本業獲利穩固",
@@ -355,7 +334,7 @@
         "warning_tag": null
       },
       {
-        "rank": 15,
+        "rank": 14,
         "stock_id": "2610",
         "stock_name": "華航",
         "name": "華航",
@@ -368,11 +347,32 @@
         "revenue_yoy_pct": 22.4,
         "roe_value": 4.0,
         "roe_pct": 4.0,
-        "total_score": 0.14,
+        "total_score": 0.16,
         "highlights": [
           "📈 營收穩健成長",
           "✨ 本業獲利穩固",
           "🚀 強勢動能領跑"
+        ],
+        "warning_tag": null
+      },
+      {
+        "rank": 15,
+        "stock_id": "6446",
+        "stock_name": "藥華藥",
+        "name": "藥華藥",
+        "latest_close": 1335.0,
+        "close": 1335.0,
+        "latest_date": "2026-11-11",
+        "momentum_value": 0.1125,
+        "momentum_pct": 11.2,
+        "revenue_yoy_value": 102.0,
+        "revenue_yoy_pct": 102.0,
+        "roe_value": 6.2,
+        "roe_pct": 6.2,
+        "total_score": 0.06,
+        "highlights": [
+          "🔥 營收翻倍暴增",
+          "💎 高ROE優等生"
         ],
         "warning_tag": null
       }
@@ -382,8 +382,16 @@
         "stock_id": "3691",
         "name": "碩禾",
         "prev_rank": 4,
-        "new_rank": 25,
+        "new_rank": 24,
         "close": 135.5,
+        "reason": "動能轉弱跌出前15名，參考紀律為汰弱換取現金"
+      },
+      {
+        "stock_id": "3147",
+        "name": "大綜",
+        "prev_rank": 6,
+        "new_rank": 16,
+        "close": 356.0,
         "reason": "動能轉弱跌出前15名，參考紀律為汰弱換取現金"
       },
       {
@@ -427,8 +435,16 @@
           "stock_id": "3691",
           "name": "碩禾",
           "prev_rank": 4,
-          "current_rank": 25,
+          "current_rank": 24,
           "close": 135.5,
+          "action_sop": "明日 09:00 開盤以市價單 (MOO) 無條件賣出換現金"
+        },
+        {
+          "stock_id": "3147",
+          "name": "大綜",
+          "prev_rank": 6,
+          "current_rank": 16,
+          "close": 356.0,
           "action_sop": "明日 09:00 開盤以市價單 (MOO) 無條件賣出換現金"
         },
         {
@@ -474,7 +490,7 @@
           "close": 53.1,
           "momentum_pct": 27.6,
           "revenue_yoy_pct": 145.1,
-          "roe_pct": 0.7,
+          "roe_pct": 1.3,
           "highlights": [
             "🔥 營收翻倍暴增",
             "✨ 本業獲利穩固",
@@ -519,29 +535,11 @@
           "action_sop": "開高跳空等待 13:25 尾盤市價買 / 平低盤 09:00 開盤市價買"
         },
         {
-          "stock_id": "2471",
-          "name": "資通",
-          "prev_rank": "不在名單內",
-          "prev_rank_raw": 999,
-          "current_rank": 8,
-          "close": 59.8,
-          "momentum_pct": 18.6,
-          "revenue_yoy_pct": 5.3,
-          "roe_pct": 50.0,
-          "highlights": [
-            "📈 營收穩健成長",
-            "💎 獲利體質極佳",
-            "🚀 強勢動能領跑"
-          ],
-          "warning_tag": null,
-          "action_sop": "開高跳空等待 13:25 尾盤市價買 / 平低盤 09:00 開盤市價買"
-        },
-        {
           "stock_id": "5475",
           "name": "德宏",
           "prev_rank": "第 12 名",
           "prev_rank_raw": 12,
-          "current_rank": 9,
+          "current_rank": 8,
           "close": 204.0,
           "momentum_pct": 8.2,
           "revenue_yoy_pct": 388.1,
@@ -549,6 +547,24 @@
           "highlights": [
             "🔥 營收翻倍暴增",
             "💎 高ROE優等生"
+          ],
+          "warning_tag": null,
+          "action_sop": "開高跳空等待 13:25 尾盤市價買 / 平低盤 09:00 開盤市價買"
+        },
+        {
+          "stock_id": "2471",
+          "name": "資通",
+          "prev_rank": "不在名單內",
+          "prev_rank_raw": 999,
+          "current_rank": 9,
+          "close": 59.8,
+          "momentum_pct": 18.6,
+          "revenue_yoy_pct": 5.3,
+          "roe_pct": 5.2,
+          "highlights": [
+            "📈 營收穩健成長",
+            "💎 高ROE優等生",
+            "🚀 強勢動能領跑"
           ],
           "warning_tag": null,
           "action_sop": "開高跳空等待 13:25 尾盤市價買 / 平低盤 09:00 開盤市價買"
@@ -560,11 +576,11 @@
           "name": "大甲",
           "prev_rank": "第 7 名",
           "prev_rank_raw": 7,
-          "current_rank": 10,
+          "current_rank": 11,
           "close": 167.0,
           "highlights": [
             "🔥 營收強勁高成長",
-            "💎 獲利體質極佳",
+            "✨ 本業獲利穩固",
             "🚀 強勢動能領跑"
           ],
           "warning_tag": null,
@@ -585,25 +601,11 @@
           "action_sop": "安穩續抱！不必賣出換股，亦無須追高加碼"
         },
         {
-          "stock_id": "3147",
-          "name": "大綜",
-          "prev_rank": "第 6 名",
-          "prev_rank_raw": 6,
-          "current_rank": 13,
-          "close": 356.0,
-          "highlights": [
-            "🔥 營收強勁高成長",
-            "💎 獲利體質極佳"
-          ],
-          "warning_tag": null,
-          "action_sop": "安穩續抱！不必賣出換股，亦無須追高加碼"
-        },
-        {
           "stock_id": "6112",
           "name": "邁達特",
           "prev_rank": "第 14 名",
           "prev_rank_raw": 14,
-          "current_rank": 14,
+          "current_rank": 13,
           "close": 58.0,
           "highlights": [
             "📈 營收穩健成長",
@@ -832,7 +834,7 @@
         "name": "大世科",
         "market": "上櫃",
         "disposal_tier": "2分盤",
-        "prepay_type": "門檻預收(單筆10張/累計30張)",
+        "prepay_type": "逐筆全額預收",
         "regulatory_regime": "新制 (5日/2分盤)",
         "latest_price": 150.5,
         "disp_cum_ret": 4.88,
@@ -864,7 +866,7 @@
         "name": "全景軟體",
         "market": "上櫃",
         "disposal_tier": "2分盤",
-        "prepay_type": "門檻預收(單筆10張/累計30張)",
+        "prepay_type": "逐筆全額預收",
         "regulatory_regime": "新制 (5日/2分盤)",
         "latest_price": 97.3,
         "disp_cum_ret": -5.53,
@@ -1314,7 +1316,7 @@
         "name": "大世科",
         "market": "上櫃",
         "disposal_tier": "2分盤",
-        "prepay_type": "門檻預收(單筆10張/累計30張)",
+        "prepay_type": "逐筆全額預收",
         "regulatory_regime": "新制 (5日/2分盤)",
         "latest_price": 150.5,
         "disp_cum_ret": 4.88,
@@ -1346,7 +1348,7 @@
         "name": "全景軟體",
         "market": "上櫃",
         "disposal_tier": "2分盤",
-        "prepay_type": "門檻預收(單筆10張/累計30張)",
+        "prepay_type": "逐筆全額預收",
         "regulatory_regime": "新制 (5日/2分盤)",
         "latest_price": 97.3,
         "disp_cum_ret": -5.53,
@@ -1649,33 +1651,33 @@
       "status": "TOP_9",
       "close": 54.1
     },
-    "2471": {
-      "stock_id": "2471",
-      "name": "資通",
-      "rank": 8,
-      "status": "TOP_9",
-      "close": 59.8
-    },
     "5475": {
       "stock_id": "5475",
       "name": "德宏",
-      "rank": 9,
+      "rank": 8,
       "status": "TOP_9",
       "close": 204.0
     },
-    "2221": {
-      "stock_id": "2221",
-      "name": "大甲",
-      "rank": 10,
-      "status": "BUFFER_10_15",
-      "close": 167.0
+    "2471": {
+      "stock_id": "2471",
+      "name": "資通",
+      "rank": 9,
+      "status": "TOP_9",
+      "close": 59.8
     },
     "1802": {
       "stock_id": "1802",
       "name": "台玻",
-      "rank": 11,
+      "rank": 10,
       "status": "BUFFER_10_15",
       "close": 76.7
+    },
+    "2221": {
+      "stock_id": "2221",
+      "name": "大甲",
+      "rank": 11,
+      "status": "BUFFER_10_15",
+      "close": 167.0
     },
     "3701": {
       "stock_id": "3701",
@@ -1684,33 +1686,33 @@
       "status": "BUFFER_10_15",
       "close": 63.2
     },
-    "3147": {
-      "stock_id": "3147",
-      "name": "大綜",
-      "rank": 13,
-      "status": "BUFFER_10_15",
-      "close": 356.0
-    },
     "6112": {
       "stock_id": "6112",
       "name": "邁達特",
-      "rank": 14,
+      "rank": 13,
       "status": "BUFFER_10_15",
       "close": 58.0
     },
     "2610": {
       "stock_id": "2610",
       "name": "華航",
-      "rank": 15,
+      "rank": 14,
       "status": "BUFFER_10_15",
       "close": 23.5
     },
     "6446": {
       "stock_id": "6446",
       "name": "藥華藥",
-      "rank": 16,
-      "status": "OUTSIDE",
+      "rank": 15,
+      "status": "BUFFER_10_15",
       "close": 1335.0
+    },
+    "3147": {
+      "stock_id": "3147",
+      "name": "大綜",
+      "rank": 16,
+      "status": "DROPPED",
+      "close": 356.0
     },
     "3141": {
       "stock_id": "3141",
@@ -1747,33 +1749,33 @@
       "status": "OUTSIDE",
       "close": 47.6
     },
-    "1476": {
-      "stock_id": "1476",
-      "name": "儒鴻",
-      "rank": 22,
-      "status": "OUTSIDE",
-      "close": 352.5
-    },
     "3491": {
       "stock_id": "3491",
       "name": "昇達科",
-      "rank": 23,
+      "rank": 22,
       "status": "OUTSIDE",
       "close": 1435.0
     },
-    "5340": {
-      "stock_id": "5340",
-      "name": "建榮",
-      "rank": 24,
+    "1476": {
+      "stock_id": "1476",
+      "name": "儒鴻",
+      "rank": 23,
       "status": "OUTSIDE",
-      "close": 96.5
+      "close": 352.5
     },
     "3691": {
       "stock_id": "3691",
       "name": "碩禾",
-      "rank": 25,
+      "rank": 24,
       "status": "DROPPED",
       "close": 135.5
+    },
+    "5340": {
+      "stock_id": "5340",
+      "name": "建榮",
+      "rank": 25,
+      "status": "OUTSIDE",
+      "close": 96.5
     },
     "9933": {
       "stock_id": "9933",
@@ -1782,47 +1784,47 @@
       "status": "OUTSIDE",
       "close": 51.5
     },
+    "4577": {
+      "stock_id": "4577",
+      "name": "達航科技",
+      "rank": 27,
+      "status": "OUTSIDE",
+      "close": 137.5
+    },
     "6221": {
       "stock_id": "6221",
       "name": "晉泰",
-      "rank": 27,
+      "rank": 28,
       "status": "OUTSIDE",
       "close": 43.9
     },
     "3029": {
       "stock_id": "3029",
       "name": "零壹",
-      "rank": 28,
+      "rank": 29,
       "status": "OUTSIDE",
       "close": 135.0
     },
     "5904": {
       "stock_id": "5904",
       "name": "寶雅",
-      "rank": 29,
+      "rank": 30,
       "status": "OUTSIDE",
       "close": 76.8
     },
     "6782": {
       "stock_id": "6782",
       "name": "視陽",
-      "rank": 30,
+      "rank": 31,
       "status": "OUTSIDE",
       "close": 282.5
     },
     "3576": {
       "stock_id": "3576",
       "name": "聯合再生",
-      "rank": 31,
-      "status": "OUTSIDE",
-      "close": 17.75
-    },
-    "2355": {
-      "stock_id": "2355",
-      "name": "敬鵬",
       "rank": 32,
       "status": "OUTSIDE",
-      "close": 55.2
+      "close": 17.75
     },
     "4770": {
       "stock_id": "4770",
@@ -1859,45 +1861,52 @@
       "status": "OUTSIDE",
       "close": 50.5
     },
+    "2355": {
+      "stock_id": "2355",
+      "name": "敬鵬",
+      "rank": 38,
+      "status": "OUTSIDE",
+      "close": 55.2
+    },
     "6472": {
       "stock_id": "6472",
       "name": "保瑞",
-      "rank": 38,
+      "rank": 39,
       "status": "OUTSIDE",
       "close": 403.0
     },
     "2891": {
       "stock_id": "2891",
       "name": "中信金",
-      "rank": 39,
+      "rank": 40,
       "status": "OUTSIDE",
       "close": 74.7
     },
     "2886": {
       "stock_id": "2886",
       "name": "兆豐金",
-      "rank": 40,
+      "rank": 41,
       "status": "OUTSIDE",
       "close": 54.2
     },
     "3019": {
       "stock_id": "3019",
       "name": "亞光",
-      "rank": 41,
+      "rank": 42,
       "status": "OUTSIDE",
       "close": 133.5
     },
     "9921": {
       "stock_id": "9921",
       "name": "巨大",
-      "rank": 42,
+      "rank": 43,
       "status": "OUTSIDE",
       "close": 88.0
     },
     "6244": {
       "stock_id": "6244",
       "name": "茂迪",
-      "rank": 43,
+      "rank": 44,
       "status": "OUTSIDE",
       "close": 21.3
     },
