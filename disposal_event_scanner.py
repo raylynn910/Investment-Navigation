@@ -372,6 +372,25 @@ class DisposalEventScanner:
         last_closed_w = WEEKDAY_NAMES[last_closed_date.weekday()]
         next_trading_w = WEEKDAY_NAMES[next_trading_date.weekday()]
 
+        # 取得大盤/台指期基準日漲跌幅 (供策略 B* 大盤順風濾網 >= 0.0% 檢核)
+        tx_ret_pct = 0.0
+        try:
+            df_tx = conn.execute(f"""
+                SELECT date, close FROM klines
+                WHERE stock_id = 'TXF' AND date <= '{current_date}'
+                ORDER BY date DESC LIMIT 2
+            """).df()
+            if len(df_tx) < 2:
+                df_tx = conn.execute(f"""
+                    SELECT date, close FROM klines
+                    WHERE stock_id = 'TAIEX' AND date <= '{current_date}'
+                    ORDER BY date DESC LIMIT 2
+                """).df()
+            if len(df_tx) >= 2 and float(df_tx.iloc[1]['close']) > 0:
+                tx_ret_pct = ((float(df_tx.iloc[0]['close']) / float(df_tx.iloc[1]['close'])) - 1.0) * 100.0
+        except Exception:
+            tx_ret_pct = 0.0
+
         for idx, row in df.iterrows():
             sid = str(row['stock_id']).strip()
             name = str(row['name']).strip()
@@ -383,6 +402,7 @@ class DisposalEventScanner:
             # 依休市日（颱風假/國定假）自動順延足額處置營業日
             meas_text = str(row.get('measures', '')) + " " + str(row.get('reason', '')) + " " + str(row.get('regulatory_regime', ''))
             start_d, end_d, exit_d, n_days = self.calculate_adjusted_disposal_dates(start_d, end_d, meas_text)
+            exit_w = WEEKDAY_NAMES[exit_d.weekday()]
 
             # 距離正式出關日 (T日) 的剩餘交易日天數
             td_to_exit = self.count_trading_days(current_date, exit_d)
@@ -409,6 +429,7 @@ class DisposalEventScanner:
             prev_vol = float(df_k.iloc[1]['volume']) if len(df_k) > 1 else latest_vol
             vol_ratio = (latest_vol / prev_vol) if prev_vol > 0 else 1.0
             ma5 = float(df_k.iloc[:5]['close'].mean()) if len(df_k) >= 5 else latest_close
+            ma5_bias_pct = ((latest_close / ma5) - 1.0) * 100.0 if ma5 > 0 else 0.0
             
             mom_20 = 0.0
             if len(df_k) >= 20:
@@ -425,7 +446,7 @@ class DisposalEventScanner:
             pre_close = float(pre_k[0]) if (pre_k and pre_k[0] is not None) else latest_close
             disp_cum_ret = ((latest_close / pre_close) - 1.0) * 100.0 if pre_close > 0 else 0.0
             
-            # 判斷策略 B 與 策略 C 命中狀態
+            # 判斷最佳化策略 B* 與 最佳化策略 C* 命中狀態 (蒙地卡羅 1,000 次參數高原穩健解)
             strat_tag = "⚪ 處置觀察中"
             action_timing = "觀望"
             sop = f"處置中持續監控動能，預計 {exit_d.strftime('%m/%d')} 出關"
@@ -434,85 +455,117 @@ class DisposalEventScanner:
             is_hit_c = False
             
             if td_to_exit == 2:
-                # 策略 B 檢驗 (出關前 T-2 搶跑買入)
-                cond_b_ret = (-5.0 <= disp_cum_ret <= 12.0)
-                cond_b_ma5 = (latest_close > ma5)
-                cond_b_vol = (turnover >= 30_000_000)
+                # 最佳化策略 B* 檢驗 (出關前 T-2 搶跑買入：處置累積 -5.0%~+4.5%、5MA正乖離 +1.0%~+4.5%、成交 >= 3,500萬、大盤 >= 0%)
+                cond_b_ret = (-5.0 <= disp_cum_ret <= 4.5)
+                cond_b_ma5 = (1.0 <= ma5_bias_pct <= 4.5)
+                cond_b_vol = (turnover >= 35_000_000)
+                cond_b_tx = True if (is_market_closed and current_date == next_trading_date) else (tx_ret_pct >= 0.0)
                 
-                if cond_b_ret and cond_b_ma5 and cond_b_vol:
+                if cond_b_ret and cond_b_ma5 and cond_b_vol and cond_b_tx:
                     if is_market_closed and current_date == last_closed_date:
-                        strat_tag = "🔥 策略 B (T-2 搶跑買入)"
+                        strat_tag = "🔥 策略 B* (T-2 搶跑買入)"
                         action_timing = f"{last_closed_w} ({last_closed_date.strftime('%m/%d')}) 收盤已進場 (續抱中)"
-                        sop = f"{last_closed_w}收盤已觸發買進 ｜ 持有續抱 ｜ {next_trading_w}(T-1)收盤賣50% ｜ 出關日(T)開盤賣50% ｜ 破5MA停損"
+                        sop = f"{last_closed_w}收盤已觸發買進 ｜ 持有續抱 ｜ {next_trading_w}(T-1)收盤賣50% ｜ 出關日(T)09:00開盤賣50% ｜ 破5MA停損"
                     elif is_market_closed and current_date == next_trading_date:
-                        strat_tag = f"🔥 策略 B 預警 ({next_trading_w}收盤搶跑買入)"
+                        strat_tag = f"🔥 策略 B* 預警 ({next_trading_w}收盤搶跑買入)"
                         action_timing = f"{next_trading_w} ({next_trading_date.strftime('%m/%d')}) 13:25 尾盤進場"
-                        sop = f"{next_trading_w}收盤前買進 ｜ 次一交易日(T-1)收盤賣50% ｜ 出關日(T)09:00 開盤賣出剩餘 50% ｜ 破5MA停損"
+                        sop = f"{next_trading_w} 13:25 若大盤>=平盤且維持5MA正乖離+1%~+4.5%則買進 ｜ 次日(T-1)收盤賣50% ｜ 出關日(T)09:00開盤賣50% ｜ 破5MA停損"
                     else:
-                        strat_tag = "🔥 策略 B (T-2 搶跑買入)"
-                        action_timing = "今日收盤進場"
-                        sop = "今日收盤買進 ｜ 明日(T-1)收盤賣50% ｜ 出關日(T)開盤賣50% ｜ 破5MA停損"
+                        strat_tag = "🔥 策略 B* (T-2 搶跑買入)"
+                        action_timing = "今日 13:25 收盤進場"
+                        sop = "今日13:25收盤買進 ｜ 明日(T-1)收盤賣50% ｜ 出關日(T)09:00開盤賣50% ｜ 破5MA停損"
                     priority = 1
                     is_hit_b = True
                 else:
                     reasons = []
-                    if not cond_b_ret: reasons.append(f"漲跌{disp_cum_ret:+.1f}%非-5%~+12%")
-                    if not cond_b_ma5: reasons.append("未站上5MA")
-                    if not cond_b_vol: reasons.append(f"成交{turnover/1e4:.0f}萬<3000萬")
+                    if not cond_b_ret: reasons.append(f"漲跌{disp_cum_ret:+.1f}%非-5.0%~+4.5%")
+                    if not cond_b_ma5: reasons.append(f"5MA乖離{ma5_bias_pct:+.2f}%非+1.0%~+4.5%")
+                    if not cond_b_vol: reasons.append(f"成交{turnover/1e4:.0f}萬<3500萬")
+                    if not cond_b_tx: reasons.append(f"大盤{tx_ret_pct:+.2f}%<0%")
                     strat_tag = "⏳ 處置蓄勢 (T-2)"
                     action_timing = "觀望"
-                    sop = f"未達標 ({'、'.join(reasons)})"
+                    sop = f"B*未達標 ({'、'.join(reasons)})"
+                    if is_market_closed and current_date == last_closed_date and disp_cum_ret >= 7.8:
+                        c_pre = []
+                        if turnover < 40_000_000: c_pre.append(f"成交{turnover/1e4:.0f}萬<4000萬")
+                        if not (1.05 <= vol_ratio <= 1.80): c_pre.append(f"量比{vol_ratio:.2f}非1.05~1.80")
+                        if c_pre:
+                            sop += f" ｜ {next_trading_w}T-1 C*預檢亦未達標 ({'、'.join(c_pre)})"
                     priority = 3
                     
             elif td_to_exit == 1:
-                # 策略 C 檢驗 (出關前 T-1 警戒，明晨 09:00 開高走低做空)
-                cond_c_ret = (disp_cum_ret >= 7.2)
-                cond_c_vol = (turnover >= 30_000_000)
-                cond_c_ratio = (0.8 <= vol_ratio <= 1.8)
+                # 最佳化策略 C* 檢驗 (出關前 T-1 警戒，出關日 T0 09:00 開高 +1.2%~+6.0% 做空：累積 >= +7.8%、量比 1.05~1.80、成交 >= 4,000萬)
+                cond_c_ret = (disp_cum_ret >= 7.8)
+                cond_c_vol = (turnover >= 40_000_000)
+                cond_c_ratio = (1.05 <= vol_ratio <= 1.80)
                 
                 if cond_c_ret and cond_c_vol and cond_c_ratio:
-                    strat_tag = "🎯 策略 C 警戒 (明晨開高空)"
-                    next_exec_d = self.get_next_trading_day(current_date)
                     if is_market_closed and current_date == last_closed_date:
-                        action_timing = f"{next_trading_w} ({next_trading_date.strftime('%m/%d')}) 09:00 MOO 券賣"
-                        sop = f"{next_trading_w} 09:00 若開高 +1%~+5.2% 且台指期無大漲，MOO 券賣放空 ｜ 停損+5% ｜ 13:25 全平"
+                        strat_tag = "🎯 策略 C* 警戒 (明晨開高空)"
+                        action_timing = f"{exit_w} ({exit_d.strftime('%m/%d')}) 09:00 MOO 券賣"
+                        sop = f"{exit_w} ({exit_d.strftime('%m/%d')}) 09:00 若開高 +1.2%~+6.0% 且台指期漲幅 <= +1.0%，MOO 券賣放空 ｜ 停損+4.8% ｜ 13:25 全平"
                     elif is_market_closed and current_date == next_trading_date:
-                        action_timing = f"{next_trading_w} ({next_trading_date.strftime('%m/%d')}) 09:00 MOO 券賣"
-                        sop = f"{next_trading_w} 09:00 若開高 +1%~+5.2% 且台指期無大漲，MOO 券賣放空 ｜ 停損+5% ｜ 13:25 全平"
+                        strat_tag = f"🎯 策略 C* 預警 ({next_trading_w}T-1收盤確認)"
+                        action_timing = f"{exit_w} ({exit_d.strftime('%m/%d')}) 09:00 MOO 券賣"
+                        sop = f"待 {next_trading_w} ({next_trading_date.strftime('%m/%d')}) T-1 收盤確認量比 1.05~1.80 後，於 {exit_w} ({exit_d.strftime('%m/%d')}) 09:00 開高 +1.2%~+6.0% MOO 券賣 ｜ 停損+4.8% ｜ 13:25 全平"
                     else:
-                        action_timing = f"{next_exec_d.strftime('%m/%d')} 09:00 MOO 券賣"
-                        sop = f"{next_exec_d.strftime('%m/%d')} 09:00 若開高 +1%~+5.2% 且台指期無大漲，MOO 券賣放空 ｜ 停損+5% ｜ 13:25 全平"
+                        strat_tag = "🎯 策略 C* 警戒 (明晨開高空)"
+                        action_timing = f"{exit_w} ({exit_d.strftime('%m/%d')}) 09:00 MOO 券賣"
+                        sop = f"{exit_w} ({exit_d.strftime('%m/%d')}) 09:00 若開高 +1.2%~+6.0% 且台指期漲幅 <= +1.0%，MOO 券賣放空 ｜ 停損+4.8% ｜ 13:25 全平"
                     priority = 1
                     is_hit_c = True
                 else:
                     reasons = []
-                    if not cond_c_ret: reasons.append(f"處置累積{disp_cum_ret:+.1f}%未超漲")
-                    if not cond_c_vol: reasons.append(f"成交{turnover/1e4:.0f}萬<3000萬")
-                    if not cond_c_ratio: reasons.append(f"量比{vol_ratio:.2f}非0.8~1.8")
+                    if not cond_c_ret: reasons.append(f"處置累積{disp_cum_ret:+.1f}%<+7.8%")
+                    if not cond_c_vol: reasons.append(f"成交{turnover/1e4:.0f}萬<4000萬")
+                    if not cond_c_ratio: reasons.append(f"量比{vol_ratio:.2f}非1.05~1.80")
                     strat_tag = "⏳ 處置出關前夕 (T-1)"
                     action_timing = "觀望"
                     sop = f"未達標 ({'、'.join(reasons)})"
                     priority = 3
                     
             elif td_to_exit == 0:
-                # 今日出關日 (T 日)
-                if disp_cum_ret >= 7.2 and turnover >= 30_000_000:
-                    strat_tag = "🚨 策略 C 執行 (T日出關空)"
-                    action_timing = f"{current_date.strftime('%m/%d')} 09:00 MOO 券賣"
-                    sop = "開高 +1%~+5.2% 券賣放空，設 5% 停損 ｜ 開低或開平嚴禁追空 ｜ 13:25 全數平倉"
+                # 今日出關日 (T 日)：必須錨定 T-1 (出關前一交易日) 完整檢核三項條件 (包含量比 1.05~1.80)
+                df_k_t1 = df_k[pd.to_datetime(df_k['date']).dt.date < exit_d]
+                if df_k_t1.empty:
+                    df_k_t1 = df_k
+                t1_close = float(df_k_t1.iloc[0]['close'])
+                t1_vol = float(df_k_t1.iloc[0]['volume'])
+                t1_prev_vol = float(df_k_t1.iloc[1]['volume']) if len(df_k_t1) > 1 else t1_vol
+                t1_vol_ratio = (t1_vol / t1_prev_vol) if t1_prev_vol > 0 else 1.0
+                t1_turnover = t1_close * t1_vol
+                t1_cum_ret = ((t1_close / pre_close) - 1.0) * 100.0 if pre_close > 0 else 0.0
+
+                cond_c_ret = (t1_cum_ret >= 7.8)
+                cond_c_vol = (t1_turnover >= 40_000_000)
+                cond_c_ratio = (1.05 <= t1_vol_ratio <= 1.80)
+
+                if cond_c_ret and cond_c_vol and cond_c_ratio:
+                    strat_tag = "🚨 策略 C* 執行 (T日出關空)"
+                    action_timing = f"{exit_w} ({exit_d.strftime('%m/%d')}) 09:00 MOO 券賣"
+                    sop = "09:00 若開高 +1.2%~+6.0% 且台指期漲幅 <= +1.0%，MOO 券賣放空 ｜ 停損+4.8% ｜ 開低或開平嚴禁追空 ｜ 13:25 全數平倉"
                     priority = 2
                     is_hit_c = True
                 else:
+                    reasons = []
+                    if not cond_c_ret: reasons.append(f"處置累積{t1_cum_ret:+.1f}%<+7.8%")
+                    if not cond_c_vol: reasons.append(f"成交{t1_turnover/1e4:.0f}萬<4000萬")
+                    if not cond_c_ratio: reasons.append(f"量比{t1_vol_ratio:.2f}非1.05~1.80")
                     strat_tag = "⚪ 今日出關 (觀望)"
                     action_timing = "觀望"
-                    sop = "處置期未超漲或開盤重挫，嚴禁接刀做多，全日觀望"
+                    sop = f"未達標 ({'、'.join(reasons)}) ｜ 嚴禁盲目放空或接刀"
                     priority = 4
                     
             elif td_to_exit > 2:
                 strat_tag = f"關狗籠中 (倒數{td_to_exit}天)"
                 action_timing = "觀望"
                 if td_to_exit == 3 and is_market_closed:
-                    sop = f"處置中持續觀察，預計 {exit_d.strftime('%m/%d')} 出關 ｜ 次一交易日 ({next_trading_date.strftime('%m/%d')}) 收盤將進入 T-2 搶跑點"
+                    b_pre = []
+                    if not (-5.0 <= disp_cum_ret <= 4.5): b_pre.append(f"漲跌{disp_cum_ret:+.1f}%非-5.0%~+4.5%")
+                    if not (1.0 <= ma5_bias_pct <= 4.5): b_pre.append(f"5MA乖離{ma5_bias_pct:+.2f}%非+1.0%~+4.5%")
+                    if turnover < 35_000_000: b_pre.append(f"成交{turnover/1e4:.0f}萬<3500萬")
+                    pre_note = f"目前B*預檢未達標 ({'、'.join(b_pre)})" if b_pre else "目前符合B*預檢條件"
+                    sop = f"{next_trading_w} ({next_trading_date.strftime('%m/%d')}) 將進入 T-2 搶跑檢核點 ｜ {pre_note}"
                 else:
                     sop = f"處置中持續觀察，預計 {exit_d.strftime('%m/%d')} 出關"
                 priority = 5
@@ -542,6 +595,8 @@ class DisposalEventScanner:
                 'turnover_str': t_str,
                 'vol_ratio': vol_ratio,
                 'ma5': ma5,
+                'ma5_bias_pct': ma5_bias_pct,
+                'tx_ret_pct': tx_ret_pct,
                 'mom_20_pct': mom_20,
                 'start_date': str(start_d),
                 'end_date': str(end_d),

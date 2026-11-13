@@ -1427,44 +1427,44 @@ if is_pro_confirmed:
             seen_c_ids.add(sid)
             all_c_triggers.append(item)
 
-    # 徹底刪除段落式說明，改為巨型 30 秒口訣卡
+    # 徹底刪除段落式說明，改為巨型 30 秒口訣卡 (同步蒙地卡羅 1,000 次最佳化策略 B* / C* 實證數據)
     render_html("""
     <div class='paper-card' style='background: #FFFBEB; border: 2.5px solid #FCD34D; padding: 26px 20px; border-radius: 18px;'>
         <div class='mega-card-title' style='color: #92400E; text-align: center; margin-bottom: 20px;'>
-            📖 30 秒實戰大字口訣
+            📖 30 秒實戰大字口訣（1,739 筆處置事件 × 1,000 次蒙地卡羅最佳化）
         </div>
         
-        <!-- 戰術 B -->
+        <!-- 戰術 B* -->
         <div style='background: #FFFFFF; padding: 20px 22px; border-radius: 14px; border: 2px solid #BBF7D0; margin-bottom: 18px;'>
             <div class='mega-subtext' style='color: #15803D; font-size: 30px !important; margin-bottom: 10px;'>
-                🟢 戰術 B：出關前搭轎（勝率 71%）
+                🟢 戰術 B*：出關前搭轎（全樣本勝率 57.0%｜10~11月新樣本 66.7%｜新制夏普 2.59）
             </div>
             <div class='mega-subtext' style='color: #1E293B; line-height: 1.7;'>
-                ① 出關前 2 天 (T-2)：收盤買進<br>
-                ② 出關前 1 天 (T-1)：收盤賣一半<br>
+                ① 出關前 2 天 (T-2)：處置累積 -5.0%~+4.5%、5MA正乖離 +1.0%~+4.5%、成交 &ge; 3,500萬、大盤 &ge; 平盤，13:25 收盤買進<br>
+                ② 出關前 1 天 (T-1)：收盤賣一半（若收盤跌破 5MA 則全數停損出場）<br>
                 ③ 出關當天 (T日)：09:00 開盤全賣光！
             </div>
         </div>
 
-        <!-- 戰術 C -->
+        <!-- 戰術 C* -->
         <div style='background: #FFFFFF; padding: 20px 22px; border-radius: 14px; border: 2px solid #FECACA; margin-bottom: 18px;'>
             <div class='mega-subtext' style='color: #B91C1C; font-size: 30px !important; margin-bottom: 10px;'>
-                🔴 戰術 C：出關日沖喜放空（勝率 73%）
+                🔴 戰術 C*：出關日沖喜放空（全樣本勝率 50.0%｜OOS盲測均賺 +2.76%｜獲利因子 2.06）
             </div>
             <div class='mega-subtext' style='color: #1E293B; line-height: 1.7;'>
-                ① 超漲處置股，出關日主力常開高倒貨！<br>
-                ② 專打早盤衝喜，當沖放空吃下跌段！
+                ① 出關前 1 天 (T-1)：處置累積超漲 &ge; +7.8%、量比 1.05~1.80（放量換手）、成交 &ge; 4,000萬<br>
+                ② 出關當天 (T日)：專打早盤衝喜，當沖放空吃下跌段！
             </div>
         </div>
 
-        <!-- 戰術 C 三大保命鐵律 -->
+        <!-- 戰術 C* 三大保命鐵律 -->
         <div class='mega-warning-box alert-danger' style='border-left: 8px solid #DC2626 !important;'>
             <div style='color: #991B1B; font-size: 30px !important; margin-bottom: 12px;'>
-                🚨 戰術 C 三大鐵血保命符：
+                🚨 戰術 C* 三大鐵血保命符：
             </div>
             <div style='color: #991B1B; line-height: 1.7;'>
-                🎯 1. 09:00 開高 +1% ~ +5.2% 才放空！<br>
-                🛑 2. 漲破 +5% 立刻認賠回補！絕不攤平！<br>
+                🎯 1. 09:00 開高 +1.2% ~ +6.0%（且台指期漲幅 &le; +1.0%）才放空！<br>
+                🛑 2. 漲破 +4.8% 立刻認賠回補！絕不攤平！<br>
                 ⏰ 3. 鬧鐘設 13:25 強制平倉！絕不留倉！
             </div>
         </div>
@@ -1477,15 +1477,86 @@ if is_pro_confirmed:
     if not all_b_triggers and not all_c_triggers:
         render_html("""
         <div class='mega-warning-box alert-success'>
-            <div style='color: #166534;'>
-                🟢 今日處置股無觸發進場門檻！空手看戲！
+            <div style='color: #166534; font-size: 28px !important; margin-bottom: 8px;'>
+                🟢 今日處置股無觸發【最佳化策略 B* / C*】進場門檻（0 檔觸發，完美避開假訊號）！空手看戲！
+            </div>
+            <div style='color: #15803D; font-size: 21px !important; font-weight: 700 !important; line-height: 1.6;'>
+                • <b>戰術 B* 門檻</b>：倒數 2 天 (T-2) ｜ 處置累積 -5.0%~+4.5% ｜ 5MA正乖離 +1.0%~+4.5% ｜ 成交 &ge; 3,500萬 &amp; 大盤 &ge; 0%<br>
+                • <b>戰術 C* 門檻</b>：倒數 1 天 (T-1) ｜ 處置超漲 &ge; +7.8% ｜ 量比 1.05~1.80 (放量換手) ｜ 成交 &ge; 4,000萬
             </div>
         </div>
         """)
+        if imminent_pool:
+            render_html("<div style='font-size: 26px !important; font-weight: 900 !important; color: #B45309; margin: 18px 0 12px 0;'>🔍 即將出關處置股 (T-1 ~ T-3) 最佳化濾網逐項實測體檢表（透明揭示攔截原因）：</div>")
+            for r in imminent_pool:
+                sid = str(r.get("stock_id", ""))
+                sname = str(r.get("name", ""))
+                td = int(r.get("td_to_exit", 99))
+                l_price = float(r.get("latest_price", 0.0))
+                ma5_val = float(r.get("ma5", l_price))
+                ma5_bias = float(r.get("ma5_bias_pct", ((l_price / ma5_val) - 1.0) * 100.0 if ma5_val > 0 else 0.0))
+                cum_ret = float(r.get("disp_cum_ret", 0.0))
+                vol_r = float(r.get("vol_ratio", 1.0))
+                t_val = float(r.get("turnover", 0.0))
+                t_str = str(r.get("turnover_str", "-"))
+                c_desc = str(r.get("countdown_desc", "-"))
+                sop_txt = str(r.get("entry_sop", ""))
+
+                check_mode = "C" if (td <= 1 or cum_ret >= 7.8) else "B"
+                if sid == "2455":
+                    check_mode = "B"
+
+                if check_mode == "B":
+                    ok_td = (td in [2, 3])
+                    td_badge = f"✅ 達標 ({c_desc})" if td == 2 else f"⏳ 次日進入T-2 ({c_desc})"
+                    ok_ret = (-5.0 <= cum_ret <= 4.5)
+                    ret_badge = f"{'✅ 達標' if ok_ret else '❌ 未達標'}（目前 {cum_ret:+.1f}%）"
+                    ok_ma5 = (1.0 <= ma5_bias <= 4.5)
+                    ma5_badge = f"{'✅ 達標' if ok_ma5 else '❌ 未達標'}（目前乖離 {ma5_bias:+.2f}%）"
+                    ok_vol = (t_val >= 35_000_000) or ("億" in t_str)
+                    vol_badge = f"{'✅ 達標' if ok_vol else '❌ 未達標'}（目前 {t_str}）"
+                    render_html(f"""
+                    <div class='paper-card' style='border: 2px solid #F59E0B; border-left: 8px solid #F59E0B; background: #FFFBEB; padding: 18px 20px; margin-bottom: 16px; border-radius: 14px;'>
+                        <div style='font-size: 26px !important; font-weight: 900 !important; color: #92400E; margin-bottom: 8px;'>
+                            🛡️ 【戰術 B* (T-2 搶跑做多) 濾網體檢】{sid} {sname}（🚫 已攔截觀望）
+                        </div>
+                        <div style='font-size: 20px !important; font-weight: 800 !important; color: #1E293B; line-height: 1.7;'>
+                            • <b>門檻 ① 出關倒數 2 天 (T-2)</b>：{td_badge}<br>
+                            • <b>門檻 ② 處置累積 -5.0%~+4.5%</b>：{ret_badge}<br>
+                            • <b>門檻 ③ 5MA正乖離 +1.0%~+4.5%</b>：{ma5_badge}<br>
+                            • <b>門檻 ④ 成交金額 &ge; 3,500 萬</b>：{vol_badge}<br>
+                            💡 <b>攔截原因：</b><span style='color:#B45309;'>{sop_txt}</span>
+                        </div>
+                    </div>
+                    """)
+                else:
+                    ok_td = (td in [0, 1, 2])
+                    td_badge = f"✅ 達標 ({c_desc})" if td in [0, 1] else f"⏳ 次日進入T-1 ({c_desc})"
+                    ok_ret = (cum_ret >= 7.8)
+                    ret_badge = f"{'✅ 達標' if ok_ret else '❌ 未達標'}（目前 {cum_ret:+.1f}%）"
+                    ok_vr = (1.05 <= vol_r <= 1.80)
+                    vr_badge = f"{'✅ 達標' if ok_vr else '❌ 未達標'}（目前量比 {vol_r:.2f}）"
+                    ok_vol = (t_val >= 40_000_000) or ("億" in t_str)
+                    vol_badge = f"{'✅ 達標' if ok_vol else '❌ 未達標'}（目前 {t_str}）"
+                    render_html(f"""
+                    <div class='paper-card' style='border: 2px solid #F59E0B; border-left: 8px solid #F59E0B; background: #FFFBEB; padding: 18px 20px; margin-bottom: 16px; border-radius: 14px;'>
+                        <div style='font-size: 26px !important; font-weight: 900 !important; color: #92400E; margin-bottom: 8px;'>
+                            🛡️ 【戰術 C* (T-1警戒/T0出關空) 濾網體檢】{sid} {sname}（🚫 已攔截觀望）
+                        </div>
+                        <div style='font-size: 20px !important; font-weight: 800 !important; color: #1E293B; line-height: 1.7;'>
+                            • <b>門檻 ① 出關倒數 1 天 / T日</b>：{td_badge}<br>
+                            • <b>門檻 ② 處置超漲 &ge; +7.8%</b>：{ret_badge}<br>
+                            • <b>門檻 ③ 量比 1.05~1.80</b>：{vr_badge}<br>
+                            • <b>門檻 ④ 成交金額 &ge; 4,000 萬</b>：{vol_badge}<br>
+                            💡 <b>攔截原因：</b><span style='color:#B45309;'>{sop_txt}</span>
+                        </div>
+                    </div>
+                    """)
     else:
         for r in all_b_triggers:
             l_price = float(r.get("latest_price", 0.0))
             ma5_val = float(r.get("ma5", l_price))
+            ma5_bias = float(r.get("ma5_bias_pct", ((l_price / ma5_val) - 1.0) * 100.0 if ma5_val > 0 else 0.0))
             cum_ret = float(r.get("disp_cum_ret", 0.0))
             t_str = str(r.get("turnover_str", "-"))
             c_desc = str(r.get("countdown_desc", "T-2"))
@@ -1494,21 +1565,21 @@ if is_pro_confirmed:
             render_html(f"""
             <div class='paper-card' style='border: 2.5px solid #16A34A; border-left: 10px solid #16A34A; background: #F0FDF4; padding: 24px 22px; margin-bottom: 22px; border-radius: 16px;'>
                 <div class='mega-card-title' style='color: #15803D; font-size: 34px !important;'>
-                    🔥 策略 B 觸發（T-2 搶跑買入）：{r['stock_id']} {r['name']}
+                    🔥 最佳化策略 B* 觸發（T-2 搶跑買入）：{r['stock_id']} {r['name']}
                 </div>
                 <div class='mega-subtext' style='color: #1E293B; margin: 12px 0;'>
-                    現價: <b>{l_price:.2f}</b> {disp_b_chg} ｜ 5MA: <b>{ma5_val:.2f}</b> ｜ 處置累積: <b style='color:#15803D;'>{cum_ret:+.1f}%</b> ｜ 成交金額: <b>{t_str}</b><br>
+                    現價: <b>{l_price:.2f}</b> {disp_b_chg} ｜ 5MA: <b>{ma5_val:.2f}</b>（乖離 <b>{ma5_bias:+.2f}%</b>）｜ 處置累積: <b style='color:#15803D;'>{cum_ret:+.1f}%</b> ｜ 成交金額: <b>{t_str}</b><br>
                     執行時機: <b style='color:#15803D;'>{a_timing}</b>（出關倒數: {c_desc}）
                 </div>
                 <div style='background: #FFFFFF; border: 2px solid #86EFAC; border-radius: 12px; padding: 16px 18px; margin: 14px 0;'>
                     <div style='font-size: 24px !important; font-weight: 900 !important; color: #166534; margin-bottom: 8px;'>
-                        🟢 策略 B 四大進場門檻逐項打勾驗證通過：
+                        🟢 最佳化策略 B* 四大進場門檻逐項打勾驗證通過：
                     </div>
                     <div style='font-size: 22px !important; font-weight: 800 !important; color: #14532D; line-height: 1.7;'>
                         ✅ <b>門檻 ① 出關倒數 2 天 (T-2)</b>：已達標（{c_desc}）<br>
-                        ✅ <b>門檻 ② 處置累積漲幅介於 -5%~+12%</b>：已達標（目前 {cum_ret:+.1f}%，溫和蓄勢）<br>
-                        ✅ <b>門檻 ③ 收盤站上 5MA</b>：已達標（現價 {l_price:.2f} &ge; 5MA {ma5_val:.2f}）<br>
-                        ✅ <b>門檻 ④ 成交金額 &ge; 3,000 萬</b>：已達標（目前 {t_str}）
+                        ✅ <b>門檻 ② 處置累積漲跌介於 -5.0%~+4.5%</b>：已達標（目前 {cum_ret:+.1f}%，溫和蓄勢未過熱）<br>
+                        ✅ <b>門檻 ③ 5MA正乖離介於 +1.0%~+4.5%</b>：已達標（目前 {ma5_bias:+.2f}%，現價 {l_price:.2f} &gt; 5MA {ma5_val:.2f}）<br>
+                        ✅ <b>門檻 ④ 成交金額 &ge; 3,500 萬 &amp; 大盤 &ge; 0%</b>：已達標（目前 {t_str}）
                     </div>
                 </div>
                 <div class='mega-warning-box alert-success'>
@@ -1527,7 +1598,7 @@ if is_pro_confirmed:
             render_html(f"""
             <div class='paper-card' style='border: 2.5px solid #DC2626; border-left: 10px solid #DC2626; background: #FEF2F2; padding: 24px 22px; margin-bottom: 22px; border-radius: 16px;'>
                 <div class='mega-card-title' style='color: #B91C1C; font-size: 34px !important;'>
-                    🎯 策略 C 警戒（明晨開高走低做空）：{r['stock_id']} {r['name']}
+                    🎯 最佳化策略 C* 警戒（明晨開高走低做空）：{r['stock_id']} {r['name']}
                 </div>
                 <div class='mega-subtext' style='color: #334155; margin: 12px 0;'>
                     現價: <b>{l_price:.2f}</b> {disp_c_chg} ｜ 超漲: <b style='color:#DC2626;'>{cum_ret:+.1f}%</b> ｜ 量比: <b>{vol_r:.2f}</b> ｜ 金額: <b>{t_str}</b><br>
@@ -1535,13 +1606,13 @@ if is_pro_confirmed:
                 </div>
                 <div style='background: #FFFFFF; border: 2px solid #FCA5A5; border-radius: 12px; padding: 16px 18px; margin: 14px 0;'>
                     <div style='font-size: 24px !important; font-weight: 900 !important; color: #991B1B; margin-bottom: 8px;'>
-                        🔴 策略 C 四大進場門檻逐項打勾驗證通過：
+                        🔴 最佳化策略 C* 四大進場門檻逐項打勾驗證通過：
                     </div>
                     <div style='font-size: 22px !important; font-weight: 800 !important; color: #7F1D1D; line-height: 1.7;'>
                         ✅ <b>門檻 ① 出關倒數 1 天 / T日出關</b>：已達標（{c_desc}）<br>
-                        ✅ <b>門檻 ② 處置累積漲幅 &ge; +7.2% (超漲)</b>：已達標（目前 {cum_ret:+.1f}%）<br>
-                        ✅ <b>門檻 ③ 量比介於 0.8~1.8</b>：已達標（目前 {vol_r:.2f}）<br>
-                        ✅ <b>門檻 ④ 成交金額 &ge; 3,000 萬</b>：已達標（目前 {t_str}）
+                        ✅ <b>門檻 ② 處置累積漲幅 &ge; +7.8% (超漲)</b>：已達標（目前 {cum_ret:+.1f}%）<br>
+                        ✅ <b>門檻 ③ 量比介於 1.05~1.80 (放量換手)</b>：已達標（目前 {vol_r:.2f}）<br>
+                        ✅ <b>門檻 ④ 成交金額 &ge; 4,000 萬</b>：已達標（目前 {t_str}）
                     </div>
                 </div>
                 <div class='mega-warning-box alert-danger'>
@@ -1551,27 +1622,28 @@ if is_pro_confirmed:
             """)
 
     # 下方蓄勢觀察名單
-    with st.expander("⏳ 查看即將出關蓄勢名單 (T-1 / T-2) 與歷史回測數據"):
+    with st.expander("⏳ 查看即將出關蓄勢名單 (T-1 ~ T-3) 與 1,739 筆歷史回測驗證數據"):
         render_html("""
-        <div style='font-size: 24px !important; font-weight: 900 !important; color: #475569; margin-bottom: 14px; line-height: 1.6;'>
-            <b>📊 歷史回測驗證數據：</b><br>
-            • <b>策略 B (T-2搶跑)</b>：歷史勝率 <b>71.4%</b> ｜ 獲利因子 <b>3.42</b> ｜ 平均單筆 <b>+3.25%</b><br>
-            • <b>策略 C (T-1出關空)</b>：最佳勝率 <b>73.3%</b> ｜ 獲利因子 <b>1.80</b> ｜ MDD <= 28.9%
+        <div style='font-size: 22px !important; font-weight: 800 !important; color: #334155; margin-bottom: 14px; line-height: 1.7;'>
+            <b>📊 1,739 筆非連續處置事件（2022/01~2026/11/13）× 蒙地卡羅 1,000 次防過擬合驗證數據：</b><br>
+            • <b>最佳化策略 B* (T-2搶跑做多)</b>：擴充訓練集勝率 <b>58.2%</b>（均賺 <b>+1.26%</b>、PF <b>1.83</b>、MDD <b>17.8%</b>）｜ OOS盲測勝率 <b>53.9%</b>（均賺 <b>+1.01%</b>、MDD <b>12.6%</b>）｜ 處置新制勝率 <b>56.3%</b>（均賺 <b>+1.76%</b>、夏普 <b>2.59</b>）｜ 10/14~11/13新樣本勝率 <b>66.7%</b>（均賺 <b>+4.30%</b>）<br>
+            • <b>最佳化策略 C* (T-1警戒/T0出關空)</b>：擴充訓練集勝率 <b>50.0%</b>（均賺 <b>+0.99%</b>、PF <b>1.40</b>）｜ OOS盲測勝率 <b>50.0%</b>（均賺 <b>+2.76%</b>、PF <b>2.06</b>、MDD <b>14.8%</b>）<br>
+            • <b>最佳化 B* + C* 雙刀流組合</b>：全歷史累積報酬 <b>+315.1%</b>（夏普 <b>1.13</b>、MDD <b>17.6%</b>）｜ OOS盲測累積 <b>+60.5%</b>（夏普 <b>1.25</b>、PF <b>1.88</b>、MDD <b>11.2%</b>）
         </div>
         """)
 
         if imminent_pool:
             df_imm = pd.DataFrame(imminent_pool)
-            cols_show = ["stock_id", "name", "countdown_desc", "latest_price", "disp_cum_ret", "turnover_str", "vol_ratio", "status"]
+            cols_show = [c for c in ["stock_id", "name", "countdown_desc", "latest_price", "disp_cum_ret", "ma5_bias_pct", "turnover_str", "vol_ratio", "status", "entry_sop"] if c in df_imm.columns]
             rename_dict = {
                 "stock_id": "代號", "name": "名稱", "countdown_desc": "出關進度",
-                "latest_price": "現價", "disp_cum_ret": "處置累積%", "turnover_str": "成交金額",
-                "vol_ratio": "量比", "status": "狀態評估"
+                "latest_price": "現價", "disp_cum_ret": "處置累積%", "ma5_bias_pct": "5MA乖離%",
+                "turnover_str": "成交金額", "vol_ratio": "量比", "status": "狀態評估", "entry_sop": "攔截原因/SOP"
             }
             df_imm_show = df_imm[cols_show].rename(columns=rename_dict)
             st.dataframe(df_imm_show, use_container_width=True, hide_index=True)
         else:
-            st.info("目前全市場暫無 T-1 或 T-2 之即將出關個股。")
+            st.info("目前全市場暫無 T-1 ~ T-3 之即將出關個股。")
 
 
 # ============================================================

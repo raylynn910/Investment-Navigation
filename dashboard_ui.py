@@ -546,13 +546,18 @@ def render_companion_view():
     if not dedup_b and not dedup_c:
         render_html("""
         <div class='companion-card' style='border-left: 6px solid #10b981;'>
-            <div style='font-size: 20px; font-weight: 900; color: #10b981;'>🟢 今日處置股無觸發進場門檻！空手看戲！</div>
+            <div style='font-size: 20px; font-weight: 900; color: #10b981;'>🟢 今日處置股無觸發【最佳化策略 B* / C*】進場門檻（0 檔觸發，完美避開假訊號）！空手看戲！</div>
+            <div style='font-size: 14px; color: #94a3b8; margin-top: 6px; line-height: 1.6;'>
+                • <b>最佳化策略 B* (T-2 搶跑做多)</b>：處置累積 -5.0%~+4.5% ｜ 5MA正乖離 +1.0%~+4.5% ｜ 成交 &ge; 3,500萬 ｜ 大盤 &ge; 0%<br>
+                • <b>最佳化策略 C* (T-1 警戒 / T0 開高空)</b>：處置累積 &ge; +7.8% ｜ 量比 1.05~1.80 ｜ 成交 &ge; 4,000萬 ｜ 09:00 開高 +1.2%~+6.0% MOO 券賣（停損 +4.8%）
+            </div>
         </div>
         """)
     else:
         for r in dedup_b:
             l_p = float(r.get("latest_price", 0.0))
             ma5_v = float(r.get("ma5", l_p))
+            ma5_bias = float(r.get("ma5_bias_pct", ((l_p / ma5_v) - 1.0) * 100.0 if ma5_v > 0 else 0.0))
             cum_r = float(r.get("disp_cum_ret", 0.0))
             t_s = str(r.get("turnover_str", "-"))
             c_d = str(r.get("countdown_desc", "T-2"))
@@ -560,18 +565,42 @@ def render_companion_view():
             render_html(f"""
             <div class='companion-card' style='border: 1.5px solid #10b981; border-left: 6px solid #10b981; background: rgba(16, 185, 129, 0.08);'>
                 <div style='font-size: 24px; font-weight: 900; color: #10b981;'>
-                    🔥 策略 B 觸發（T-2 搶跑買入）：{r['stock_id']} {r['name']}
+                    🔥 最佳化策略 B* 觸發（T-2 搶跑買入）：{r['stock_id']} {r['name']}
                 </div>
                 <div style='font-size: 16px; color: #cbd5e1; margin: 8px 0;'>
-                    現價: <b>{l_p:.2f}</b> ｜ 5MA: <b>{ma5_v:.2f}</b> ｜ 處置累積: <b style='color:#10b981;'>{cum_r:+.1f}%</b> ｜ 成交: <b>{t_s}</b> ｜ 時機: <b style='color:#10b981;'>{a_t}</b>
+                    現價: <b>{l_p:.2f}</b> ｜ 5MA乖離: <b>{ma5_bias:+.2f}%</b> ｜ 處置累積: <b style='color:#10b981;'>{cum_r:+.1f}%</b> ｜ 成交: <b>{t_s}</b> ｜ 時機: <b style='color:#10b981;'>{a_t}</b>
                 </div>
                 <div style='background: rgba(17, 24, 39, 0.9); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 10px; padding: 12px 14px; margin: 10px 0; font-size: 15px; color: #a7f3d0; line-height: 1.7;'>
                     ✅ <b>門檻 ① 出關倒數 2 天 (T-2)</b>：已達標（{c_d}）<br>
-                    ✅ <b>門檻 ② 處置累積漲幅介於 -5%~+12%</b>：已達標（目前 {cum_r:+.1f}%）<br>
-                    ✅ <b>門檻 ③ 收盤站上 5MA</b>：已達標（現價 {l_p:.2f} &ge; 5MA {ma5_v:.2f}）<br>
-                    ✅ <b>門檻 ④ 成交金額 &ge; 3,000 萬</b>：已達標（目前 {t_s}）
+                    ✅ <b>門檻 ② 處置累積漲跌介於 -5.0%~+4.5%</b>：已達標（目前 {cum_r:+.1f}%）<br>
+                    ✅ <b>門檻 ③ 5MA正乖離介於 +1.0%~+4.5%</b>：已達標（目前 {ma5_bias:+.2f}%，現價 {l_p:.2f} &gt; 5MA {ma5_v:.2f}）<br>
+                    ✅ <b>門檻 ④ 成交金額 &ge; 3,500 萬 &amp; 大盤 &ge; 0%</b>：已達標（目前 {t_s}）
                 </div>
                 <div style='font-size: 15px; color: #d1fae5;'>👉 <b>SOP：</b>{r.get('entry_sop', '')}</div>
+            </div>
+            """)
+        for r in dedup_c:
+            l_p = float(r.get("latest_price", 0.0))
+            cum_r = float(r.get("disp_cum_ret", 0.0))
+            v_r = float(r.get("vol_ratio", 1.0))
+            t_s = str(r.get("turnover_str", "-"))
+            c_d = str(r.get("countdown_desc", "T-1"))
+            a_t = str(r.get("action_timing", ""))
+            render_html(f"""
+            <div class='companion-card' style='border: 1.5px solid #f43f5e; border-left: 6px solid #f43f5e; background: rgba(244, 63, 94, 0.08);'>
+                <div style='font-size: 24px; font-weight: 900; color: #f43f5e;'>
+                    🎯 最佳化策略 C* 觸發（出關開高走低做空）：{r['stock_id']} {r['name']}
+                </div>
+                <div style='font-size: 16px; color: #cbd5e1; margin: 8px 0;'>
+                    現價: <b>{l_p:.2f}</b> ｜ 處置超漲: <b style='color:#f43f5e;'>{cum_r:+.1f}%</b> ｜ 量比: <b>{v_r:.2f}</b> ｜ 成交: <b>{t_s}</b> ｜ 時機: <b style='color:#f43f5e;'>{a_t}</b>
+                </div>
+                <div style='background: rgba(17, 24, 39, 0.9); border: 1px solid rgba(244, 63, 94, 0.35); border-radius: 10px; padding: 12px 14px; margin: 10px 0; font-size: 15px; color: #fecdd3; line-height: 1.7;'>
+                    ✅ <b>門檻 ① 出關倒數 1 天 (T-1) / T日</b>：已達標（{c_d}）<br>
+                    ✅ <b>門檻 ② 處置累積超漲 &ge; +7.8%</b>：已達標（目前 {cum_r:+.1f}%）<br>
+                    ✅ <b>門檻 ③ 量比介於 1.05~1.80</b>：已達標（目前 {v_r:.2f}）<br>
+                    ✅ <b>門檻 ④ 成交金額 &ge; 4,000 萬</b>：已達標（目前 {t_s}）
+                </div>
+                <div style='font-size: 15px; color: #fecdd3;'>👉 <b>SOP：</b>{r.get('entry_sop', '')}</div>
             </div>
             """)
 

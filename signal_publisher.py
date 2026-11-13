@@ -508,7 +508,7 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
                         row_dict[k] = str(v)
                 active_disposals_records.append(row_dict)
 
-            # 基準收盤日：策略 B 命中標的 (例如週五 10/16 觸發之 3441 聯一光)
+            # 基準收盤日：最佳化策略 B* 命中標的
             df_b = df_disp[df_disp['is_hit_b'] == True]
             for _, r in df_b.iterrows():
                 hits_b_list.append({
@@ -517,11 +517,13 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
                     "latest_price": float(r["latest_price"]),
                     "disp_cum_ret": round(float(r["disp_cum_ret"]), 1),
                     "vol_ratio": round(float(r["vol_ratio"]), 2),
+                    "turnover": float(r.get("turnover", 0.0)),
                     "turnover_str": str(r["turnover_str"]),
                     "action_timing": str(r["action_timing"]),
                     "countdown_desc": str(r["countdown_desc"]),
                     "ma5": round(float(r["ma5"]), 2),
-                    "status": str(r.get("status", "🔥 策略 B (T-2 搶跑買入)")),
+                    "ma5_bias_pct": round(float(r.get("ma5_bias_pct", 0.0)), 2),
+                    "status": str(r.get("status", "🔥 策略 B* (T-2 搶跑買入)")),
                     "priority": int(r.get("priority", 1)),
                     "is_hit_b": True,
                     "is_hit_c": False,
@@ -529,7 +531,7 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
                     "entry_sop": str(r["entry_sop"])
                 })
 
-            # 基準收盤日：策略 C 命中標的 (例如週五 10/16 出關之 4760 勤凱等)
+            # 基準收盤日：最佳化策略 C* 命中標的
             df_c = df_disp[df_disp['is_hit_c'] == True]
             for _, r in df_c.iterrows():
                 hits_c_list.append({
@@ -538,11 +540,13 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
                     "latest_price": float(r["latest_price"]),
                     "disp_cum_ret": round(float(r["disp_cum_ret"]), 1),
                     "vol_ratio": round(float(r["vol_ratio"]), 2),
+                    "turnover": float(r.get("turnover", 0.0)),
                     "turnover_str": str(r["turnover_str"]),
                     "action_timing": str(r["action_timing"]),
                     "countdown_desc": str(r["countdown_desc"]),
                     "ma5": round(float(r.get("ma5", r["latest_price"])), 2),
-                    "status": str(r.get("status", "🚨 策略 C 執行 (T日出關空)")),
+                    "ma5_bias_pct": round(float(r.get("ma5_bias_pct", 0.0)), 2),
+                    "status": str(r.get("status", "🚨 策略 C* 執行 (T日出關空)")),
                     "priority": int(r.get("priority", 2)),
                     "is_hit_b": False,
                     "is_hit_c": True,
@@ -550,8 +554,8 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
                     "entry_sop": str(r["entry_sop"])
                 })
 
-            # 即將出關警戒 (T-1 / T-2) 蓄勢名單
-            df_imm = df_disp[df_disp['td_to_exit'].isin([0, 1, 2])]
+            # 即將出關警戒 (T-1 ~ T-3) 蓄勢名單
+            df_imm = df_disp[df_disp['td_to_exit'].isin([0, 1, 2, 3])]
             for _, r in df_imm.iterrows():
                 imminent_pool_list.append({
                     "stock_id": str(r["stock_id"]),
@@ -560,6 +564,7 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
                     "td_to_exit": int(r["td_to_exit"]),
                     "latest_price": float(r["latest_price"]),
                     "disp_cum_ret": round(float(r["disp_cum_ret"]), 1),
+                    "turnover": float(r.get("turnover", 0.0)),
                     "turnover_str": str(r["turnover_str"]),
                     "vol_ratio": round(float(r["vol_ratio"]), 2),
                     "status": str(r["status"]),
@@ -568,10 +573,11 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
                     "is_hit_c": bool(r.get("is_hit_c", False)),
                     "action_timing": str(r.get("action_timing", "觀望")),
                     "ma5": round(float(r.get("ma5", r["latest_price"])), 2),
+                    "ma5_bias_pct": round(float(r.get("ma5_bias_pct", 0.0)), 2),
                     "entry_sop": str(r["entry_sop"])
                 })
 
-        # 次一交易日推演：例如下週一 (10/19) 收盤進入 T-2 搶跑點之標的 (例如 3597 映興)
+        # 次一交易日推演
         if not df_next.empty:
             for _, r in df_next.iterrows():
                 row_dict = {}
@@ -598,11 +604,13 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
                     "latest_price": float(r["latest_price"]),
                     "disp_cum_ret": round(float(r["disp_cum_ret"]), 1),
                     "vol_ratio": round(float(r["vol_ratio"]), 2),
+                    "turnover": float(r.get("turnover", 0.0)),
                     "turnover_str": str(r["turnover_str"]),
                     "action_timing": str(r["action_timing"]),
                     "countdown_desc": str(r["countdown_desc"]),
                     "ma5": round(float(r["ma5"]), 2),
-                    "status": str(r.get("status", "🔥 策略 B 預警 (週一收盤搶跑買入)")),
+                    "ma5_bias_pct": round(float(r.get("ma5_bias_pct", 0.0)), 2),
+                    "status": str(r.get("status", "🔥 策略 B* 預警 (週一收盤搶跑買入)")),
                     "priority": int(r.get("priority", 1)),
                     "is_hit_b": True,
                     "is_hit_c": False,
@@ -618,11 +626,13 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
                     "latest_price": float(r["latest_price"]),
                     "disp_cum_ret": round(float(r["disp_cum_ret"]), 1),
                     "vol_ratio": round(float(r["vol_ratio"]), 2),
+                    "turnover": float(r.get("turnover", 0.0)),
                     "turnover_str": str(r["turnover_str"]),
                     "action_timing": str(r["action_timing"]),
                     "countdown_desc": str(r["countdown_desc"]),
                     "ma5": round(float(r.get("ma5", r["latest_price"])), 2),
-                    "status": str(r.get("status", "🎯 策略 C 警戒 (明晨開高空)")),
+                    "ma5_bias_pct": round(float(r.get("ma5_bias_pct", 0.0)), 2),
+                    "status": str(r.get("status", "🎯 策略 C* 警戒 (明晨開高空)")),
                     "priority": int(r.get("priority", 1)),
                     "is_hit_b": False,
                     "is_hit_c": True,
@@ -630,7 +640,7 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
                     "entry_sop": str(r["entry_sop"])
                 })
 
-            # 將次一交易日進入 T-0 / T-1 / T-2 的標的（如 4526 東台）同步併入 imminent_pool_list
+            # 將次一交易日進入 T-0 / T-1 / T-2 的標的同步併入 imminent_pool_list
             imm_by_id = {x["stock_id"]: x for x in imminent_pool_list}
             df_imm_next = df_next[df_next['td_to_exit'].isin([0, 1, 2])]
             for _, r in df_imm_next.iterrows():
@@ -643,6 +653,7 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
                         "td_to_exit": int(r["td_to_exit"]),
                         "latest_price": float(r["latest_price"]),
                         "disp_cum_ret": round(float(r["disp_cum_ret"]), 1),
+                        "turnover": float(r.get("turnover", 0.0)),
                         "turnover_str": str(r["turnover_str"]),
                         "vol_ratio": round(float(r["vol_ratio"]), 2),
                         "status": str(r["status"]),
@@ -651,6 +662,7 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
                         "is_hit_c": bool(r.get("is_hit_c", False)),
                         "action_timing": str(r.get("action_timing", "觀望")),
                         "ma5": round(float(r.get("ma5", r["latest_price"])), 2),
+                        "ma5_bias_pct": round(float(r.get("ma5_bias_pct", 0.0)), 2),
                         "entry_sop": str(r["entry_sop"])
                     }
             imminent_pool_list = list(imm_by_id.values())
@@ -956,17 +968,32 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
         "core_2_disposal": {
             "backtest_stats": {
                 "strategy_b": {
-                    "title": "策略 B (T-2 搶跑買入)",
-                    "win_rate": "71.4%",
-                    "profit_factor": 3.42,
-                    "avg_return": "+3.25%",
-                    "new_regime_win_rate": "80.0%"
+                    "title": "最佳化策略 B* (T-2 搶跑買入)",
+                    "win_rate": "57.0%",
+                    "train_win_rate": "58.2%",
+                    "oos_win_rate": "53.9%",
+                    "new_sample_1014_1113_win_rate": "66.7%",
+                    "new_regime_win_rate": "56.3%",
+                    "new_regime_sharpe": 2.59,
+                    "profit_factor": 1.81,
+                    "avg_return": "+1.19%",
+                    "mdd": "17.75%"
                 },
                 "strategy_c": {
-                    "title": "策略 C (T-1 警戒 / 出關當沖做空)",
-                    "win_rate": "73.3%",
-                    "profit_factor": 1.80,
-                    "optimal_mdd": "<= 28.9%"
+                    "title": "最佳化策略 C* (T-1 警戒 / 出關當沖做空)",
+                    "win_rate": "50.0%",
+                    "oos_win_rate": "50.0%",
+                    "oos_avg_return": "+2.76%",
+                    "profit_factor": 2.06,
+                    "optimal_mdd": "14.80% (95%MC 27.41%)"
+                },
+                "combined_bc": {
+                    "title": "最佳化 B* + C* 雙刀流組合",
+                    "full_cum_return": "+315.14%",
+                    "oos_cum_return": "+60.54%",
+                    "oos_sharpe": 1.25,
+                    "oos_profit_factor": 1.88,
+                    "oos_mdd": "11.17%"
                 }
             },
             "is_weekend_or_holiday": is_weekend_or_holiday,
@@ -1030,6 +1057,7 @@ def run_git_sync(data_date: str) -> dict:
     tracked_files = [
         "published_signals.json",
         "history_snapshots.json",
+        "updated_mc_1113_summary.json",
         "family_app.py",
         "dashboard_ui.py",
         "components_weapons.py",
