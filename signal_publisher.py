@@ -379,7 +379,66 @@ def generate_stock_highlights(momentum_pct: float, revenue_yoy_pct: float, roe_p
     return tags[:3]
 
 
-def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict = None) -> dict:
+def _load_market_daily_changes() -> dict:
+    """從 market_data.duckdb 取得全市場各股最新一日收盤價、前一日收盤價、單日漲跌幅與漲跌停狀態"""
+    change_map = {}
+    if not os.path.exists(DUCKDB_PATH):
+        return change_map
+    try:
+        from db_utils import safe_duckdb_connect
+        conn = safe_duckdb_connect(DUCKDB_PATH, read_only=True)
+        try:
+            sql = """
+                WITH ranked AS (
+                    SELECT stock_id, date, open, high, low, close,
+                           ROW_NUMBER() OVER (PARTITION BY stock_id ORDER BY date DESC) AS rn
+                    FROM klines
+                    WHERE close > 0
+                )
+                SELECT t1.stock_id,
+                       t1.close AS close_t,
+                       t1.open AS open_t,
+                       t1.high AS high_t,
+                       t1.low AS low_t,
+                       t2.close AS close_t1
+                FROM ranked t1
+                LEFT JOIN ranked t2 ON t1.stock_id = t2.stock_id AND t2.rn = 2
+                WHERE t1.rn = 1
+            """
+            df_chg = conn.execute(sql).df()
+            for _, row in df_chg.iterrows():
+                sid = str(row["stock_id"])
+                c_t = float(row["close_t"]) if pd.notnull(row["close_t"]) else 0.0
+                o_t = float(row["open_t"]) if pd.notnull(row["open_t"]) and float(row["open_t"]) > 0 else c_t
+                h_t = float(row["high_t"]) if pd.notnull(row["high_t"]) and float(row["high_t"]) > 0 else c_t
+                l_t = float(row["low_t"]) if pd.notnull(row["low_t"]) and float(row["low_t"]) > 0 else c_t
+                c_t1 = float(row["close_t1"]) if pd.notnull(row["close_t1"]) and float(row["close_t1"]) > 0 else o_t
+                # 防除權息減資超過 11% 跳空或跨日缺漏造成超過 10.2% 漲跌幅失真
+                if c_t1 > 0 and o_t > 0:
+                    gap = (o_t / c_t1) - 1.0
+                    raw_chg = (c_t / c_t1) - 1.0
+                    if abs(gap) > 0.11 or abs(raw_chg) > 0.102:
+                        c_t1 = o_t
+                chg_pct = round(((c_t / c_t1) - 1.0) * 100.0, 2) if c_t1 > 0 else 0.0
+                chg_val = round(c_t - c_t1, 2) if c_t1 > 0 else 0.0
+                is_lu = bool(chg_pct >= 9.5 or (chg_pct >= 9.0 and abs(c_t - h_t) < 1e-4))
+                is_ld = bool(chg_pct <= -9.5 or (chg_pct <= -9.0 and abs(c_t - l_t) < 1e-4))
+                change_map[sid] = {
+                    "close": round(c_t, 2),
+                    "prev_close": round(c_t1, 2),
+                    "daily_change_pct": chg_pct,
+                    "daily_change_val": chg_val,
+                    "is_limit_up": is_lu,
+                    "is_limit_down": is_ld,
+                }
+        finally:
+            conn.close()
+    except Exception as e:
+        print(f"[signal_publisher] 讀取全市場單日漲跌幅警示: {e}")
+    return change_map
+
+
+def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict = None, push_to_git: bool = True) -> dict:
     """
     執行完整的信號匯出、歷史比對與 Git 發布流程。
     回傳執行結果摘要字典。
@@ -613,6 +672,27 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
     except Exception as e:
         print(f"[signal_publisher] 處置模組讀取警示: {e}")
 
+    # 離線或官方 API 暫時無法連線時，從現有 published_signals.json 保留處置清單
+    if total_active_disposals == 0 and os.path.exists(SIGNALS_FILE):
+        try:
+            with open(SIGNALS_FILE, "r", encoding="utf-8") as f:
+                old_sig = json.load(f)
+            old_c2 = old_sig.get("core_2_disposal", {})
+            if old_c2:
+                total_active_disposals = int(old_c2.get("total_active_disposals_count", 0))
+                hits_b_list = old_c2.get("strategy_b_triggers", [])
+                hits_c_list = old_c2.get("strategy_c_triggers", [])
+                next_day_b_list = old_c2.get("next_day_b_triggers", [])
+                next_day_c_list = old_c2.get("next_day_c_triggers", [])
+                imminent_pool_list = old_c2.get("imminent_pool", [])
+                active_disposals_records = old_c2.get("active_disposals_list", [])
+                next_trading_disposals_records = old_c2.get("next_trading_disposals_list", [])
+                for rec in active_disposals_records:
+                    if rec.get("stock_id"):
+                        active_disposal_ids.add(str(rec["stock_id"]))
+        except Exception:
+            pass
+
     # 特別確保 4760 (勤凱) 等處置熱門股若在名單中，能正確識別
     active_disposal_ids.add("4760")
 
@@ -632,19 +712,62 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
         prev_top15_ids = prev_snapshot.get("stock_ids", [])
         prev_top15_map = {s["stock_id"]: s for s in prev_snapshot.get("top15", [])}
 
+    # 讀取全市場最新單日收盤漲跌幅字典
+    daily_change_map = _load_market_daily_changes()
+    stock_name_map = {}
+    try:
+        from data_providers.four_factors_screener_service import _get_stock_name_map
+        stock_name_map = _get_stock_name_map()
+    except Exception:
+        pass
+
+    # 為核心二處置清單補齊今日單日漲跌幅與漲跌停標記
+    for disp_list in [hits_b_list, hits_c_list, imminent_pool_list, next_day_b_list, next_day_c_list, active_disposals_records, next_trading_disposals_records]:
+        for item in disp_list:
+            sid_d = str(item.get("stock_id", ""))
+            chg_info = daily_change_map.get(sid_d, {})
+            item["daily_change_pct"] = float(chg_info.get("daily_change_pct", 0.0))
+            item["daily_change_val"] = float(chg_info.get("daily_change_val", 0.0))
+            item["is_limit_up"] = bool(chg_info.get("is_limit_up", False))
+            item["is_limit_down"] = bool(chg_info.get("is_limit_down", False))
+
     # 建立全市場搜尋字典 (供一鍵健檢使用)
     all_searchable_stocks = {}
+    # 先載入全市場基礎行情 (讓未進榜之普通股也能顯示最新收盤價與今日漲跌幅)
+    for sid_m, chg_m in daily_change_map.items():
+        if len(sid_m) == 4 and sid_m.isdigit() and not sid_m.startswith("0"):
+            all_searchable_stocks[sid_m] = {
+                "stock_id": sid_m,
+                "name": stock_name_map.get(sid_m, sid_m),
+                "rank": "未進榜",
+                "status": "OUTSIDE",
+                "close": float(chg_m.get("close", 0.0)),
+                "daily_change_pct": float(chg_m.get("daily_change_pct", 0.0)),
+                "daily_change_val": float(chg_m.get("daily_change_val", 0.0)),
+                "is_limit_up": bool(chg_m.get("is_limit_up", False)),
+                "is_limit_down": bool(chg_m.get("is_limit_down", False)),
+            }
+
     screener_rank_map = {}
     for idx, s in enumerate(all_screener_stocks, 1):
         sid = str(s["stock_id"])
         screener_rank_map[sid] = idx
         status_tag = "TOP_9" if idx <= 9 else ("BUFFER_10_15" if idx <= 15 else "OUTSIDE")
+        chg_info = daily_change_map.get(sid, {})
+        d_pct = float(chg_info.get("daily_change_pct", s.get("daily_change_pct", 0.0)))
+        d_val = float(chg_info.get("daily_change_val", s.get("daily_change_val", 0.0)))
+        is_lu = bool(chg_info.get("is_limit_up", d_pct >= 9.5))
+        is_ld = bool(chg_info.get("is_limit_down", d_pct <= -9.5))
         all_searchable_stocks[sid] = {
             "stock_id": sid,
-            "name": str(s.get("stock_name", "")),
+            "name": str(s.get("stock_name", stock_name_map.get(sid, ""))),
             "rank": idx,
             "status": status_tag,
-            "close": float(s.get("latest_close", 0.0))
+            "close": float(s.get("latest_close", chg_info.get("close", 0.0))),
+            "daily_change_pct": round(d_pct, 2),
+            "daily_change_val": round(d_val, 2),
+            "is_limit_up": is_lu,
+            "is_limit_down": is_ld,
         }
 
     # 組合今日前 15 名清單
@@ -656,6 +779,11 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
         sid = str(s["stock_id"])
         sname = str(s.get("stock_name", ""))
         close = float(s.get("latest_close", 0.0))
+        chg_info = daily_change_map.get(sid, {})
+        d_pct = round(float(chg_info.get("daily_change_pct", s.get("daily_change_pct", 0.0))), 2)
+        d_val = round(float(chg_info.get("daily_change_val", s.get("daily_change_val", 0.0))), 2)
+        is_lu = bool(chg_info.get("is_limit_up", d_pct >= 9.5))
+        is_ld = bool(chg_info.get("is_limit_down", d_pct <= -9.5))
         
         # 動能數值正規化為百分比
         mom_raw = float(s.get("momentum_value", 0.0))
@@ -679,6 +807,10 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
             "name": sname,
             "latest_close": close,
             "close": close,
+            "daily_change_pct": d_pct,
+            "daily_change_val": d_val,
+            "is_limit_up": is_lu,
+            "is_limit_down": is_ld,
             "latest_date": data_date,
             "momentum_value": mom_raw,
             "momentum_pct": mom_pct,
@@ -703,15 +835,21 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
         for sid in dropped_ids:
             prev_info = prev_top15_map.get(sid, {})
             prev_rank = prev_info.get("rank", "-")
-            prev_name = prev_info.get("stock_name", prev_info.get("name", ""))
+            prev_name = prev_info.get("stock_name", prev_info.get("name", stock_name_map.get(sid, "")))
             
             # 查詢今日最新排名
             current_rank = screener_rank_map.get(sid, "已移出觀察池")
             
-            # 查詢最新收盤價
-            c_price = prev_info.get("latest_close", 0.0)
+            # 查詢最新收盤價與單日漲跌幅
+            chg_info = daily_change_map.get(sid, {})
+            c_price = float(chg_info.get("close", prev_info.get("latest_close", 0.0)))
+            d_pct = round(float(chg_info.get("daily_change_pct", 0.0)), 2)
+            d_val = round(float(chg_info.get("daily_change_val", 0.0)), 2)
+            is_lu = bool(chg_info.get("is_limit_up", d_pct >= 9.5))
+            is_ld = bool(chg_info.get("is_limit_down", d_pct <= -9.5))
             if sid in all_searchable_stocks:
-                c_price = all_searchable_stocks[sid]["close"]
+                if all_searchable_stocks[sid]["close"] > 0:
+                    c_price = all_searchable_stocks[sid]["close"]
                 if not prev_name:
                     prev_name = all_searchable_stocks[sid]["name"]
 
@@ -721,6 +859,10 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
                 "prev_rank": prev_rank,
                 "new_rank": current_rank,
                 "close": c_price,
+                "daily_change_pct": d_pct,
+                "daily_change_val": d_val,
+                "is_limit_up": is_lu,
+                "is_limit_down": is_ld,
                 "reason": "動能轉弱跌出前15名，參考紀律為汰弱換取現金"
             })
             
@@ -730,7 +872,11 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
                 "name": prev_name,
                 "rank": current_rank,
                 "status": "DROPPED",
-                "close": c_price
+                "close": c_price,
+                "daily_change_pct": d_pct,
+                "daily_change_val": d_val,
+                "is_limit_up": is_lu,
+                "is_limit_down": is_ld,
             }
 
     # 儲存/更新今日快照至 history_snapshots.json (無論今日按幾次，永遠覆寫今日日期，不覆寫昨日日期)
@@ -759,6 +905,10 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
             "prev_rank": d["prev_rank"],
             "current_rank": d["new_rank"],
             "close": d["close"],
+            "daily_change_pct": d.get("daily_change_pct", 0.0),
+            "daily_change_val": d.get("daily_change_val", 0.0),
+            "is_limit_up": d.get("is_limit_up", False),
+            "is_limit_down": d.get("is_limit_down", False),
             "action_sop": "明日 09:00 開盤以市價單 (MOO) 無條件賣出換現金"
         })
 
@@ -776,12 +926,16 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
                 "prev_rank_raw": prev_r,
                 "current_rank": s["rank"],
                 "close": s["close"],
+                "daily_change_pct": s.get("daily_change_pct", 0.0),
+                "daily_change_val": s.get("daily_change_val", 0.0),
+                "is_limit_up": s.get("is_limit_up", False),
+                "is_limit_down": s.get("is_limit_down", False),
                 "momentum_pct": s["momentum_pct"],
                 "revenue_yoy_pct": s["revenue_yoy_pct"],
                 "roe_pct": s["roe_pct"],
                 "highlights": s["highlights"],
                 "warning_tag": s["warning_tag"],
-                "action_sop": "開高跳空等待 13:25 尾盤市價買 / 平低盤 09:00 開盤市價買"
+                "action_sop": "🔥 今日漲停明日易開高，嚴禁早盤追高、務必等開盤價以下低接或是 13:25 尾盤買" if s.get("is_limit_up") else "開高跳空等待 13:25 尾盤市價買 / 平低盤 09:00 開盤市價買"
             })
 
     # 3. 緩衝區續抱 (Holds): 今日 10~15, 昨日 <= 15
@@ -797,6 +951,10 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
                 "prev_rank_raw": prev_r,
                 "current_rank": s["rank"],
                 "close": s["close"],
+                "daily_change_pct": s.get("daily_change_pct", 0.0),
+                "daily_change_val": s.get("daily_change_val", 0.0),
+                "is_limit_up": s.get("is_limit_up", False),
+                "is_limit_down": s.get("is_limit_down", False),
                 "highlights": s["highlights"],
                 "warning_tag": s["warning_tag"],
                 "action_sop": "安穩續抱！不必賣出換股，亦無須追高加碼"
@@ -868,7 +1026,10 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
     # -------------------------------------------------------------
     # 6. Git 資安防護與自動推送
     # -------------------------------------------------------------
-    git_status = run_git_sync(data_date)
+    if push_to_git:
+        git_status = run_git_sync(data_date)
+    else:
+        git_status = {"git_committed": False, "git_pushed": False, "message": "Skipped git sync"}
 
     return {
         "success": True,
@@ -915,6 +1076,7 @@ def run_git_sync(data_date: str) -> dict:
         "update_revenue_openapi.py",
         "moneydj_revenue_scraper.py",
         "data_providers/smart_sync_manager.py",
+        "data_providers/four_factors_screener_service.py",
         "data_providers/finmind_revenue_service.py",
         "data_providers/finmind_financials_service.py",
         "tools/market_calendar.py",

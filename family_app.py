@@ -168,6 +168,74 @@ div[data-testid="stMarkdownContainer"] .mega-buy-amount {
     margin-top: 6px !important;
 }
 
+/* 3.5 今日收盤漲跌幅與漲跌停亮紅/綠燈專用徽章 */
+@keyframes pulse-red-light {
+    0%, 100% { box-shadow: 0 0 10px rgba(220, 38, 38, 0.55), 0 0 20px rgba(239, 68, 68, 0.35); }
+    50% { box-shadow: 0 0 18px rgba(220, 38, 38, 0.85), 0 0 28px rgba(239, 68, 68, 0.6); }
+}
+div[data-testid="stMarkdownContainer"] .chg-badge-limit-up {
+    font-size: 26px !important;
+    font-weight: 900 !important;
+    background: linear-gradient(135deg, #EF4444 0%, #B91C1C 100%) !important;
+    color: #FFFFFF !important;
+    border: 2.5px solid #FCA5A5 !important;
+    padding: 6px 16px !important;
+    border-radius: 12px !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    margin-left: 10px !important;
+    animation: pulse-red-light 2s infinite !important;
+}
+div[data-testid="stMarkdownContainer"] .chg-badge-limit-down {
+    font-size: 26px !important;
+    font-weight: 900 !important;
+    background: linear-gradient(135deg, #16A34A 0%, #14532D 100%) !important;
+    color: #FFFFFF !important;
+    border: 2.5px solid #86EFAC !important;
+    padding: 6px 16px !important;
+    border-radius: 12px !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    margin-left: 10px !important;
+    box-shadow: 0 0 12px rgba(22, 163, 74, 0.5) !important;
+}
+div[data-testid="stMarkdownContainer"] .chg-badge-up {
+    font-size: 26px !important;
+    font-weight: 900 !important;
+    background: #FEF2F2 !important;
+    color: #DC2626 !important;
+    border: 2px solid #FCA5A5 !important;
+    padding: 5px 14px !important;
+    border-radius: 12px !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    margin-left: 10px !important;
+}
+div[data-testid="stMarkdownContainer"] .chg-badge-down {
+    font-size: 26px !important;
+    font-weight: 900 !important;
+    background: #F0FDF4 !important;
+    color: #15803D !important;
+    border: 2px solid #86EFAC !important;
+    padding: 5px 14px !important;
+    border-radius: 12px !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    margin-left: 10px !important;
+}
+div[data-testid="stMarkdownContainer"] .chg-badge-flat {
+    font-size: 26px !important;
+    font-weight: 900 !important;
+    background: #F1F5F9 !important;
+    color: #475569 !important;
+    border: 2px solid #CBD5E1 !important;
+    padding: 5px 14px !important;
+    border-radius: 12px !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    margin-left: 10px !important;
+}
+
 /* 4. 放大分頁籤 (Tabs) */
 [data-testid="stTabs"] {
     background-color: transparent !important;
@@ -622,9 +690,63 @@ if single_stock_budget < 10000:
 # ============================================================
 # 區塊三：「我手上的股票怎麼辦？」一鍵健檢
 # ============================================================
+all_search_dict = data.get("all_searchable_stocks", {})
+
+
+def format_daily_change_badge(item: dict, fallback_map: dict = None) -> str:
+    """
+    產生台股紅漲綠跌＋漲跌停亮燈徽章 HTML：
+    - 漲停 (>= +9.5%)：🔴 漲停亮燈 +X.X% (發光紅底白字)
+    - 跌停 (<= -9.5%)：🟢 跌停亮燈 -X.X% (綠底白字)
+    - 一般上漲 (> 0%)：🔺 +X.X% (紅框紅字)
+    - 一般下跌 (< 0%)：🔻 -X.X% (綠框綠字)
+    - 平盤 (0.0%)：➖ 0.0% (灰框灰字)
+    """
+    if not isinstance(item, dict):
+        return ""
+    sid = str(item.get("stock_id", ""))
+    pct = item.get("daily_change_pct")
+    if pct is None and fallback_map and sid in fallback_map:
+        pct = fallback_map[sid].get("daily_change_pct")
+    if pct is None:
+        return ""
+    try:
+        pct_f = float(pct)
+    except Exception:
+        return ""
+    is_lu = bool(item.get("is_limit_up", False) or pct_f >= 9.5)
+    is_ld = bool(item.get("is_limit_down", False) or pct_f <= -9.5)
+
+    if is_lu:
+        return f"<span class='chg-badge-limit-up'>🔴 漲停亮燈 {pct_f:+.1f}%</span>"
+    elif is_ld:
+        return f"<span class='chg-badge-limit-down'>🟢 跌停亮燈 {pct_f:+.1f}%</span>"
+    elif pct_f > 0:
+        return f"<span class='chg-badge-up'>🔺 {pct_f:+.1f}%</span>"
+    elif pct_f < 0:
+        return f"<span class='chg-badge-down'>🔻 {pct_f:+.1f}%</span>"
+    else:
+        return "<span class='chg-badge-flat'>➖ 0.0%</span>"
+
+
+def is_stock_limit_up(item: dict, fallback_map: dict = None) -> bool:
+    """判斷個股今日是否漲停亮紅燈 (>= +9.5%)"""
+    if not isinstance(item, dict):
+        return False
+    if item.get("is_limit_up"):
+        return True
+    sid = str(item.get("stock_id", ""))
+    pct = item.get("daily_change_pct")
+    if pct is None and fallback_map and sid in fallback_map:
+        pct = fallback_map[sid].get("daily_change_pct")
+    try:
+        return float(pct or 0.0) >= 9.5
+    except Exception:
+        return False
+
+
 render_html("<div class='mega-section-title'>🔍 「我手上的股票怎麼辦？」一鍵健檢</div>")
 
-all_search_dict = data.get("all_searchable_stocks", {})
 search_query = st.text_input("輸入股票代號（例如: 6672, 4760, 6187, 2330）", placeholder="請輸入 4 碼台股代號").strip()
 
 if search_query:
@@ -634,15 +756,25 @@ if search_query:
         t_name = target_info.get("name", "")
         t_rank = target_info.get("rank", 999)
         t_close = target_info.get("close", 0.0)
+        t_chg_badge = format_daily_change_badge(target_info, all_search_dict)
+        t_is_lu = is_stock_limit_up(target_info, all_search_dict)
 
         if isinstance(t_rank, int) and t_rank <= 9:
+            lu_tip = (
+                "🔥 <b>空手進場叮嚀</b>：今日漲停明日易開高，嚴禁早盤追高、務必等開盤價以下低接或是 13:25 尾盤買！"
+                if t_is_lu
+                else "🎯 <b>明日進出場提醒</b>：已持有者安心抱牢；空手想買者開高跳空等 13:25 尾盤買、平低盤 09:00 開盤買！"
+            )
             render_html(f"""
             <div class='alert-success' style='padding: 22px 20px !important; border-radius: 14px;'>
                 <div class='mega-subtext' style='color: #166534; font-size: 30px !important;'>
                     🟢 動能超強（第 {t_rank} 名）！安心抱牢！
                 </div>
-                <div class='mega-price' style='color: #0F172A; margin: 10px 0 0 0 !important;'>
-                    {search_query} {t_name} ｜ 現價: {t_close:,.2f} 元
+                <div class='mega-price' style='color: #0F172A; margin: 12px 0 10px 0 !important;'>
+                    {search_query} {t_name} ｜ 現價: {t_close:,.2f} 元 {t_chg_badge}
+                </div>
+                <div class='mega-subtext' style='color: #14532D; margin-top: 12px; padding-top: 12px; border-top: 1.5px dashed #86EFAC; font-size: 22px !important;'>
+                    {lu_tip}
                 </div>
             </div>
             """)
@@ -652,22 +784,26 @@ if search_query:
                 <div class='mega-subtext' style='color: #1E40AF; font-size: 30px !important;'>
                     🔵 安全緩衝（第 {t_rank} 名）！續抱、不加碼！
                 </div>
-                <div class='mega-price' style='color: #0F172A; margin: 10px 0 0 0 !important;'>
-                    {search_query} {t_name} ｜ 現價: {t_close:,.2f} 元
+                <div class='mega-price' style='color: #0F172A; margin: 12px 0 10px 0 !important;'>
+                    {search_query} {t_name} ｜ 現價: {t_close:,.2f} 元 {t_chg_badge}
+                </div>
+                <div class='mega-subtext' style='color: #1E3A8A; margin-top: 12px; padding-top: 12px; border-top: 1.5px dashed #93C5FD; font-size: 22px !important;'>
+                    🛡️ <b>明日進出場提醒</b>：原持有者安心續抱不賣；空手者請鎖定前 9 強，不追買緩衝區！
                 </div>
             </div>
             """)
         else:
+            rank_label = f"第 {t_rank} 名" if isinstance(t_rank, int) else str(t_rank)
             render_html(f"""
             <div class='alert-danger' style='padding: 22px 20px !important; border-radius: 14px;'>
                 <div class='mega-subtext' style='color: #991B1B; font-size: 30px !important;'>
-                    🔴 跌出榜外！動能轉弱，找機會賣出換現金！
+                    🔴 跌出前15強榜外（{rank_label}）！動能轉弱，賣出換現金！
                 </div>
-                <div class='mega-price' style='color: #0F172A; margin: 10px 0 0 0 !important;'>
-                    {search_query} {t_name} ｜ 現價: {t_close:,.2f} 元
+                <div class='mega-price' style='color: #0F172A; margin: 12px 0 10px 0 !important;'>
+                    {search_query} {t_name} ｜ 現價: {t_close:,.2f} 元 {t_chg_badge}
                 </div>
-                <div class='mega-subtext' style='color: #991B1B; margin-top: 14px; padding-top: 12px; border-top: 1px dashed #FCA5A5;'>
-                    💡 果農挑水果，不甜就換！小賠換現金才能抓下一檔飆股。
+                <div class='mega-subtext' style='color: #991B1B; margin-top: 14px; padding-top: 12px; border-top: 1.5px dashed #FCA5A5; font-size: 22px !important;'>
+                    🚨 <b>明日出場提醒</b>：若手中持有，請於<b>明日 09:00 開盤以市價單 (MOO) 賣出換現金</b>！果農挑水果，不甜就換！
                 </div>
             </div>
             """)
@@ -681,7 +817,7 @@ if search_query:
                 股票代號: {search_query}
             </div>
             <div class='mega-subtext' style='color: #991B1B; margin-top: 14px; padding-top: 12px; border-top: 1px dashed #FCA5A5;'>
-                💡 果農挑水果，不甜就換！小賠換現金才能抓下一檔飆股。
+                🚨 <b>明日出場提醒</b>：不在前 15 強名單內，若持有建議於 09:00 開盤汰弱換現金！
             </div>
         </div>
         """)
@@ -714,10 +850,61 @@ if not tracking_sells and dropped_15:
             "prev_rank": d.get("prev_rank", "-"),
             "current_rank": d.get("new_rank", "跌出前15名"),
             "close": d.get("close", 0.0),
+            "daily_change_pct": d.get("daily_change_pct"),
+            "is_limit_up": d.get("is_limit_up", False),
+            "is_limit_down": d.get("is_limit_down", False),
             "action_sop": "明日 09:00 開盤以市價單 (MOO) 無條件賣出換現金"
         })
 
 total_actions = len(tracking_sells) + len(tracking_buys)
+
+# 統計前 15 強今日亮紅燈漲停清單
+limit_up_in_top15 = [
+    s for s in (top_9 + buffer_15) if is_stock_limit_up(s, all_search_dict)
+]
+sells_summary_str = (
+    "、".join([f"{s.get('stock_id','')} {s.get('name','')}" for s in tracking_sells])
+    if tracking_sells
+    else "🎉 今日無跌出，手中持股安心續抱"
+)
+buys_summary_str = (
+    "、".join([
+        f"{s.get('stock_id','')} {s.get('name','')}{' (🔴漲停)' if is_stock_limit_up(s, all_search_dict) else ''}"
+        for s in tracking_buys
+    ])
+    if tracking_buys
+    else "👍 前 9 強無新血，無須買進新股"
+)
+lu_summary_str = (
+    "、".join([f"#{s.get('rank','')} {s.get('stock_id','')} {s.get('name','')}" for s in limit_up_in_top15])
+    if limit_up_in_top15
+    else "今日前 15 強無鎖漲停個股（溫和穩健推進）"
+)
+
+# 頂部「今日行動速覽卡」（一眼秒懂今日必賣/必買/漲停股名）
+render_html(f"""
+<div class='paper-card' style='padding: 22px 22px; margin-bottom: 24px; border: 2.5px solid #CBD5E1; border-left: 10px solid #0F172A; background: #FFFFFF; border-radius: 18px;'>
+    <div style='font-size: 30px !important; font-weight: 900; color: #0F172A; margin-bottom: 14px;'>
+        📣 今日進出場行動速覽（{date_t} 收盤判定）
+    </div>
+    <div style='background: #FEF2F2; border: 1.5px solid #FCA5A5; border-radius: 12px; padding: 12px 16px; margin-bottom: 10px;'>
+        <div style='font-size: 24px !important; font-weight: 900; color: #991B1B;'>
+            ❌ 明日 09:00 必賣（{len(tracking_sells)} 檔）：<span style='color: #DC2626;'>{sells_summary_str}</span>
+        </div>
+    </div>
+    <div style='background: #F0FDF4; border: 1.5px solid #86EFAC; border-radius: 12px; padding: 12px 16px; margin-bottom: 10px;'>
+        <div style='font-size: 24px !important; font-weight: 900; color: #166534;'>
+            🎯 新進前 9 強必買（{len(tracking_buys)} 檔）：<span style='color: #15803D;'>{buys_summary_str}</span>
+            {"<span style='color: #B45309; font-size: 20px !important; display: block; margin-top: 4px;'>⛔ 注意：目前大盤防守警戒中，空手者建議暫緩開新倉！</span>" if (halt_buys and tracking_buys) else ""}
+        </div>
+    </div>
+    <div style='background: #FFF1F2; border: 1.5px solid #FDA4AF; border-radius: 12px; padding: 12px 16px;'>
+        <div style='font-size: 24px !important; font-weight: 900; color: #BE123C;'>
+            🔴 今日亮紅燈漲停（{len(limit_up_in_top15)} 檔）：<span>{lu_summary_str}</span>
+        </div>
+    </div>
+</div>
+""")
 
 tab_compare, tab_top9, tab_buffer, tab_dropped = st.tabs([
     f"🔄 今日換股對比 ({total_actions})",
@@ -799,6 +986,7 @@ with tab_compare:
             prev_r = s.get("prev_rank", "-")
             cur_r = s.get("current_rank", "已移出觀察池")
             c_price = s.get("close", 0.0)
+            s_chg_badge = format_daily_change_badge(s, all_search_dict)
 
             cur_r_str = f"第 {cur_r} 名" if isinstance(cur_r, int) or (isinstance(cur_r, str) and str(cur_r).isdigit()) else str(cur_r)
 
@@ -815,9 +1003,9 @@ with tab_compare:
                         昨日：第 {prev_r} 名 ➔ 今日：跌出前15名 ({cur_r_str})
                     </div>
                 </div>
-                <!-- 第 3 層：收盤價 -->
+                <!-- 第 3 層：收盤價 + 今日漲跌幅徽章 -->
                 <span class='mega-price' style='margin: 8px 0 !important;'>
-                    💰 最新收盤價：{c_price:,.2f} 元
+                    💰 最新收盤價：{c_price:,.2f} 元 {s_chg_badge}
                 </span>
                 <!-- 第 4 層：巨型執行 SOP 行動指示框 -->
                 <div style='background: #7F1D1D; border-radius: 14px; padding: 18px 16px; text-align: center; margin-top: 14px;'>
@@ -866,6 +1054,8 @@ with tab_compare:
             s_close = s.get("close", 0.0)
             s_tags = s.get("highlights", [])
             s_warn = s.get("warning_tag")
+            b_chg_badge = format_daily_change_badge(s, all_search_dict)
+            b_is_lu = is_stock_limit_up(s, all_search_dict)
 
             # 試算零股數
             shares_calc = math.floor(single_stock_budget / s_close) if s_close > 0 else 0
@@ -891,6 +1081,30 @@ with tab_compare:
                 </div>
                 """
 
+            if b_is_lu:
+                sop_block = """
+                <div style='background: #7F1D1D; border: 2px solid #FCA5A5; border-radius: 14px; padding: 16px 16px; text-align: center; margin-top: 12px;'>
+                    <div style='font-size: 24px !important; font-weight: 900; color: #FDE047;'>
+                        🔴 漲停亮紅燈・進場特別叮嚀：
+                    </div>
+                    <div style='font-size: 23px !important; font-weight: 900; color: #FFFFFF; margin-top: 6px; line-height: 1.45 !important;'>
+                        🔥 今日漲停明日易開高，嚴禁早盤追高、務必等開盤價以下低接或是 13:25 尾盤買
+                    </div>
+                </div>
+                """
+            else:
+                sop_block = """
+                <div style='background: #1E293B; border-radius: 14px; padding: 16px 16px; text-align: center; margin-top: 12px;'>
+                    <div style='font-size: 24px !important; font-weight: 900; color: #FCD34D;'>
+                        ⚡ 進場 SOP 紀律：
+                    </div>
+                    <div style='font-size: 22px !important; font-weight: 700; color: #F8FAFC; margin-top: 6px; line-height: 1.4 !important;'>
+                        開高跳空等待 <b>13:25 尾盤市價買 (MOC)</b><br>
+                        平低盤趁恐慌 <b>09:00 開盤市價買 (MOO)</b>
+                    </div>
+                </div>
+                """
+
             render_html(f"""
             <div class='paper-card' style='padding: 24px 22px; margin-bottom: 22px; border-radius: 18px; border-left: 8px solid #16A34A;'>
                 <!-- 第 1 層：大綠標籤 + 股號股名 -->
@@ -904,9 +1118,9 @@ with tab_compare:
                         昨日：{prev_r_str} ➔ 今日：第 {cur_rank} 名（新晉前9強）
                     </div>
                 </div>
-                <!-- 第 3 層：現價 -->
+                <!-- 第 3 層：現價 + 今日漲跌幅與亮紅燈徽章 -->
                 <span class='mega-price' style='margin: 8px 0 !important;'>
-                    💰 最新現價：{s_close:,.2f} 元
+                    💰 最新現價：{s_close:,.2f} 元 {b_chg_badge}
                 </span>
                 <!-- 第 4 層：亮點標籤 -->
                 <div style='display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;'>
@@ -926,15 +1140,7 @@ with tab_compare:
                     </span>
                 </div>
                 <!-- 第 6 層：實戰進場 SOP 指示框 -->
-                <div style='background: #1E293B; border-radius: 14px; padding: 16px 16px; text-align: center; margin-top: 12px;'>
-                    <div style='font-size: 24px !important; font-weight: 900; color: #FCD34D;'>
-                        ⚡ 進場 SOP 紀律：
-                    </div>
-                    <div style='font-size: 22px !important; font-weight: 700; color: #F8FAFC; margin-top: 6px; line-height: 1.4 !important;'>
-                        開高跳空等待 <b>13:25 尾盤市價買 (MOC)</b><br>
-                        平低盤趁恐慌 <b>09:00 開盤市價買 (MOO)</b>
-                    </div>
-                </div>
+                {sop_block}
             </div>
             """)
 
@@ -965,6 +1171,7 @@ with tab_compare:
             prev_r_str = s.get("prev_rank", "-")
             cur_rank = s.get("current_rank", 10)
             s_close = s.get("close", 0.0)
+            h_chg_badge = format_daily_change_badge(s, all_search_dict)
 
             render_html(f"""
             <div class='paper-card' style='padding: 22px 20px; margin-bottom: 20px; border-radius: 18px; border-left: 8px solid #2563EB;'>
@@ -979,9 +1186,9 @@ with tab_compare:
                         昨日：{prev_r_str} ➔ 今日：第 {cur_rank} 名（落入 10~15 緩衝區）
                     </div>
                 </div>
-                <!-- 第 3 層：現價 -->
+                <!-- 第 3 層：現價 + 今日漲跌幅徽章 -->
                 <span class='mega-price' style='margin: 6px 0 !important; font-size: 28px !important;'>
-                    💰 最新收盤價：{s_close:,.2f} 元
+                    💰 最新收盤價：{s_close:,.2f} 元 {h_chg_badge}
                 </span>
                 <!-- 第 4 層：安穩提示框 -->
                 <div style='background: #DBEAFE; border-radius: 12px; padding: 14px 16px; text-align: center; margin-top: 10px;'>
@@ -1019,6 +1226,8 @@ with tab_top9:
         s_close = stock.get("close", 0.0)
         s_warn = stock.get("warning_tag")
         s_tags = stock.get("highlights", [])
+        t9_chg_badge = format_daily_change_badge(stock, all_search_dict)
+        t9_is_lu = is_stock_limit_up(stock, all_search_dict)
         
         # 試算零股數
         shares_calc = math.floor(single_stock_budget / s_close) if s_close > 0 else 0
@@ -1035,6 +1244,16 @@ with tab_top9:
             </div>
             """
 
+        lu_reminder_block = ""
+        if t9_is_lu:
+            lu_reminder_block = """
+            <div style='background: #7F1D1D; border: 2px solid #FCA5A5; border-radius: 14px; padding: 14px 16px; text-align: center; margin-top: 12px;'>
+                <div style='font-size: 22px !important; font-weight: 900; color: #FFFFFF; line-height: 1.45 !important;'>
+                    🔥 今日漲停明日易開高，嚴禁早盤追高、務必等開盤價以下低接或是 13:25 尾盤買
+                </div>
+            </div>
+            """
+
         card_html = f"""
         <div class='paper-card' style='padding: 24px 22px; margin-bottom: 24px; border-radius: 18px;'>
             <!-- 第 1 層：超大股名 -->
@@ -1042,9 +1261,9 @@ with tab_top9:
                 <span class='mega-badge' style='background: #16A34A; color: #FFF; margin-right: 12px;'>#{s_rank}</span>
                 <span class='mega-card-title'>{s_id} {s_name}</span>
             </div>
-            <!-- 第 2 層：超大現價 -->
+            <!-- 第 2 層：超大現價 + 今日漲跌幅與亮紅燈徽章 -->
             <span class='mega-price'>
-                💰 現價：{s_close:,.2f} 元
+                💰 現價：{s_close:,.2f} 元 {t9_chg_badge}
             </span>
             <!-- 第 3 層：大膠囊亮點 -->
             <div style='display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px;'>
@@ -1052,6 +1271,8 @@ with tab_top9:
             </div>
             <!-- 第 4 層：處置避雷大黃框（若有） -->
             {warning_block}
+            <!-- 漲停防追高智慧叮嚀（若有） -->
+            {lu_reminder_block}
             <!-- 第 5 層：巨型買進試算看板 -->
             <div style='background: #0F172A; border-radius: 16px; padding: 20px 16px; text-align: center; margin-top: 14px;'>
                 <span class='mega-buy-shares'>
@@ -1082,6 +1303,7 @@ with tab_buffer:
         s_name = stock.get("name", "")
         s_close = stock.get("close", 0.0)
         s_tags = stock.get("highlights", [])
+        buf_chg_badge = format_daily_change_badge(stock, all_search_dict)
         tag_spans = "".join([f"<span class='mega-tag badge-blue'>{t}</span>" for t in s_tags])
 
         render_html(f"""
@@ -1091,9 +1313,9 @@ with tab_buffer:
                 <span class='mega-badge' style='background: #2563EB; color: #FFF; margin-right: 12px;'>#{s_rank}</span>
                 <span class='mega-card-title'>{s_id} {s_name}</span>
             </div>
-            <!-- 第 2 層：超大現價 -->
+            <!-- 第 2 層：超大現價 + 今日漲跌幅徽章 -->
             <span class='mega-price'>
-                💰 現價：{s_close:,.2f} 元
+                💰 現價：{s_close:,.2f} 元 {buf_chg_badge}
             </span>
             <!-- 第 3 層：大膠囊亮點 -->
             <div style='display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px;'>
@@ -1128,6 +1350,7 @@ with tab_dropped:
             p_rank = stock.get("prev_rank", "-")
             n_rank = stock.get("new_rank", "外")
             d_close = stock.get("close", 0.0)
+            drp_chg_badge = format_daily_change_badge(stock, all_search_dict)
             
             render_html(f"""
             <div class='paper-card' style='border-left: 8px solid #DC2626; padding: 24px 22px; margin-bottom: 24px; border-radius: 18px;'>
@@ -1136,14 +1359,14 @@ with tab_dropped:
                     <span class='mega-card-title' style='color: #991B1B;'>{d_id} {d_name}</span>
                 </div>
                 <span class='mega-price'>
-                    💰 最新價：{d_close:,.2f} 元
+                    💰 最新價：{d_close:,.2f} 元 {drp_chg_badge}
                 </span>
                 <div class='mega-subtext' style='color: #64748B; margin-bottom: 14px;'>
                     原前一交易日排名: 第 <b>{p_rank}</b> 名 ➔ 今日動向: <b style='color:#DC2626;'>{n_rank}</b>
                 </div>
                 <div style='background: #FEF2F2; border: 1.5px solid #F87171; border-radius: 14px; padding: 16px; text-align: center;'>
                     <div class='mega-subtext' style='color: #991B1B;'>
-                        🔴 跌出榜外！找機會賣出換現金！
+                        🔴 跌出榜外！明日 09:00 開盤市價賣出換現金！
                     </div>
                 </div>
             </div>
@@ -1254,13 +1477,14 @@ if is_pro_confirmed:
             t_str = str(r.get("turnover_str", "-"))
             c_desc = str(r.get("countdown_desc", "T-2"))
             a_timing = str(r.get("action_timing", f"{next_trading_w_label} 13:25 尾盤進場"))
+            disp_b_chg = format_daily_change_badge(r, all_search_dict)
             render_html(f"""
             <div class='paper-card' style='border: 2.5px solid #16A34A; border-left: 10px solid #16A34A; background: #F0FDF4; padding: 24px 22px; margin-bottom: 22px; border-radius: 16px;'>
                 <div class='mega-card-title' style='color: #15803D; font-size: 34px !important;'>
                     🔥 策略 B 觸發（T-2 搶跑買入）：{r['stock_id']} {r['name']}
                 </div>
                 <div class='mega-subtext' style='color: #1E293B; margin: 12px 0;'>
-                    現價: <b>{l_price:.2f}</b> ｜ 5MA: <b>{ma5_val:.2f}</b> ｜ 處置累積: <b style='color:#15803D;'>{cum_ret:+.1f}%</b> ｜ 成交金額: <b>{t_str}</b><br>
+                    現價: <b>{l_price:.2f}</b> {disp_b_chg} ｜ 5MA: <b>{ma5_val:.2f}</b> ｜ 處置累積: <b style='color:#15803D;'>{cum_ret:+.1f}%</b> ｜ 成交金額: <b>{t_str}</b><br>
                     執行時機: <b style='color:#15803D;'>{a_timing}</b>（出關倒數: {c_desc}）
                 </div>
                 <div style='background: #FFFFFF; border: 2px solid #86EFAC; border-radius: 12px; padding: 16px 18px; margin: 14px 0;'>
@@ -1286,13 +1510,14 @@ if is_pro_confirmed:
             vol_r = float(r.get("vol_ratio", 1.0))
             t_str = str(r.get("turnover_str", "-"))
             c_desc = str(r.get("countdown_desc", "T-1"))
+            disp_c_chg = format_daily_change_badge(r, all_search_dict)
             render_html(f"""
             <div class='paper-card' style='border: 2.5px solid #DC2626; border-left: 10px solid #DC2626; background: #FEF2F2; padding: 24px 22px; margin-bottom: 22px; border-radius: 16px;'>
                 <div class='mega-card-title' style='color: #B91C1C; font-size: 34px !important;'>
                     🎯 策略 C 警戒（明晨開高走低做空）：{r['stock_id']} {r['name']}
                 </div>
                 <div class='mega-subtext' style='color: #334155; margin: 12px 0;'>
-                    現價: <b>{l_price:.2f}</b> ｜ 超漲: <b style='color:#DC2626;'>{cum_ret:+.1f}%</b> ｜ 量比: <b>{vol_r:.2f}</b> ｜ 金額: <b>{t_str}</b><br>
+                    現價: <b>{l_price:.2f}</b> {disp_c_chg} ｜ 超漲: <b style='color:#DC2626;'>{cum_ret:+.1f}%</b> ｜ 量比: <b>{vol_r:.2f}</b> ｜ 金額: <b>{t_str}</b><br>
                     執行時機: <b>{r['action_timing']}</b>（出關倒數: {c_desc}）
                 </div>
                 <div style='background: #FFFFFF; border: 2px solid #FCA5A5; border-radius: 12px; padding: 16px 18px; margin: 14px 0;'>
