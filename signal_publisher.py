@@ -379,63 +379,48 @@ def generate_stock_highlights(momentum_pct: float, revenue_yoy_pct: float, roe_p
     return tags[:3]
 
 
+_DAILY_CHANGE_META = {}
+
+
 def _load_market_daily_changes() -> dict:
-    """從 market_data.duckdb 取得全市場各股最新一日收盤價、前一日收盤價、單日漲跌幅與漲跌停狀態"""
+    """
+    全市場今日收盤漲跌幅與漲跌停判定 (委派 tools/tw_price_limit.py 唯一判定來源)
+    - 漲跌停一律以「官方漲跌停價 (參考價 ±10% 依升降單位捨入)」判定，不再使用百分比門檻
+    - 前一交易日必須是全市場前一個有效交易日；缺漏者 daily_change_pct=None、不亮燈
+    """
+    global _DAILY_CHANGE_META
     change_map = {}
     if not os.path.exists(DUCKDB_PATH):
         return change_map
     try:
         from db_utils import safe_duckdb_connect
+        from tools.tw_price_limit import load_daily_change_map
         conn = safe_duckdb_connect(DUCKDB_PATH, read_only=True)
         try:
-            sql = """
-                WITH ranked AS (
-                    SELECT stock_id, date, open, high, low, close,
-                           ROW_NUMBER() OVER (PARTITION BY stock_id ORDER BY date DESC) AS rn
-                    FROM klines
-                    WHERE close > 0
-                )
-                SELECT t1.stock_id,
-                       t1.close AS close_t,
-                       t1.open AS open_t,
-                       t1.high AS high_t,
-                       t1.low AS low_t,
-                       t2.close AS close_t1
-                FROM ranked t1
-                LEFT JOIN ranked t2 ON t1.stock_id = t2.stock_id AND t2.rn = 2
-                WHERE t1.rn = 1
-            """
-            df_chg = conn.execute(sql).df()
-            for _, row in df_chg.iterrows():
-                sid = str(row["stock_id"])
-                c_t = float(row["close_t"]) if pd.notnull(row["close_t"]) else 0.0
-                o_t = float(row["open_t"]) if pd.notnull(row["open_t"]) and float(row["open_t"]) > 0 else c_t
-                h_t = float(row["high_t"]) if pd.notnull(row["high_t"]) and float(row["high_t"]) > 0 else c_t
-                l_t = float(row["low_t"]) if pd.notnull(row["low_t"]) and float(row["low_t"]) > 0 else c_t
-                c_t1 = float(row["close_t1"]) if pd.notnull(row["close_t1"]) and float(row["close_t1"]) > 0 else o_t
-                # 防除權息減資超過 11% 跳空或跨日缺漏造成超過 10.2% 漲跌幅失真
-                if c_t1 > 0 and o_t > 0:
-                    gap = (o_t / c_t1) - 1.0
-                    raw_chg = (c_t / c_t1) - 1.0
-                    if abs(gap) > 0.11 or abs(raw_chg) > 0.102:
-                        c_t1 = o_t
-                chg_pct = round(((c_t / c_t1) - 1.0) * 100.0, 2) if c_t1 > 0 else 0.0
-                chg_val = round(c_t - c_t1, 2) if c_t1 > 0 else 0.0
-                is_lu = bool(chg_pct >= 9.5 or (chg_pct >= 9.0 and abs(c_t - h_t) < 1e-4))
-                is_ld = bool(chg_pct <= -9.5 or (chg_pct <= -9.0 and abs(c_t - l_t) < 1e-4))
-                change_map[sid] = {
-                    "close": round(c_t, 2),
-                    "prev_close": round(c_t1, 2),
-                    "daily_change_pct": chg_pct,
-                    "daily_change_val": chg_val,
-                    "is_limit_up": is_lu,
-                    "is_limit_down": is_ld,
-                }
+            change_map, meta = load_daily_change_map(conn)
+            _DAILY_CHANGE_META = meta
+            print(f"[signal_publisher] 漲跌停判定: {meta}")
+            if meta.get("missing_prev_count", 0) > 50:
+                print(f"[signal_publisher] ⚠️ 前一交易日 {meta.get('date_t1')} 有 {meta['missing_prev_count']} 檔資料缺漏，請先執行斷層回補！")
         finally:
             conn.close()
     except Exception as e:
         print(f"[signal_publisher] 讀取全市場單日漲跌幅警示: {e}")
     return change_map
+
+
+def _chg_fields(change_map: dict, sid: str) -> dict:
+    """自 change_map 取出統一的漲跌欄位；無資料時回傳 None / False (嚴禁補 0 冒充平盤)"""
+    info = change_map.get(str(sid), {}) or {}
+    return {
+        "daily_change_pct": info.get("daily_change_pct"),
+        "daily_change_val": info.get("daily_change_val"),
+        "is_limit_up": bool(info.get("is_limit_up", False)),
+        "is_limit_down": bool(info.get("is_limit_down", False)),
+        "limit_up_price": info.get("limit_up_price"),
+        "limit_down_price": info.get("limit_down_price"),
+        "change_note": info.get("change_note", "無資料" if not info else ""),
+    }
 
 
 def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict = None, push_to_git: bool = True) -> dict:
@@ -725,11 +710,7 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
     for disp_list in [hits_b_list, hits_c_list, imminent_pool_list, next_day_b_list, next_day_c_list, active_disposals_records, next_trading_disposals_records]:
         for item in disp_list:
             sid_d = str(item.get("stock_id", ""))
-            chg_info = daily_change_map.get(sid_d, {})
-            item["daily_change_pct"] = float(chg_info.get("daily_change_pct", 0.0))
-            item["daily_change_val"] = float(chg_info.get("daily_change_val", 0.0))
-            item["is_limit_up"] = bool(chg_info.get("is_limit_up", False))
-            item["is_limit_down"] = bool(chg_info.get("is_limit_down", False))
+            item.update(_chg_fields(daily_change_map, sid_d))
 
     # 建立全市場搜尋字典 (供一鍵健檢使用)
     all_searchable_stocks = {}
@@ -741,11 +722,8 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
                 "name": stock_name_map.get(sid_m, sid_m),
                 "rank": "未進榜",
                 "status": "OUTSIDE",
-                "close": float(chg_m.get("close", 0.0)),
-                "daily_change_pct": float(chg_m.get("daily_change_pct", 0.0)),
-                "daily_change_val": float(chg_m.get("daily_change_val", 0.0)),
-                "is_limit_up": bool(chg_m.get("is_limit_up", False)),
-                "is_limit_down": bool(chg_m.get("is_limit_down", False)),
+                "close": float(chg_m.get("close") or 0.0),
+                **_chg_fields(daily_change_map, sid_m),
             }
 
     screener_rank_map = {}
@@ -754,20 +732,13 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
         screener_rank_map[sid] = idx
         status_tag = "TOP_9" if idx <= 9 else ("BUFFER_10_15" if idx <= 15 else "OUTSIDE")
         chg_info = daily_change_map.get(sid, {})
-        d_pct = float(chg_info.get("daily_change_pct", s.get("daily_change_pct", 0.0)))
-        d_val = float(chg_info.get("daily_change_val", s.get("daily_change_val", 0.0)))
-        is_lu = bool(chg_info.get("is_limit_up", d_pct >= 9.5))
-        is_ld = bool(chg_info.get("is_limit_down", d_pct <= -9.5))
         all_searchable_stocks[sid] = {
             "stock_id": sid,
             "name": str(s.get("stock_name", stock_name_map.get(sid, ""))),
             "rank": idx,
             "status": status_tag,
-            "close": float(s.get("latest_close", chg_info.get("close", 0.0))),
-            "daily_change_pct": round(d_pct, 2),
-            "daily_change_val": round(d_val, 2),
-            "is_limit_up": is_lu,
-            "is_limit_down": is_ld,
+            "close": float(s.get("latest_close", chg_info.get("close") or 0.0)),
+            **_chg_fields(daily_change_map, sid),
         }
 
     # 組合今日前 15 名清單
@@ -779,11 +750,7 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
         sid = str(s["stock_id"])
         sname = str(s.get("stock_name", ""))
         close = float(s.get("latest_close", 0.0))
-        chg_info = daily_change_map.get(sid, {})
-        d_pct = round(float(chg_info.get("daily_change_pct", s.get("daily_change_pct", 0.0))), 2)
-        d_val = round(float(chg_info.get("daily_change_val", s.get("daily_change_val", 0.0))), 2)
-        is_lu = bool(chg_info.get("is_limit_up", d_pct >= 9.5))
-        is_ld = bool(chg_info.get("is_limit_down", d_pct <= -9.5))
+        chg_f = _chg_fields(daily_change_map, sid)
         
         # 動能數值正規化為百分比
         mom_raw = float(s.get("momentum_value", 0.0))
@@ -807,10 +774,7 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
             "name": sname,
             "latest_close": close,
             "close": close,
-            "daily_change_pct": d_pct,
-            "daily_change_val": d_val,
-            "is_limit_up": is_lu,
-            "is_limit_down": is_ld,
+            **chg_f,
             "latest_date": data_date,
             "momentum_value": mom_raw,
             "momentum_pct": mom_pct,
@@ -842,11 +806,8 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
             
             # 查詢最新收盤價與單日漲跌幅
             chg_info = daily_change_map.get(sid, {})
-            c_price = float(chg_info.get("close", prev_info.get("latest_close", 0.0)))
-            d_pct = round(float(chg_info.get("daily_change_pct", 0.0)), 2)
-            d_val = round(float(chg_info.get("daily_change_val", 0.0)), 2)
-            is_lu = bool(chg_info.get("is_limit_up", d_pct >= 9.5))
-            is_ld = bool(chg_info.get("is_limit_down", d_pct <= -9.5))
+            c_price = float(chg_info.get("close") or prev_info.get("latest_close", 0.0))
+            chg_f = _chg_fields(daily_change_map, sid)
             if sid in all_searchable_stocks:
                 if all_searchable_stocks[sid]["close"] > 0:
                     c_price = all_searchable_stocks[sid]["close"]
@@ -859,10 +820,7 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
                 "prev_rank": prev_rank,
                 "new_rank": current_rank,
                 "close": c_price,
-                "daily_change_pct": d_pct,
-                "daily_change_val": d_val,
-                "is_limit_up": is_lu,
-                "is_limit_down": is_ld,
+                **chg_f,
                 "reason": "動能轉弱跌出前15名，參考紀律為汰弱換取現金"
             })
             
@@ -873,10 +831,7 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
                 "rank": current_rank,
                 "status": "DROPPED",
                 "close": c_price,
-                "daily_change_pct": d_pct,
-                "daily_change_val": d_val,
-                "is_limit_up": is_lu,
-                "is_limit_down": is_ld,
+                **chg_f,
             }
 
     # 儲存/更新今日快照至 history_snapshots.json (無論今日按幾次，永遠覆寫今日日期，不覆寫昨日日期)
@@ -905,10 +860,13 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
             "prev_rank": d["prev_rank"],
             "current_rank": d["new_rank"],
             "close": d["close"],
-            "daily_change_pct": d.get("daily_change_pct", 0.0),
-            "daily_change_val": d.get("daily_change_val", 0.0),
-            "is_limit_up": d.get("is_limit_up", False),
-            "is_limit_down": d.get("is_limit_down", False),
+            "daily_change_pct": d.get("daily_change_pct"),
+            "daily_change_val": d.get("daily_change_val"),
+            "is_limit_up": bool(d.get("is_limit_up", False)),
+            "is_limit_down": bool(d.get("is_limit_down", False)),
+            "limit_up_price": d.get("limit_up_price"),
+            "limit_down_price": d.get("limit_down_price"),
+            "change_note": d.get("change_note", ""),
             "action_sop": "明日 09:00 開盤以市價單 (MOO) 無條件賣出換現金"
         })
 
@@ -926,10 +884,13 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
                 "prev_rank_raw": prev_r,
                 "current_rank": s["rank"],
                 "close": s["close"],
-                "daily_change_pct": s.get("daily_change_pct", 0.0),
-                "daily_change_val": s.get("daily_change_val", 0.0),
-                "is_limit_up": s.get("is_limit_up", False),
-                "is_limit_down": s.get("is_limit_down", False),
+                "daily_change_pct": s.get("daily_change_pct"),
+                "daily_change_val": s.get("daily_change_val"),
+                "is_limit_up": bool(s.get("is_limit_up", False)),
+                "is_limit_down": bool(s.get("is_limit_down", False)),
+                "limit_up_price": s.get("limit_up_price"),
+                "limit_down_price": s.get("limit_down_price"),
+                "change_note": s.get("change_note", ""),
                 "momentum_pct": s["momentum_pct"],
                 "revenue_yoy_pct": s["revenue_yoy_pct"],
                 "roe_pct": s["roe_pct"],
@@ -951,10 +912,13 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
                 "prev_rank_raw": prev_r,
                 "current_rank": s["rank"],
                 "close": s["close"],
-                "daily_change_pct": s.get("daily_change_pct", 0.0),
-                "daily_change_val": s.get("daily_change_val", 0.0),
-                "is_limit_up": s.get("is_limit_up", False),
-                "is_limit_down": s.get("is_limit_down", False),
+                "daily_change_pct": s.get("daily_change_pct"),
+                "daily_change_val": s.get("daily_change_val"),
+                "is_limit_up": bool(s.get("is_limit_up", False)),
+                "is_limit_down": bool(s.get("is_limit_down", False)),
+                "limit_up_price": s.get("limit_up_price"),
+                "limit_down_price": s.get("limit_down_price"),
+                "change_note": s.get("change_note", ""),
                 "highlights": s["highlights"],
                 "warning_tag": s["warning_tag"],
                 "action_sop": "安穩續抱！不必賣出換股，亦無須追高加碼"
@@ -1077,8 +1041,10 @@ def run_git_sync(data_date: str) -> dict:
         "moneydj_revenue_scraper.py",
         "data_providers/smart_sync_manager.py",
         "data_providers/four_factors_screener_service.py",
+        "data_providers/price_adjuster.py",
         "data_providers/finmind_revenue_service.py",
         "data_providers/finmind_financials_service.py",
+        "tools/tw_price_limit.py",
         "tools/market_calendar.py",
         "tools/__init__.py",
         ".gitignore"

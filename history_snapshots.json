@@ -2245,20 +2245,20 @@
       "date": "2026-11-13",
       "stock_ids": [
         "2465",
-        "6148",
         "8099",
-        "6234",
+        "6148",
+        "6609",
         "6697",
-        "1416",
         "6108",
-        "2471",
+        "1416",
         "3701",
+        "2471",
+        "5475",
+        "6234",
         "1802",
         "3661",
-        "5475",
         "6870",
-        "2355",
-        "5013"
+        "7717"
       ],
       "top15": [
         {
@@ -2269,21 +2269,21 @@
         },
         {
           "rank": 2,
-          "stock_id": "6148",
-          "stock_name": "驊宏資",
-          "latest_close": 58.1
-        },
-        {
-          "rank": 3,
           "stock_id": "8099",
           "stock_name": "大世科",
           "latest_close": 182.0
         },
         {
+          "rank": 3,
+          "stock_id": "6148",
+          "stock_name": "驊宏資",
+          "latest_close": 58.1
+        },
+        {
           "rank": 4,
-          "stock_id": "6234",
-          "stock_name": "高僑",
-          "latest_close": 58.4
+          "stock_id": "6609",
+          "stock_name": "瀧澤科",
+          "latest_close": 58.7
         },
         {
           "rank": 5,
@@ -2293,63 +2293,63 @@
         },
         {
           "rank": 6,
-          "stock_id": "1416",
-          "stock_name": "廣豐",
-          "latest_close": 18.3
-        },
-        {
-          "rank": 7,
           "stock_id": "6108",
           "stock_name": "競國",
           "latest_close": 41.0
         },
         {
-          "rank": 8,
-          "stock_id": "2471",
-          "stock_name": "資通",
-          "latest_close": 71.1
+          "rank": 7,
+          "stock_id": "1416",
+          "stock_name": "廣豐",
+          "latest_close": 18.3
         },
         {
-          "rank": 9,
+          "rank": 8,
           "stock_id": "3701",
           "stock_name": "大眾控",
           "latest_close": 68.5
         },
         {
+          "rank": 9,
+          "stock_id": "2471",
+          "stock_name": "資通",
+          "latest_close": 71.1
+        },
+        {
           "rank": 10,
-          "stock_id": "1802",
-          "stock_name": "台玻",
-          "latest_close": 85.1
-        },
-        {
-          "rank": 11,
-          "stock_id": "3661",
-          "stock_name": "世芯-KY",
-          "latest_close": 4020.0
-        },
-        {
-          "rank": 12,
           "stock_id": "5475",
           "stock_name": "德宏",
           "latest_close": 211.0
         },
         {
+          "rank": 11,
+          "stock_id": "6234",
+          "stock_name": "高僑",
+          "latest_close": 58.4
+        },
+        {
+          "rank": 12,
+          "stock_id": "1802",
+          "stock_name": "台玻",
+          "latest_close": 85.1
+        },
+        {
           "rank": 13,
+          "stock_id": "3661",
+          "stock_name": "世芯-KY",
+          "latest_close": 4020.0
+        },
+        {
+          "rank": 14,
           "stock_id": "6870",
           "stock_name": "騰雲",
           "latest_close": 498.0
         },
         {
-          "rank": 14,
-          "stock_id": "2355",
-          "stock_name": "敬鵬",
-          "latest_close": 65.9
-        },
-        {
           "rank": 15,
-          "stock_id": "5013",
-          "stock_name": "強新",
-          "latest_close": 61.6
+          "stock_id": "7717",
+          "stock_name": "萊德光電-KY",
+          "latest_close": 489.5
         }
       ]
     }

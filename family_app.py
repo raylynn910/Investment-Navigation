@@ -693,33 +693,56 @@ if single_stock_budget < 10000:
 all_search_dict = data.get("all_searchable_stocks", {})
 
 
+def _resolve_change_meta(item: dict, fallback_map: dict = None) -> dict:
+    """從個股項目或 all_search_dict 解析權威漲跌停欄位，不硬寫百分比門檻覆蓋"""
+    if not isinstance(item, dict):
+        return {}
+    sid = str(item.get("stock_id", ""))
+    fb = fallback_map.get(sid, {}) if (fallback_map and sid in fallback_map) else {}
+
+    pct = item.get("daily_change_pct")
+    if pct is None:
+        pct = fb.get("daily_change_pct")
+
+    if "is_limit_up" in item and item.get("daily_change_pct") is not None:
+        is_lu = bool(item.get("is_limit_up"))
+        is_ld = bool(item.get("is_limit_down", False))
+    elif "is_limit_up" in fb and fb.get("daily_change_pct") is not None:
+        is_lu = bool(fb.get("is_limit_up"))
+        is_ld = bool(fb.get("is_limit_down", False))
+    else:
+        is_lu = bool(item.get("is_limit_up", fb.get("is_limit_up", False)))
+        is_ld = bool(item.get("is_limit_down", fb.get("is_limit_down", False)))
+
+    note = item.get("change_note") or fb.get("change_note") or ""
+    return {
+        "pct": pct,
+        "is_limit_up": is_lu,
+        "is_limit_down": is_ld,
+        "change_note": str(note),
+    }
+
+
 def format_daily_change_badge(item: dict, fallback_map: dict = None) -> str:
     """
-    產生台股紅漲綠跌＋漲跌停亮燈徽章 HTML：
-    - 漲停 (>= +9.5%)：🔴 漲停亮燈 +X.X% (發光紅底白字)
-    - 跌停 (<= -9.5%)：🟢 跌停亮燈 -X.X% (綠底白字)
-    - 一般上漲 (> 0%)：🔺 +X.X% (紅框紅字)
-    - 一般下跌 (< 0%)：🔻 -X.X% (綠框綠字)
-    - 平盤 (0.0%)：➖ 0.0% (灰框灰字)
+    產生台股紅漲綠跌＋官方升降單位漲跌停亮燈徽章 HTML：
+    - 嚴格依據後端官方升降單位算出的 is_limit_up / is_limit_down 亮燈
+    - pct 為 None (缺前日資料或除權息參考價異動) 時顯示暫無漲跌或不亮燈，絕不偽造 0.0%
     """
-    if not isinstance(item, dict):
+    meta = _resolve_change_meta(item, fallback_map)
+    if not meta:
         return ""
-    sid = str(item.get("stock_id", ""))
-    pct = item.get("daily_change_pct")
-    if pct is None and fallback_map and sid in fallback_map:
-        pct = fallback_map[sid].get("daily_change_pct")
+    pct = meta["pct"]
     if pct is None:
-        return ""
+        return "<span class='chg-badge-flat'>➖ 暫無漲跌</span>" if meta["change_note"] else ""
     try:
         pct_f = float(pct)
     except Exception:
         return ""
-    is_lu = bool(item.get("is_limit_up", False) or pct_f >= 9.5)
-    is_ld = bool(item.get("is_limit_down", False) or pct_f <= -9.5)
 
-    if is_lu:
+    if meta["is_limit_up"]:
         return f"<span class='chg-badge-limit-up'>🔴 漲停亮燈 {pct_f:+.1f}%</span>"
-    elif is_ld:
+    elif meta["is_limit_down"]:
         return f"<span class='chg-badge-limit-down'>🟢 跌停亮燈 {pct_f:+.1f}%</span>"
     elif pct_f > 0:
         return f"<span class='chg-badge-up'>🔺 {pct_f:+.1f}%</span>"
@@ -730,19 +753,9 @@ def format_daily_change_badge(item: dict, fallback_map: dict = None) -> str:
 
 
 def is_stock_limit_up(item: dict, fallback_map: dict = None) -> bool:
-    """判斷個股今日是否漲停亮紅燈 (>= +9.5%)"""
-    if not isinstance(item, dict):
-        return False
-    if item.get("is_limit_up"):
-        return True
-    sid = str(item.get("stock_id", ""))
-    pct = item.get("daily_change_pct")
-    if pct is None and fallback_map and sid in fallback_map:
-        pct = fallback_map[sid].get("daily_change_pct")
-    try:
-        return float(pct or 0.0) >= 9.5
-    except Exception:
-        return False
+    """判斷個股今日是否漲停亮紅燈（完全依據官方升降單位漲跌停價布林值）"""
+    meta = _resolve_change_meta(item, fallback_map)
+    return bool(meta.get("is_limit_up", False))
 
 
 render_html("<div class='mega-section-title'>🔍 「我手上的股票怎麼辦？」一鍵健檢</div>")

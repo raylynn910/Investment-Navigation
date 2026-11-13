@@ -418,18 +418,20 @@ def render_companion_view():
     if search_query:
         target_info = all_stocks.get(search_query)
         def _comp_chg_badge(info_dict: dict) -> str:
-            chg = info_dict.get("daily_change_pct", 0.0)
+            chg = info_dict.get("daily_change_pct")
+            if chg is None:
+                return "<span style='background:rgba(148,163,184,0.18);color:#cbd5e1;padding:2px 8px;border-radius:99px;font-size:13px;font-weight:800;margin-left:8px;'>➖ 暫無漲跌</span>"
             try:
-                chg_f = float(chg or 0.0)
+                chg_f = float(chg)
             except Exception:
-                chg_f = 0.0
-            if bool(info_dict.get("is_limit_up", False)) or chg_f >= 9.5:
+                return ""
+            if bool(info_dict.get("is_limit_up", False)):
                 return f"<span style='background:#dc2626;color:#fff;padding:2px 8px;border-radius:99px;font-size:13px;font-weight:900;margin-left:8px;box-shadow:0 0 8px rgba(239,68,68,0.6);'>🔴 漲停亮燈 {chg_f:+.1f}%</span>"
-            if bool(info_dict.get("is_limit_down", False)) or chg_f <= -9.5:
+            if bool(info_dict.get("is_limit_down", False)):
                 return f"<span style='background:#059669;color:#fff;padding:2px 8px;border-radius:99px;font-size:13px;font-weight:900;margin-left:8px;'>🟢 跌停亮燈 {chg_f:+.1f}%</span>"
-            if chg_f > 0.01:
+            if chg_f > 0.0:
                 return f"<span style='background:rgba(239,68,68,0.18);color:#f87171;border:1px solid #ef4444;padding:2px 8px;border-radius:99px;font-size:13px;font-weight:800;margin-left:8px;'>🔺 {chg_f:+.1f}%</span>"
-            if chg_f < -0.01:
+            if chg_f < 0.0:
                 return f"<span style='background:rgba(16,185,129,0.18);color:#34d399;border:1px solid #10b981;padding:2px 8px;border-radius:99px;font-size:13px;font-weight:800;margin-left:8px;'>🔻 {chg_f:+.1f}%</span>"
             return "<span style='background:rgba(148,163,184,0.18);color:#cbd5e1;padding:2px 8px;border-radius:99px;font-size:13px;font-weight:800;margin-left:8px;'>➖ 0.0%</span>"
 
@@ -439,7 +441,7 @@ def render_companion_view():
             t_close = target_info.get("close", 0.0)
             t_badge = _comp_chg_badge(target_info)
             t_lu_tip = ""
-            if bool(target_info.get("is_limit_up", False)) or float(target_info.get("daily_change_pct", 0.0) or 0.0) >= 9.5:
+            if bool(target_info.get("is_limit_up", False)):
                 t_lu_tip = "<div style='font-size: 14px; color: #fca5a5; margin-top: 6px; font-weight: 800;'>🔥 今日漲停明日易開高，嚴禁早盤追高、務必等開盤價以下低接或是 13:25 尾盤買</div>"
 
             if isinstance(t_rank, int) and t_rank <= 9:
@@ -485,17 +487,21 @@ def render_companion_view():
     for s in top_9_cards:
         tags_html = " ".join([f"<span class='companion-badge' style='background:rgba(16,185,129,0.15); color:#10b981; border:1px solid #10b981;'>{t}</span>" for t in s.get("highlights", [])])
         warn_html = f"<div style='font-size:13px; color:#fbbf24; margin-top:6px;'>{s['warning_tag']}</div>" if s.get("warning_tag") else ""
-        chg_Val = float(s.get("daily_change_pct", 0.0) or 0.0)
-        if bool(s.get("is_limit_up", False)) or chg_Val >= 9.5:
+        chg_raw = s.get("daily_change_pct")
+        chg_Val = float(chg_raw) if chg_raw is not None else None
+        if bool(s.get("is_limit_up", False)) and chg_Val is not None:
             s_badge = f"<span style='background:#dc2626;color:#fff;padding:2px 8px;border-radius:99px;font-size:13px;font-weight:900;margin-left:8px;box-shadow:0 0 8px rgba(239,68,68,0.6);'>🔴 漲停亮燈 {chg_Val:+.1f}%</span>"
             lu_notice = "<div style='font-size:13px; color:#fca5a5; margin-top:6px; font-weight:800;'>🔥 今日漲停明日易開高，嚴禁早盤追高、務必等開盤價以下低接或是 13:25 尾盤買</div>"
-        elif bool(s.get("is_limit_down", False)) or chg_Val <= -9.5:
+        elif bool(s.get("is_limit_down", False)) and chg_Val is not None:
             s_badge = f"<span style='background:#059669;color:#fff;padding:2px 8px;border-radius:99px;font-size:13px;font-weight:900;margin-left:8px;'>🟢 跌停亮燈 {chg_Val:+.1f}%</span>"
             lu_notice = ""
-        elif chg_Val > 0.01:
+        elif chg_Val is None:
+            s_badge = "<span style='background:rgba(148,163,184,0.18);color:#cbd5e1;padding:2px 8px;border-radius:99px;font-size:13px;font-weight:800;margin-left:8px;'>➖ 暫無漲跌</span>"
+            lu_notice = ""
+        elif chg_Val > 0.0:
             s_badge = f"<span style='background:rgba(239,68,68,0.18);color:#f87171;border:1px solid #ef4444;padding:2px 8px;border-radius:99px;font-size:13px;font-weight:800;margin-left:8px;'>🔺 {chg_Val:+.1f}%</span>"
             lu_notice = ""
-        elif chg_Val < -0.01:
+        elif chg_Val < 0.0:
             s_badge = f"<span style='background:rgba(16,185,129,0.18);color:#34d399;border:1px solid #10b981;padding:2px 8px;border-radius:99px;font-size:13px;font-weight:800;margin-left:8px;'>🔻 {chg_Val:+.1f}%</span>"
             lu_notice = ""
         else:

@@ -158,12 +158,6 @@ def compute_four_factors_from_db() -> list[dict]:
             else:
                 mom_20d = float((adj_c[-1] / adj_c[0]) - 1.0) if adj_c[0] > 0 else 0.0
 
-            # 今日單日收盤漲跌幅与漲跌停判定 (Close_T / Close_{T-1} - 1)
-            prev_adj_c = float(adj_c[-2]) if len(adj_c) >= 2 and adj_c[-2] > 0 else float(adj_c[-1])
-            prev_raw_c = float(raw_c[-2]) if len(raw_c) >= 2 and raw_c[-2] > 0 else float(raw_c[-1])
-            daily_change_pct = round((( float(adj_c[-1]) / prev_adj_c ) - 1.0) * 100.0, 2) if prev_adj_c > 0 else 0.0
-            daily_change_val = round(latest_close - prev_raw_c, 2)
-
             momentum_records.append({
                 "stock_id": sid,
                 "momentum_10d": mom_10d,
@@ -171,15 +165,17 @@ def compute_four_factors_from_db() -> list[dict]:
                 "turnover_ma5": turnover_ma5,
                 "latest_date": str(grp["date"].iloc[-1]) if not grp.empty else "",
                 "latest_close": latest_close,
-                "daily_change_pct": daily_change_pct,
-                "daily_change_val": daily_change_val,
             })
 
         df_momentum = (
             pd.DataFrame(momentum_records)
             if momentum_records
-            else pd.DataFrame(columns=["stock_id", "momentum_10d", "momentum_20d", "turnover_ma5", "latest_date", "latest_close", "daily_change_pct", "daily_change_val"])
+            else pd.DataFrame(columns=["stock_id", "momentum_10d", "momentum_20d", "turnover_ma5", "latest_date", "latest_close"])
         )
+
+        # 使用台股官方升降單位漲跌停判定模組 (Single Source of Truth)
+        from tools.tw_price_limit import load_daily_change_map
+        daily_chg_map, _ = load_daily_change_map(db)
 
         # ===================================================================
         # 第 4 步：籌碼面 — 近 20 日外資與投信淨買超累計
@@ -278,6 +274,7 @@ def compute_four_factors_from_db() -> list[dict]:
             if pd.isna(trust_net):
                 trust_net = 0
 
+            chg_info = daily_chg_map.get(sid, {})
             result.append({
                 "stock_id": sid,
                 "stock_name": row["stock_name"],
@@ -294,10 +291,12 @@ def compute_four_factors_from_db() -> list[dict]:
                 "momentum_value": round(float(row.get("momentum_10d", 0) or 0), 4),
                 "latest_date": str(row.get("latest_date", "")),
                 "latest_close": round(float(row.get("latest_close", 0) or 0), 2),
-                "daily_change_pct": round(float(row.get("daily_change_pct", 0) or 0), 2),
-                "daily_change_val": round(float(row.get("daily_change_val", 0) or 0), 2),
-                "is_limit_up": bool(float(row.get("daily_change_pct", 0) or 0) >= 9.5),
-                "is_limit_down": bool(float(row.get("daily_change_pct", 0) or 0) <= -9.5),
+                "daily_change_pct": chg_info.get("daily_change_pct"),
+                "daily_change_val": chg_info.get("daily_change_val"),
+                "is_limit_up": bool(chg_info.get("is_limit_up", False)),
+                "is_limit_down": bool(chg_info.get("is_limit_down", False)),
+                "limit_up_price": chg_info.get("limit_up_price"),
+                "limit_down_price": chg_info.get("limit_down_price"),
             })
 
         return result
