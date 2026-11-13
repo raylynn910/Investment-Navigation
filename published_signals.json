@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-11-12 23:13:29",
+  "generated_at": "2026-11-13 09:08:04",
   "data_date": "2026-11-12",
   "holiday_notice": {
     "is_active": false,
@@ -32,18 +32,18 @@
       "spot_reason": "TXF 處於季線下但站上 5MA 反彈，允許半倉試單（上限鎖死 50%，嚴禁季線下滿倉！）。",
       "night_intercept_active": false,
       "night_buy_cap": 50,
-      "night_intercept_reason": "夜盤波動平穩 (+1.17%)，無觸發破線攔截，正常放行買單。",
+      "night_intercept_reason": "夜盤波動平穩 (+1.15%)，無觸發破線攔截，正常放行買單。",
       "mod_c_triggered": false,
       "mod_c_reason": "未觸發極端超賣緩衝條件，按常規紀律執行。",
-      "txf_close": 44091.0,
-      "txf_ma5": 41967.6,
-      "txf_ma20": 45235.8,
-      "txf_ma60": 46386.1,
-      "txf_k_val": 48.9,
-      "night_close": 44606.0,
-      "night_ret_pct": 1.17,
-      "night_date": "2026-11-12",
-      "night_k_val": 62.7
+      "txf_close": 43178.0,
+      "txf_ma5": 42220.2,
+      "txf_ma20": 44974.8,
+      "txf_ma60": 46339.0,
+      "txf_k_val": 56.5,
+      "night_close": 43676.0,
+      "night_ret_pct": 1.15,
+      "night_date": "2026-11-13",
+      "night_k_val": 66.2
     }
   },
   "core_1_swing": {
@@ -533,7 +533,7 @@
         "optimal_mdd": "<= 28.9%"
       }
     },
-    "is_weekend_or_holiday": false,
+    "is_weekend_or_holiday": true,
     "last_closed_date": "2026-11-12",
     "next_trading_date": "2026-11-13",
     "total_active_disposals_count": 12,
@@ -548,7 +548,7 @@
         "disp_cum_ret": 17.8,
         "vol_ratio": 1.17,
         "turnover_str": "49.28億",
-        "action_timing": "11/16 09:00 MOO 券賣",
+        "action_timing": "週五 (11/13) 09:00 MOO 券賣",
         "countdown_desc": "T-1 (11/16)",
         "ma5": 1311.0,
         "status": "🎯 策略 C 警戒 (明晨開高空)",
@@ -556,7 +556,7 @@
         "is_hit_b": false,
         "is_hit_c": true,
         "td_to_exit": 1,
-        "entry_sop": "11/16 09:00 若開高 +1%~+5.2% 且台指期無大漲，MOO 券賣放空 ｜ 停損+5% ｜ 13:25 全平"
+        "entry_sop": "週五 09:00 若開高 +1%~+5.2% 且台指期無大漲，MOO 券賣放空 ｜ 停損+5% ｜ 13:25 全平"
       },
       {
         "stock_id": "3532",
@@ -565,7 +565,7 @@
         "disp_cum_ret": 13.5,
         "vol_ratio": 1.61,
         "turnover_str": "5.74億",
-        "action_timing": "11/16 09:00 MOO 券賣",
+        "action_timing": "週五 (11/13) 09:00 MOO 券賣",
         "countdown_desc": "T-1 (11/16)",
         "ma5": 286.9,
         "status": "🎯 策略 C 警戒 (明晨開高空)",
@@ -573,7 +573,7 @@
         "is_hit_b": false,
         "is_hit_c": true,
         "td_to_exit": 1,
-        "entry_sop": "11/16 09:00 若開高 +1%~+5.2% 且台指期無大漲，MOO 券賣放空 ｜ 停損+5% ｜ 13:25 全平"
+        "entry_sop": "週五 09:00 若開高 +1%~+5.2% 且台指期無大漲，MOO 券賣放空 ｜ 停損+5% ｜ 13:25 全平"
       }
     ],
     "imminent_pool": [
@@ -590,9 +590,9 @@
         "priority": 1,
         "is_hit_b": false,
         "is_hit_c": true,
-        "action_timing": "11/16 09:00 MOO 券賣",
+        "action_timing": "週五 (11/13) 09:00 MOO 券賣",
         "ma5": 1311.0,
-        "entry_sop": "11/16 09:00 若開高 +1%~+5.2% 且台指期無大漲，MOO 券賣放空 ｜ 停損+5% ｜ 13:25 全平"
+        "entry_sop": "週五 09:00 若開高 +1%~+5.2% 且台指期無大漲，MOO 券賣放空 ｜ 停損+5% ｜ 13:25 全平"
       },
       {
         "stock_id": "3532",
@@ -607,9 +607,9 @@
         "priority": 1,
         "is_hit_b": false,
         "is_hit_c": true,
-        "action_timing": "11/16 09:00 MOO 券賣",
+        "action_timing": "週五 (11/13) 09:00 MOO 券賣",
         "ma5": 286.9,
-        "entry_sop": "11/16 09:00 若開高 +1%~+5.2% 且台指期無大漲，MOO 券賣放空 ｜ 停損+5% ｜ 13:25 全平"
+        "entry_sop": "週五 09:00 若開高 +1%~+5.2% 且台指期無大漲，MOO 券賣放空 ｜ 停損+5% ｜ 13:25 全平"
       },
       {
         "stock_id": "6213",
@@ -728,7 +728,7 @@
         "base_date": "2026-11-12",
         "last_closed_date": "2026-11-12",
         "next_trading_date": "2026-11-13",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3532",
@@ -760,7 +760,7 @@
         "base_date": "2026-11-12",
         "last_closed_date": "2026-11-12",
         "next_trading_date": "2026-11-13",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "6213",
@@ -792,7 +792,7 @@
         "base_date": "2026-11-12",
         "last_closed_date": "2026-11-12",
         "next_trading_date": "2026-11-13",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "8099",
@@ -824,7 +824,7 @@
         "base_date": "2026-11-12",
         "last_closed_date": "2026-11-12",
         "next_trading_date": "2026-11-13",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "8272",
@@ -856,7 +856,7 @@
         "base_date": "2026-11-12",
         "last_closed_date": "2026-11-12",
         "next_trading_date": "2026-11-13",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3189",
@@ -883,12 +883,12 @@
         "is_hit_b": 0,
         "is_hit_c": 0,
         "action_timing": "觀望",
-        "entry_sop": "處置中持續觀察，預計 11/17 出關",
-        "exit_sop": "處置中持續觀察，預計 11/17 出關",
+        "entry_sop": "處置中持續觀察，預計 11/17 出關 ｜ 次一交易日 (11/13) 收盤將進入 T-2 搶跑點",
+        "exit_sop": "處置中持續觀察，預計 11/17 出關 ｜ 次一交易日 (11/13) 收盤將進入 T-2 搶跑點",
         "base_date": "2026-11-12",
         "last_closed_date": "2026-11-12",
         "next_trading_date": "2026-11-13",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "4542",
@@ -915,12 +915,12 @@
         "is_hit_b": 0,
         "is_hit_c": 0,
         "action_timing": "觀望",
-        "entry_sop": "處置中持續觀察，預計 11/17 出關",
-        "exit_sop": "處置中持續觀察，預計 11/17 出關",
+        "entry_sop": "處置中持續觀察，預計 11/17 出關 ｜ 次一交易日 (11/13) 收盤將進入 T-2 搶跑點",
+        "exit_sop": "處置中持續觀察，預計 11/17 出關 ｜ 次一交易日 (11/13) 收盤將進入 T-2 搶跑點",
         "base_date": "2026-11-12",
         "last_closed_date": "2026-11-12",
         "next_trading_date": "2026-11-13",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "2455",
@@ -952,7 +952,7 @@
         "base_date": "2026-11-12",
         "last_closed_date": "2026-11-12",
         "next_trading_date": "2026-11-13",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3374",
@@ -984,7 +984,7 @@
         "base_date": "2026-11-12",
         "last_closed_date": "2026-11-12",
         "next_trading_date": "2026-11-13",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3691",
@@ -1016,7 +1016,7 @@
         "base_date": "2026-11-12",
         "last_closed_date": "2026-11-12",
         "next_trading_date": "2026-11-13",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "8291",
@@ -1048,7 +1048,7 @@
         "base_date": "2026-11-12",
         "last_closed_date": "2026-11-12",
         "next_trading_date": "2026-11-13",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "2466",
@@ -1080,7 +1080,7 @@
         "base_date": "2026-11-12",
         "last_closed_date": "2026-11-12",
         "next_trading_date": "2026-11-13",
-        "is_market_closed": 0
+        "is_market_closed": 1
       }
     ],
     "next_trading_disposals_list": [
@@ -1108,13 +1108,13 @@
         "priority": 1,
         "is_hit_b": 0,
         "is_hit_c": 1,
-        "action_timing": "11/16 09:00 MOO 券賣",
-        "entry_sop": "11/16 09:00 若開高 +1%~+5.2% 且台指期無大漲，MOO 券賣放空 ｜ 停損+5% ｜ 13:25 全平",
-        "exit_sop": "11/16 09:00 若開高 +1%~+5.2% 且台指期無大漲，MOO 券賣放空 ｜ 停損+5% ｜ 13:25 全平",
+        "action_timing": "週五 (11/13) 09:00 MOO 券賣",
+        "entry_sop": "週五 09:00 若開高 +1%~+5.2% 且台指期無大漲，MOO 券賣放空 ｜ 停損+5% ｜ 13:25 全平",
+        "exit_sop": "週五 09:00 若開高 +1%~+5.2% 且台指期無大漲，MOO 券賣放空 ｜ 停損+5% ｜ 13:25 全平",
         "base_date": "2026-11-13",
         "last_closed_date": "2026-11-12",
         "next_trading_date": "2026-11-13",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3532",
@@ -1140,13 +1140,13 @@
         "priority": 1,
         "is_hit_b": 0,
         "is_hit_c": 1,
-        "action_timing": "11/16 09:00 MOO 券賣",
-        "entry_sop": "11/16 09:00 若開高 +1%~+5.2% 且台指期無大漲，MOO 券賣放空 ｜ 停損+5% ｜ 13:25 全平",
-        "exit_sop": "11/16 09:00 若開高 +1%~+5.2% 且台指期無大漲，MOO 券賣放空 ｜ 停損+5% ｜ 13:25 全平",
+        "action_timing": "週五 (11/13) 09:00 MOO 券賣",
+        "entry_sop": "週五 09:00 若開高 +1%~+5.2% 且台指期無大漲，MOO 券賣放空 ｜ 停損+5% ｜ 13:25 全平",
+        "exit_sop": "週五 09:00 若開高 +1%~+5.2% 且台指期無大漲，MOO 券賣放空 ｜ 停損+5% ｜ 13:25 全平",
         "base_date": "2026-11-13",
         "last_closed_date": "2026-11-12",
         "next_trading_date": "2026-11-13",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "3189",
@@ -1178,7 +1178,7 @@
         "base_date": "2026-11-13",
         "last_closed_date": "2026-11-12",
         "next_trading_date": "2026-11-13",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "4542",
@@ -1210,7 +1210,7 @@
         "base_date": "2026-11-13",
         "last_closed_date": "2026-11-12",
         "next_trading_date": "2026-11-13",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "2455",
@@ -1237,12 +1237,12 @@
         "is_hit_b": 0,
         "is_hit_c": 0,
         "action_timing": "觀望",
-        "entry_sop": "處置中持續觀察，預計 11/18 出關",
-        "exit_sop": "處置中持續觀察，預計 11/18 出關",
+        "entry_sop": "處置中持續觀察，預計 11/18 出關 ｜ 次一交易日 (11/13) 收盤將進入 T-2 搶跑點",
+        "exit_sop": "處置中持續觀察，預計 11/18 出關 ｜ 次一交易日 (11/13) 收盤將進入 T-2 搶跑點",
         "base_date": "2026-11-13",
         "last_closed_date": "2026-11-12",
         "next_trading_date": "2026-11-13",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "8291",
@@ -1274,7 +1274,7 @@
         "base_date": "2026-11-13",
         "last_closed_date": "2026-11-12",
         "next_trading_date": "2026-11-13",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "2466",
@@ -1306,7 +1306,7 @@
         "base_date": "2026-11-13",
         "last_closed_date": "2026-11-12",
         "next_trading_date": "2026-11-13",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "6213",
@@ -1338,7 +1338,7 @@
         "base_date": "2026-11-13",
         "last_closed_date": "2026-11-12",
         "next_trading_date": "2026-11-13",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "8099",
@@ -1370,7 +1370,7 @@
         "base_date": "2026-11-13",
         "last_closed_date": "2026-11-12",
         "next_trading_date": "2026-11-13",
-        "is_market_closed": 0
+        "is_market_closed": 1
       },
       {
         "stock_id": "8272",
@@ -1402,7 +1402,7 @@
         "base_date": "2026-11-13",
         "last_closed_date": "2026-11-12",
         "next_trading_date": "2026-11-13",
-        "is_market_closed": 0
+        "is_market_closed": 1
       }
     ]
   },
