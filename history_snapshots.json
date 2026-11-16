@@ -2352,6 +2352,118 @@
           "latest_close": 489.5
         }
       ]
+    },
+    "2026-11-16": {
+      "date": "2026-11-16",
+      "stock_ids": [
+        "8099",
+        "6148",
+        "2471",
+        "2465",
+        "6697",
+        "6708",
+        "1416",
+        "6108",
+        "6609",
+        "3661",
+        "7717",
+        "5230",
+        "1802",
+        "1476",
+        "6163"
+      ],
+      "top15": [
+        {
+          "rank": 1,
+          "stock_id": "8099",
+          "stock_name": "大世科",
+          "latest_close": 200.0
+        },
+        {
+          "rank": 2,
+          "stock_id": "6148",
+          "stock_name": "驊宏資",
+          "latest_close": 63.9
+        },
+        {
+          "rank": 3,
+          "stock_id": "2471",
+          "stock_name": "資通",
+          "latest_close": 78.2
+        },
+        {
+          "rank": 4,
+          "stock_id": "2465",
+          "stock_name": "麗臺",
+          "latest_close": 150.0
+        },
+        {
+          "rank": 5,
+          "stock_id": "6697",
+          "stock_name": "東捷資訊",
+          "latest_close": 88.6
+        },
+        {
+          "rank": 6,
+          "stock_id": "6708",
+          "stock_name": "天擎",
+          "latest_close": 93.1
+        },
+        {
+          "rank": 7,
+          "stock_id": "1416",
+          "stock_name": "廣豐",
+          "latest_close": 19.45
+        },
+        {
+          "rank": 8,
+          "stock_id": "6108",
+          "stock_name": "競國",
+          "latest_close": 40.4
+        },
+        {
+          "rank": 9,
+          "stock_id": "6609",
+          "stock_name": "瀧澤科",
+          "latest_close": 53.3
+        },
+        {
+          "rank": 10,
+          "stock_id": "3661",
+          "stock_name": "世芯-KY",
+          "latest_close": 3660.0
+        },
+        {
+          "rank": 11,
+          "stock_id": "7717",
+          "stock_name": "萊德光電-KY",
+          "latest_close": 485.0
+        },
+        {
+          "rank": 12,
+          "stock_id": "5230",
+          "stock_name": "雷笛克光學",
+          "latest_close": 32.65
+        },
+        {
+          "rank": 13,
+          "stock_id": "1802",
+          "stock_name": "台玻",
+          "latest_close": 76.6
+        },
+        {
+          "rank": 14,
+          "stock_id": "1476",
+          "stock_name": "儒鴻",
+          "latest_close": 385.0
+        },
+        {
+          "rank": 15,
+          "stock_id": "6163",
+          "stock_name": "華電網",
+          "latest_close": 41.2
+        }
+      ]
     }
   }
 }
