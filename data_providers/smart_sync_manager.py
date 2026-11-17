@@ -612,21 +612,31 @@ def run_smart_sync_and_publish(
 
         # Step 7: 發布最新訊號與 Git 推送至雲端 Streamlit.app
         update_progress(95, "7/7 正在產出親友版訊號快照並推送至雲端 Streamlit.app...")
+        git_pushed = False
         try:
             from signal_publisher import export_and_publish_signals
             pub_res = export_and_publish_signals()
-            result_summary["git_status"] = pub_res.get("git_status", {})
+            git_info = pub_res.get("git_status", {})
+            git_pushed = bool(git_info.get("git_pushed", False))
+            result_summary["git_status"] = git_info
             result_summary["data_date"] = pub_res.get("data_date", targets["kline_date"])
             result_summary["actions_taken"].append(f"已產出最新信號快照 (基準日: {result_summary['data_date']})")
-            if pub_res.get("git_status", {}).get("git_pushed"):
+            if git_pushed:
                 result_summary["actions_taken"].append("Git Push 成功，雲端 Streamlit.app 自動重載中")
+            else:
+                push_err = git_info.get("message") or "Git Push 未完成"
+                result_summary["errors"].append(f"Git Push 失敗: {push_err}")
+                result_summary["actions_taken"].append(f"⚠️ Git Push 失敗: {push_err}")
             result_summary["success"] = True
         except Exception as e:
             err_msg = f"雲端發布與推送例外: {e}"
             logger.error(err_msg)
             result_summary["errors"].append(err_msg)
 
-        update_progress(100, "✅ 全自動盤後智能核對、數據同步與雲端發布全部完成！")
+        if git_pushed:
+            update_progress(100, "✅ 全自動盤後智能核對、數據同步與雲端發布全部完成！")
+        else:
+            update_progress(100, "⚠️ 盤後同步與跑分已完成，但 GitHub 雲端推送未完成，請查看下方狀態卡片。")
 
     except Exception as overall_e:
         logger.error(f"智能同步管線重大異常: {overall_e}")

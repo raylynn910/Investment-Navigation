@@ -61,6 +61,7 @@ if "is_syncing_klines" not in st.session_state: st.session_state.is_syncing_klin
 if "is_exporting_signals" not in st.session_state: st.session_state.is_exporting_signals = False
 if "export_signal_result" not in st.session_state: st.session_state.export_signal_result = None
 if "sync_success_msg" not in st.session_state: st.session_state.sync_success_msg = None
+if "gh_auth_check_result" not in st.session_state: st.session_state.gh_auth_check_result = None
 
 # ============================================================
 # CSS: 深色模式高保定微霧美學 (#0a0a0a + #10b981 + 16px 圓角)
@@ -250,18 +251,26 @@ def execute_smart_sync_pipeline():
         b_all = c2.get("strategy_b_triggers", []) + c2.get("next_day_b_triggers", [])
         hits_b_cnt = len({x.get("stock_id") for x in b_all if x.get("stock_id")})
 
+        git_status = res.get("git_status", {})
+        git_pushed = bool(git_status.get("git_pushed", False))
         export_res = {
             "success": res.get("success", True),
             "data_date": res.get("data_date", sig_data.get("data_date", "")),
             "top_9_count": len(c1.get("top_9", [])),
             "buffer_count": len(c1.get("buffer_10_15", [])),
             "hits_b_count": hits_b_cnt,
-            "git_status": res.get("git_status", {}),
+            "git_status": git_status,
             "actions_taken": res.get("actions_taken", []),
-            "audit_report": res.get("audit_report", {})
+            "audit_report": res.get("audit_report", {}),
+            "errors": res.get("errors", [])
         }
         st.session_state.export_signal_result = export_res
-        st.session_state.sync_success_msg = f"🎉 盤後智能核對與同步完成！資料基準: {export_res.get('data_date')}，Top 9 名單與處置狙擊已全面推送雲端！"
+        if git_pushed:
+            st.session_state.sync_success_msg = f"🎉 盤後智能核對與同步完成！資料基準: {export_res.get('data_date')}，Top 9 名單與處置狙擊已全面推送雲端！"
+        else:
+            st.session_state.sync_success_msg = (
+                f"⚠️ 本地資料與跑分已同步（基準: {export_res.get('data_date')}），但 GitHub 雲端推送失敗：{git_status.get('message', '請檢查 Git 驗證設定')}"
+            )
         st.cache_data.clear()
 
     except Exception as e:
@@ -636,6 +645,8 @@ def render_veteran_war_room(portfolio_data, market_regime):
                 st.session_state.export_signal_result = res
                 if res.get("success") and res.get("git_status", {}).get("git_pushed"):
                     st.toast("🚀 雲端親友版已成功推播！Streamlit.app 正自動熱重載中...", icon="✅")
+                else:
+                    st.toast("⚠️ 本地快照已更新，但 GitHub 推播失敗，請檢視下方訊息！", icon="⚠️")
             except Exception as e:
                 st.session_state.export_signal_result = {"success": False, "message": str(e)}
             st.session_state.is_exporting_signals = False
@@ -708,31 +719,49 @@ def render_veteran_war_room(portfolio_data, market_regime):
                     except Exception as e:
                         st.error(f"錯誤: {e}")
 
-    # 雲端親友版連動狀態卡片 (含直達 Streamlit.app 按鈕)
+    # 雲端親友版連動狀態卡片 (嚴格區分 Git Push 成功 vs 失敗，絕不假報成功)
+    is_auth_err = False
     if st.session_state.export_signal_result:
         res = st.session_state.export_signal_result
         if res.get("success"):
             git_info = res.get("git_status", {})
+            git_pushed = bool(git_info.get("git_pushed", False))
+            is_auth_err = bool(git_info.get("auth_error", False))
             pushed_at = git_info.get("pushed_at", datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
             commit_hash = git_info.get("commit_hash", "")
             cloud_url = git_info.get("cloud_url", "https://investment-navigation.streamlit.app")
-            
+            git_msg = git_info.get("message", "")
+
             actions = res.get("actions_taken", [])
             actions_html = f"<div style='font-size: 12px; color: #94a3b8; margin-top: 5px; border-top: 1px dashed rgba(255,255,255,0.12); padding-top: 4px;'>🔍 <b>智能核驗行動:</b> {' ｜ '.join(actions)}</div>" if actions else ""
             c_msg, c_btn, c_close = st.columns([0.68, 0.22, 0.10])
             with c_msg:
-                st.markdown(f"""
-                <div style='background: rgba(16, 185, 129, 0.10); border-left: 5px solid #10b981; border-radius: 8px; padding: 10px 16px;'>
-                    <div style='font-size: 15px; font-weight: bold; color: #10b981;'>
-                        🚀 雲端親友版 (Streamlit.app) 連動推送成功！
+                if git_pushed:
+                    st.markdown(f"""
+                    <div style='background: rgba(16, 185, 129, 0.10); border-left: 5px solid #10b981; border-radius: 8px; padding: 10px 16px;'>
+                        <div style='font-size: 15px; font-weight: bold; color: #10b981;'>
+                            🚀 雲端親友版 (Streamlit.app) 連動推送成功！
+                        </div>
+                        <div style='font-size: 13px; color: #cbd5e1; margin-top: 4px;'>
+                            📅 資料基準: <b>{res.get('data_date')}</b> ｜ ⏱️ 推送時間: <b>{pushed_at}</b> ｜ 🔀 Commit: <code>{commit_hash or 'latest'}</code><br>
+                            📊 前 9 強 <b>{res.get('top_9_count')}</b> 檔 ｜ 緩衝 <b>{res.get('buffer_count')}</b> 檔 ｜ 處置策略B <b>{res.get('hits_b_count')}</b> 檔 ｜ {git_msg}
+                        </div>
+                        {actions_html}
                     </div>
-                    <div style='font-size: 13px; color: #cbd5e1; margin-top: 4px;'>
-                        📅 資料基準: <b>{res.get('data_date')}</b> ｜ ⏱️ 推送時間: <b>{pushed_at}</b> ｜ 🔀 Commit: <code>{commit_hash or 'latest'}</code><br>
-                        📊 前 9 強 <b>{res.get('top_9_count')}</b> 檔 ｜ 緩衝 <b>{res.get('buffer_count')}</b> 檔 ｜ 處置策略B <b>{res.get('hits_b_count')}</b> 檔 ｜ 休市公告已全面同步
+                    """, unsafe_allow_html=True)
+                else:
+                    st.markdown(f"""
+                    <div style='background: rgba(244, 63, 94, 0.12); border-left: 5px solid #f43f5e; border-radius: 8px; padding: 10px 16px;'>
+                        <div style='font-size: 15px; font-weight: bold; color: #fb7185;'>
+                            ⚠️ 本地訊號已更新，但 GitHub 雲端推送未完成！
+                        </div>
+                        <div style='font-size: 13px; color: #fecdd3; margin-top: 4px;'>
+                            📅 資料基準: <b>{res.get('data_date')}</b> ｜ 🔀 本地 Commit: <code>{commit_hash or 'latest'}</code><br>
+                            ❌ <b>原因：</b>{git_msg or '請檢查網路或下方 GitHub 推播金鑰設定。'}
+                        </div>
+                        {actions_html}
                     </div>
-                    {actions_html}
-                </div>
-                """, unsafe_allow_html=True)
+                    """, unsafe_allow_html=True)
             with c_btn:
                 st.link_button("🔗 開啟 Streamlit.app", cloud_url, use_container_width=True)
             with c_close:
@@ -744,6 +773,57 @@ def render_veteran_war_room(portfolio_data, market_regime):
             if st.button("✖ 關閉提示", key="dismiss_export_msg"):
                 st.session_state.export_signal_result = None
                 st.rerun()
+
+    # GitHub 雲端推播金鑰與連線設定 (僅於展開或發生驗證異常時開啟，絕不影響日常載入速度)
+    if show_adv or is_auth_err:
+        with st.expander("🔑 GitHub 雲端推播金鑰 / 連線健檢（免彈 Sign in 視窗）", expanded=is_auth_err):
+            st.caption("系統會自動優先讀取 `.env` 的 `GITHUB_TOKEN` 或 Windows 憑證管理員並清理 `.git/config` 殘留前綴，推播時徹底禁用互動式登入彈窗。")
+            c_chk, c_norm = st.columns([0.5, 0.5])
+            with c_chk:
+                if st.button("🔍 檢測 GitHub 推播連線與權限", use_container_width=True, key="btn_check_gh_auth"):
+                    try:
+                        from signal_publisher import check_github_push_auth
+                        st.session_state.gh_auth_check_result = check_github_push_auth()
+                    except Exception as gh_e:
+                        st.session_state.gh_auth_check_result = {"authenticated": False, "message": str(gh_e)}
+            with c_norm:
+                if st.button("🧹 一鍵清理 .git/config 殘留 Token 前綴", use_container_width=True, key="btn_norm_gh_remote"):
+                    try:
+                        from signal_publisher import normalize_git_remote_url, check_github_push_auth
+                        norm_r = normalize_git_remote_url("origin")
+                        st.session_state.gh_auth_check_result = check_github_push_auth()
+                        if norm_r.get("changed"):
+                            st.success(f"✅ 已將 origin 淨化為標準 HTTPS URL：{norm_r.get('clean_url')}")
+                        else:
+                            st.info(f"ℹ️ origin 已為乾淨格式：{norm_r.get('clean_url')}")
+                    except Exception as norm_e:
+                        st.error(f"清理失敗: {norm_e}")
+
+            if st.session_state.get("gh_auth_check_result"):
+                chk = st.session_state.gh_auth_check_result
+                if chk.get("authenticated") and chk.get("can_push"):
+                    st.success(f"✅ {chk.get('message')}")
+                else:
+                    st.warning(f"⚠️ {chk.get('message')}")
+
+            with st.form("github_token_update_form", clear_on_submit=True):
+                new_gh_tok = st.text_input(
+                    "更新 / 綁定新版 GitHub Personal Access Token（需勾選 repo 權限）",
+                    type="password",
+                    placeholder="請貼上 ghp_... 或 github_pat_...",
+                )
+                submitted_tok = st.form_submit_button("💾 驗證並安全儲存至 .env & 系統憑證", use_container_width=True)
+                if submitted_tok:
+                    try:
+                        from signal_publisher import save_github_token_to_env, check_github_push_auth
+                        save_res = save_github_token_to_env(new_gh_tok)
+                        if save_res.get("ok"):
+                            st.success(save_res.get("message"))
+                            st.session_state.gh_auth_check_result = check_github_push_auth()
+                        else:
+                            st.error(save_res.get("message"))
+                    except Exception as tok_e:
+                        st.error(f"儲存失敗: {tok_e}")
 
     # 4. 核心一：波段輪動 (十方極速陣)
     components.render_weapon1_swing(portfolio_data, market_regime)
@@ -764,7 +844,13 @@ def render_veteran_war_room(portfolio_data, market_regime):
 # ============================================================
 def main():
     if st.session_state.sync_success_msg:
-        st.info(st.session_state.sync_success_msg, icon="ℹ️")
+        msg = st.session_state.sync_success_msg
+        if msg.startswith("⚠️"):
+            st.warning(msg, icon="⚠️")
+        elif msg.startswith("❌"):
+            st.error(msg, icon="❌")
+        else:
+            st.info(msg, icon="ℹ️")
         st.session_state.sync_success_msg = None
 
     # 頂部模式切換膠囊

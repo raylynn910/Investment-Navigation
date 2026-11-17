@@ -14,11 +14,14 @@ signal_publisher.py
 
 import os
 import sys
+import re
 import time
 import json
+import base64
 import subprocess
 import datetime
 import math
+from urllib.parse import urlparse, unquote
 import pandas as pd
 import duckdb
 import numpy as np
@@ -28,6 +31,10 @@ SIGNALS_FILE = os.path.join(PROJECT_ROOT, "published_signals.json")
 SNAPSHOTS_FILE = os.path.join(PROJECT_ROOT, "history_snapshots.json")
 DUCKDB_PATH = os.path.join(PROJECT_ROOT, "data", "market_data.duckdb")
 SCREENER_DB_PATH = os.path.join(PROJECT_ROOT, "screener_results.duckdb")
+ENV_FILE = os.path.join(PROJECT_ROOT, ".env")
+DEFAULT_CLOUD_URL = "https://investment-navigation.streamlit.app"
+DEFAULT_REPO_URL = "https://github.com/raylynn910/Investment-Navigation.git"
+DEFAULT_REPO_SLUG = "raylynn910/Investment-Navigation"
 
 
 def _get_taiwan_now() -> datetime.datetime:
@@ -1034,17 +1041,361 @@ def export_and_publish_signals(portfolio_data: dict = None, market_regime: dict 
     }
 
 
+_SECRET_PATTERNS = [
+    re.compile(r"gh[pousr]_[A-Za-z0-9_]+"),
+    re.compile(r"github_pat_[A-Za-z0-9_]+"),
+]
+
+
+def _mask_secrets(text: str) -> str:
+    """遮罩日誌或錯誤訊息中的 GitHub Token 與 URL 密碼前綴，避免外洩"""
+    if not text:
+        return ""
+    masked = str(text)
+    for pat in _SECRET_PATTERNS:
+        masked = pat.sub("***", masked)
+    masked = re.sub(r"https://[^/@\s]+@github\.com", "https://***@github.com", masked)
+    return masked
+
+
+def _git_env() -> dict:
+    """建立完全非互動式 Git 執行環境，嚴禁彈出 Windows GitHub Sign in 視窗"""
+    env = os.environ.copy()
+    env["GIT_TERMINAL_PROMPT"] = "0"
+    env["GCM_INTERACTIVE"] = "never"
+    env["GCM_GUI_PROMPT"] = "false"
+    return env
+
+
+def _run_git_cmd(args: list, extra_config: list = None, input_text: str = None, timeout: int = 25) -> subprocess.CompletedProcess:
+    """執行 Git 子行程（不彈視窗、不鎖互動提示）"""
+    cmd = ["git"] + (extra_config or []) + list(args)
+    return subprocess.run(
+        cmd,
+        cwd=PROJECT_ROOT,
+        env=_git_env(),
+        input=input_text,
+        capture_output=True,
+        encoding="utf-8",
+        errors="replace",
+        timeout=timeout,
+        creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+    )
+
+
+def _read_env_github_token() -> str:
+    """優先從 .env 讀取 GITHUB_TOKEN，其次讀取行程環境變數"""
+    if os.path.exists(ENV_FILE):
+        try:
+            with open(ENV_FILE, "r", encoding="utf-8", errors="replace") as f:
+                for raw_line in f:
+                    line = raw_line.strip()
+                    if not line or line.startswith("#") or "=" not in line:
+                        continue
+                    k, v = line.split("=", 1)
+                    if k.strip() == "GITHUB_TOKEN":
+                        tok = v.strip().strip('"').strip("'")
+                        if tok:
+                            return tok
+        except Exception:
+            pass
+    return os.environ.get("GITHUB_TOKEN", "").strip().strip('"').strip("'")
+
+
+def _upsert_env_var(key: str, value: str):
+    """安全更新或新增 .env 內的指定鍵值，完整保留其他金鑰設定"""
+    lines = []
+    if os.path.exists(ENV_FILE):
+        with open(ENV_FILE, "r", encoding="utf-8", errors="replace") as f:
+            lines = f.read().splitlines()
+    new_line = f'{key}="{value}"'
+    updated = False
+    out_lines = []
+    for line in lines:
+        stripped = line.strip()
+        if stripped and not stripped.startswith("#") and "=" in stripped:
+            k, _ = stripped.split("=", 1)
+            if k.strip() == key:
+                out_lines.append(new_line)
+                updated = True
+                continue
+        out_lines.append(line)
+    if not updated:
+        out_lines.append(new_line)
+    with open(ENV_FILE, "w", encoding="utf-8", newline="\n") as f:
+        f.write("\n".join(out_lines) + "\n")
+
+
+def _parse_github_remote(url: str) -> tuple:
+    """解析 GitHub HTTPS Remote URL，回傳 (clean_url, embedded_userinfo, repo_slug)"""
+    raw = (url or "").strip()
+    if not raw:
+        return DEFAULT_REPO_URL, "", DEFAULT_REPO_SLUG
+    parsed = urlparse(raw)
+    host = (parsed.hostname or "").lower()
+    if parsed.scheme in ("http", "https") and host == "github.com":
+        path = parsed.path or ""
+        clean_url = f"https://github.com{path}"
+        userinfo = ""
+        if "@" in parsed.netloc:
+            userinfo = unquote(parsed.netloc.rsplit("@", 1)[0])
+        slug = path.strip("/")
+        if slug.endswith(".git"):
+            slug = slug[:-4]
+        return clean_url, userinfo, (slug or DEFAULT_REPO_SLUG)
+    return raw, "", DEFAULT_REPO_SLUG
+
+
+def _verify_github_token_api(token: str, username: str = "", repo_slug: str = DEFAULT_REPO_SLUG) -> dict:
+    """呼叫 GitHub REST API 驗證憑證是否有效且具備推送 (push) 權限"""
+    tok = (token or "").strip()
+    if not tok:
+        return {"valid": False, "login": "", "scopes": "", "can_push": False, "status_code": 0, "error": "Token 為空"}
+    try:
+        import requests
+        headers = {"Accept": "application/vnd.github+json"}
+        if username:
+            auth = (username, tok)
+            req_kwargs = {"auth": auth, "headers": headers}
+        else:
+            headers["Authorization"] = f"Bearer {tok}"
+            req_kwargs = {"headers": headers}
+
+        r_user = requests.get("https://api.github.com/user", timeout=10, **req_kwargs)
+        if r_user.status_code != 200:
+            return {
+                "valid": False,
+                "login": "",
+                "scopes": "",
+                "can_push": False,
+                "status_code": r_user.status_code,
+                "error": f"GitHub 認證失敗 (HTTP {r_user.status_code}，Token 可能已過期或被撤銷)",
+            }
+        u_json = r_user.json()
+        login = str(u_json.get("login", ""))
+        scopes = str(r_user.headers.get("X-OAuth-Scopes", ""))
+
+        r_repo = requests.get(f"https://api.github.com/repos/{repo_slug}", timeout=10, **req_kwargs)
+        can_push = False
+        if r_repo.status_code == 200:
+            perms = r_repo.json().get("permissions", {}) or {}
+            can_push = bool(perms.get("push") or perms.get("admin") or perms.get("maintain"))
+        return {
+            "valid": True,
+            "login": login,
+            "scopes": scopes or "(Fine-grained PAT)",
+            "can_push": can_push,
+            "status_code": r_repo.status_code,
+            "error": "" if can_push else f"帳號 {login} 對 {repo_slug} 缺少寫入 (push) 權限",
+        }
+    except Exception as e:
+        return {"valid": False, "login": "", "scopes": "", "can_push": False, "status_code": 0, "error": _mask_secrets(str(e))}
+
+
+def _read_gcm_github_credential() -> tuple:
+    """非互動式讀取 Windows Credential Manager 中已快取的 GitHub 憑證"""
+    try:
+        res = _run_git_cmd(
+            ["credential", "fill"],
+            input_text="protocol=https\nhost=github.com\n\n",
+            timeout=8,
+        )
+        if res.returncode != 0:
+            return "", ""
+        kv = {}
+        for line in (res.stdout or "").splitlines():
+            if "=" in line:
+                k, v = line.split("=", 1)
+                kv[k.strip()] = v.strip()
+        return kv.get("username", ""), kv.get("password", "")
+    except Exception:
+        return "", ""
+
+
+def normalize_git_remote_url(remote_name: str = "origin") -> dict:
+    """
+    清理 .git/config 中殘留的 `<token>@github.com` 前綴：
+    Git 遇到 `https://<token>@github.com/...` 會將 Token 當成 username，
+    導致 Windows Credential Manager 找不到對應帳號而彈出 Sign in 視窗。
+    清理為標準 `https://github.com/owner/repo.git` 後即可正常使用 GCM 或 .env Token。
+    """
+    info = {"changed": False, "clean_url": DEFAULT_REPO_URL, "repo_slug": DEFAULT_REPO_SLUG, "migrated_token": False}
+    try:
+        res = _run_git_cmd(["remote", "get-url", remote_name], timeout=5)
+        if res.returncode != 0:
+            return info
+        raw_url = (res.stdout or "").strip()
+        clean_url, userinfo, slug = _parse_github_remote(raw_url)
+        info["clean_url"] = clean_url
+        info["repo_slug"] = slug
+        if userinfo:
+            # 若網址中剛好夾帶了一組仍然有效、且 .env 尚未儲存的 PAT，先轉存至 .env 再清理
+            candidate = userinfo.split(":", 1)[1] if ":" in userinfo else userinfo
+            if candidate.startswith(("ghp_", "github_pat_")) and not _read_env_github_token():
+                check = _verify_github_token_api(candidate, repo_slug=slug)
+                if check.get("valid") and check.get("can_push"):
+                    _upsert_env_var("GITHUB_TOKEN", candidate)
+                    os.environ["GITHUB_TOKEN"] = candidate
+                    info["migrated_token"] = True
+
+            set_res = _run_git_cmd(["remote", "set-url", remote_name, clean_url], timeout=5)
+            if set_res.returncode == 0:
+                info["changed"] = True
+                print(f"[run_git_sync] 已自動將 remote `{remote_name}` 淨化為標準 HTTPS URL（消除 Sign in 彈窗風險）")
+    except Exception as e:
+        print(f"[normalize_git_remote_url] 提示: {_mask_secrets(str(e))}")
+    return info
+
+
+def _git_auth_config_for_token(token: str) -> list:
+    """以一次性 Header 傳遞 PAT 並停用互動式 Credential Manager"""
+    b64 = base64.b64encode(f"x-access-token:{token}".encode("utf-8")).decode("ascii")
+    return [
+        "-c", "credential.helper=",
+        "-c", "credential.interactive=never",
+        "-c", f"http.https://github.com/.extraheader=AUTHORIZATION: basic {b64}",
+    ]
+
+
+def check_github_push_auth() -> dict:
+    """非互動式檢測目前 GitHub 推播驗證健康狀態（供 UI 健檢卡片使用）"""
+    remote_res = _run_git_cmd(["remote", "get-url", "origin"], timeout=5)
+    raw_url = (remote_res.stdout or "").strip() if remote_res.returncode == 0 else ""
+    clean_url, embedded_user, repo_slug = _parse_github_remote(raw_url)
+    remote_clean = bool(raw_url) and not bool(embedded_user)
+
+    env_token = _read_env_github_token()
+    has_env = bool(env_token)
+    env_check = _verify_github_token_api(env_token, repo_slug=repo_slug) if has_env else {"valid": False, "can_push": False}
+
+    gcm_user, gcm_pw = _read_gcm_github_credential()
+    has_gcm = bool(gcm_pw)
+    gcm_check = _verify_github_token_api(gcm_pw, username=gcm_user, repo_slug=repo_slug) if has_gcm else {"valid": False, "can_push": False}
+
+    if env_check.get("valid") and env_check.get("can_push"):
+        return {
+            "authenticated": True,
+            "active_method": ".env GITHUB_TOKEN",
+            "login": env_check.get("login", ""),
+            "scopes": env_check.get("scopes", ""),
+            "can_push": True,
+            "remote_clean": remote_clean,
+            "repo_slug": repo_slug,
+            "has_env_token": has_env,
+            "has_gcm_cred": has_gcm,
+            "needs_repair": not remote_clean,
+            "message": f"驗證正常（帳號: {env_check.get('login')} ｜ 來源: .env GITHUB_TOKEN ｜ 權限: {env_check.get('scopes')}）",
+        }
+    if gcm_check.get("valid") and gcm_check.get("can_push"):
+        msg = f"驗證正常（帳號: {gcm_check.get('login')} ｜ 來源: Windows 憑證管理員 ｜ 權限: {gcm_check.get('scopes')}）"
+        if has_env:
+            msg += "；注意：.env 中的 GITHUB_TOKEN 已失效，建議清除或更新。"
+        if not remote_clean:
+            msg += "；注意：.git/config 含殘留舊前綴，推送時將自動淨化。"
+        return {
+            "authenticated": True,
+            "active_method": "Windows Credential Manager (OAuth/GCM)",
+            "login": gcm_check.get("login", ""),
+            "scopes": gcm_check.get("scopes", ""),
+            "can_push": True,
+            "remote_clean": remote_clean,
+            "repo_slug": repo_slug,
+            "has_env_token": has_env,
+            "has_gcm_cred": has_gcm,
+            "needs_repair": (not remote_clean) or has_env,
+            "message": msg,
+        }
+
+    reasons = []
+    if not remote_clean and embedded_user:
+        reasons.append(".git/config 殘留舊版 Token 前綴")
+    if has_env:
+        reasons.append(f".env GITHUB_TOKEN 無法驗證：{env_check.get('error', '無效')}")
+    if has_gcm:
+        reasons.append(f"Windows 憑證管理員無法驗證：{gcm_check.get('error', '無效')}")
+    if not has_env and not has_gcm:
+        reasons.append("尚未設定 .env GITHUB_TOKEN 或 Windows GitHub 憑證")
+    return {
+        "authenticated": False,
+        "active_method": "無有效憑證",
+        "login": "",
+        "scopes": "",
+        "can_push": False,
+        "remote_clean": remote_clean,
+        "repo_slug": repo_slug,
+        "has_env_token": has_env,
+        "has_gcm_cred": has_gcm,
+        "needs_repair": True,
+        "message": "；".join(reasons),
+    }
+
+
+def save_github_token_to_env(token: str) -> dict:
+    """驗證使用者輸入之 GitHub Personal Access Token，儲存至 .env 並同步修復 Remote 與 Windows 憑證"""
+    clean_tok = (token or "").strip().strip('"').strip("'")
+    if not clean_tok:
+        return {"ok": False, "message": "請輸入有效的 GitHub Personal Access Token！"}
+
+    norm = normalize_git_remote_url()
+    repo_slug = norm.get("repo_slug", DEFAULT_REPO_SLUG)
+    chk = _verify_github_token_api(clean_tok, repo_slug=repo_slug)
+    if not chk.get("valid"):
+        return {"ok": False, "message": chk.get("error", "GitHub Token 驗證失敗，請確認未過期且輸入完整。")}
+    if not chk.get("can_push"):
+        return {"ok": False, "message": chk.get("error", "此 Token 缺少 repo 寫入權限，請勾選 repo 權限後重新產生。")}
+
+    _upsert_env_var("GITHUB_TOKEN", clean_tok)
+    os.environ["GITHUB_TOKEN"] = clean_tok
+    login = chk.get("login") or "raylynn910"
+
+    # 確保 .git/config 不殘留舊 token 前綴
+    normalize_git_remote_url()
+
+    # 同步刷新 Windows Credential Manager，確保終端機直接 git push 亦可使用最新 Token
+    try:
+        cred_payload = f"protocol=https\nhost=github.com\nusername={login}\npassword={clean_tok}\n\n"
+        _run_git_cmd(["credential", "approve"], input_text=cred_payload, timeout=8)
+    except Exception:
+        pass
+
+    return {
+        "ok": True,
+        "login": login,
+        "scopes": chk.get("scopes", ""),
+        "message": f"✅ Token 驗證通過並已儲存！（帳號: {login} ｜ 權限: {chk.get('scopes')} ｜ .env 與系統憑證已同步更新）",
+    }
+
+
+def _is_auth_failure_text(err_text: str) -> bool:
+    low = (err_text or "").lower()
+    markers = (
+        "terminal prompts disabled",
+        "cannot prompt",
+        "authentication failed",
+        "bad credentials",
+        "invalid username or token",
+        "could not read password",
+        "could not read username",
+        "logon failed",
+        "returned error: 401",
+        "returned error: 403",
+        "permission to",
+    )
+    return any(m in low for m in markers)
+
+
 def run_git_sync(data_date: str) -> dict:
-    """執行 Git Add, Commit, Push 並具備 OneDrive index.lock 自動自我修復機制"""
+    """執行 Git Add, Commit, Push；強制非互動式執行，絕不彈出 Sign in 視窗，並具備自動淨化與斷鏈診斷"""
     result = {
         "git_committed": False,
         "git_pushed": False,
+        "auth_error": False,
         "commit_hash": "",
         "pushed_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "cloud_url": "https://investment-navigation.streamlit.app",
+        "cloud_url": DEFAULT_CLOUD_URL,
         "message": ""
     }
-    
+
     # 自我修復：檢查並清除 OneDrive 或歷史殘留之 index.lock
     lock_file = os.path.join(PROJECT_ROOT, ".git", "index.lock")
     if os.path.exists(lock_file):
@@ -1077,43 +1428,27 @@ def run_git_sync(data_date: str) -> dict:
         "tools/__init__.py",
         ".gitignore"
     ]
+    existing_files = [f for f in tracked_files if os.path.exists(os.path.join(PROJECT_ROOT, f))]
 
     try:
         # 1. git add (具備重試機制)
-        add_res = subprocess.run(
-            ["git", "add"] + tracked_files,
-            cwd=PROJECT_ROOT,
-            capture_output=True,
-            encoding="utf-8",
-            errors="replace"
-        )
+        add_res = _run_git_cmd(["add"] + existing_files, timeout=20)
         if add_res.returncode != 0:
-            # 重試一次
             if os.path.exists(lock_file):
-                try: os.remove(lock_file)
-                except Exception: pass
+                try:
+                    os.remove(lock_file)
+                except Exception:
+                    pass
             time.sleep(0.5)
-            add_res = subprocess.run(
-                ["git", "add"] + tracked_files,
-                cwd=PROJECT_ROOT,
-                capture_output=True,
-                encoding="utf-8",
-                errors="replace"
-            )
-            
+            add_res = _run_git_cmd(["add"] + existing_files, timeout=20)
+
         if add_res.returncode != 0:
-            result["message"] = f"Git Add 失敗: {(add_res.stderr or '').strip()}"
+            result["message"] = f"Git Add 失敗: {_mask_secrets((add_res.stderr or '').strip())}"
             return result
 
         # 2. git commit
         commit_msg = f"Update daily signals ({data_date}) & holiday notice"
-        commit_res = subprocess.run(
-            ["git", "commit", "-m", commit_msg],
-            cwd=PROJECT_ROOT,
-            capture_output=True,
-            encoding="utf-8",
-            errors="replace"
-        )
+        commit_res = _run_git_cmd(["commit", "-m", commit_msg], timeout=20)
         stdout_str = (commit_res.stdout or "").strip()
         stderr_str = (commit_res.stderr or "").strip()
         if commit_res.returncode == 0:
@@ -1122,24 +1457,18 @@ def run_git_sync(data_date: str) -> dict:
             if "nothing to commit" in stdout_str or "clean" in stdout_str:
                 result["git_committed"] = True
             else:
-                result["message"] = f"Git Commit 提示: {stdout_str or stderr_str}"
+                result["message"] = f"Git Commit 提示: {_mask_secrets(stdout_str or stderr_str)}"
 
         # 取得最新 Commit Hash
         try:
-            rev_res = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=PROJECT_ROOT, capture_output=True, text=True)
+            rev_res = _run_git_cmd(["rev-parse", "--short", "HEAD"], timeout=5)
             if rev_res.returncode == 0:
-                result["commit_hash"] = rev_res.stdout.strip()
+                result["commit_hash"] = (rev_res.stdout or "").strip()
         except Exception:
             pass
 
-        # 3. 檢查是否有遠端倉庫 (remote)
-        remote_res = subprocess.run(
-            ["git", "remote"],
-            cwd=PROJECT_ROOT,
-            capture_output=True,
-            encoding="utf-8",
-            errors="replace"
-        )
+        # 3. 檢查並自動淨化遠端倉庫 (remote)
+        remote_res = _run_git_cmd(["remote"], timeout=5)
         has_remote = bool((remote_res.stdout or "").strip())
 
         if not has_remote:
@@ -1147,37 +1476,72 @@ def run_git_sync(data_date: str) -> dict:
             result["message"] = "本地 Git 記錄已成功提交。尚未設定遠端倉庫 (git remote)。"
             return result
 
-        # 4. git push (具備超時與重試機制)
-        push_res = subprocess.run(
-            ["git", "push", "origin", "main"],
-            cwd=PROJECT_ROOT,
-            capture_output=True,
-            encoding="utf-8",
-            errors="replace",
-            timeout=25
-        )
+        normalize_git_remote_url("origin")
+
+        # 4. 非互動式 git push（先試 .env GITHUB_TOKEN 若有設定，否則使用 Windows Credential Manager；絕不彈窗）
+        env_token = _read_env_github_token()
+        push_res = None
+        used_env_token = False
+        stale_env_notice = ""
+
+        if env_token:
+            used_env_token = True
+            push_res = _run_git_cmd(
+                ["push", "origin", "main"],
+                extra_config=_git_auth_config_for_token(env_token),
+                timeout=25,
+            )
+            if push_res.returncode != 0 and _is_auth_failure_text((push_res.stderr or "") + (push_res.stdout or "")):
+                # .env 中的 Token 若過期，自動嘗試 Windows Credential Manager 作為備援
+                gcm_res = _run_git_cmd(
+                    ["push", "origin", "main"],
+                    extra_config=["-c", "credential.interactive=never"],
+                    timeout=25,
+                )
+                if gcm_res.returncode == 0:
+                    push_res = gcm_res
+                    stale_env_notice = "（注意：.env 中的 GITHUB_TOKEN 已失效，本次已自動切換 Windows 憑證完成推送）"
+        else:
+            push_res = _run_git_cmd(
+                ["push", "origin", "main"],
+                extra_config=["-c", "credential.interactive=never"],
+                timeout=25,
+            )
+
         if push_res.returncode == 0:
+            result["git_pushed"] = True
+            result["message"] = f"✅ 訊號與前端已成功推播至 GitHub ({result['commit_hash']})！Streamlit.app 正自動熱重載！{stale_env_notice}"
+            return result
+
+        err_raw = ((push_res.stderr or "") + "\n" + (push_res.stdout or "")).strip()
+        if _is_auth_failure_text(err_raw):
+            result["git_pushed"] = False
+            result["auth_error"] = True
+            result["message"] = (
+                "GitHub 推播驗證已過期或失效（系統已自動攔截彈窗以防卡死）。"
+                "請展開下方「🔑 GitHub 雲端推播金鑰 / 連線健檢」貼上新版 Personal Access Token（勾選 repo 權限）即可恢復一鍵推播。"
+            )
+            return result
+
+        # 非驗證錯誤（如暫時性網路波動）才重試一次
+        time.sleep(1)
+        retry_cfg = _git_auth_config_for_token(env_token) if used_env_token else ["-c", "credential.interactive=never"]
+        push_res2 = _run_git_cmd(["push", "origin", "main"], extra_config=retry_cfg, timeout=25)
+        if push_res2.returncode == 0:
             result["git_pushed"] = True
             result["message"] = f"✅ 訊號與前端已成功推播至 GitHub ({result['commit_hash']})！Streamlit.app 正自動熱重載！"
         else:
-            time.sleep(1)
-            push_res = subprocess.run(
-                ["git", "push", "origin", "main"],
-                cwd=PROJECT_ROOT,
-                capture_output=True,
-                encoding="utf-8",
-                errors="replace",
-                timeout=25
-            )
-            if push_res.returncode == 0:
-                result["git_pushed"] = True
-                result["message"] = f"✅ 訊號與前端已成功推播至 GitHub ({result['commit_hash']})！Streamlit.app 正自動熱重載！"
-            else:
-                result["git_pushed"] = False
-                result["message"] = f"Git Push 失敗 (請確認網路連線或遠端權限): {(push_res.stderr or '').strip()}"
+            err2 = ((push_res2.stderr or "") + "\n" + (push_res2.stdout or "")).strip()
+            result["git_pushed"] = False
+            result["auth_error"] = _is_auth_failure_text(err2)
+            result["message"] = f"Git Push 失敗: {_mask_secrets(err2)}"
 
+    except subprocess.TimeoutExpired:
+        result["git_pushed"] = False
+        result["message"] = "Git Push 連線逾時（25秒），請檢查網路連線或於「🔑 GitHub 推播連線健檢」確認驗證狀態。"
     except Exception as e:
-        result["message"] = f"Git 操作例外: {str(e)}"
+        result["git_pushed"] = False
+        result["message"] = f"Git 操作例外: {_mask_secrets(str(e))}"
 
     return result
 
