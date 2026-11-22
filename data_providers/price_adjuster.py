@@ -1,17 +1,24 @@
+import os
 import duckdb
 import pandas as pd
 import logging
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
+_DEFAULT_DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "market_data.duckdb")
 
-def auto_adjust_historical_prices(db_path: str = "data/market_data.duckdb"):
+def auto_adjust_historical_prices(db_path: str = None):
     """
     Detects abnormal price gaps (> 11% or < -11%) between consecutive trading days,
     which usually indicate Ex-Dividend (除權息) or Capital Reduction (減資).
     Automatically back-adjusts historical prices in DuckDB to maintain accurate momentum.
     """
+    if db_path is None:
+        db_path = _DEFAULT_DB
+    con = None
     try:
-        con = duckdb.connect(db_path)
+        from db_utils import safe_duckdb_connect
+        con = safe_duckdb_connect(db_path, read_only=False)
         from tools.tw_price_limit import get_market_trading_dates
         market_dates = get_market_trading_dates(con)
         if len(market_dates) < 2:
@@ -30,6 +37,7 @@ def auto_adjust_historical_prices(db_path: str = "data/market_data.duckdb"):
                 volume,
                 ROW_NUMBER() OVER (PARTITION BY stock_id ORDER BY date DESC) as rn
             FROM klines
+            WHERE LENGTH(stock_id) = 4 AND regexp_matches(stock_id, '^[0-9]{4}$')
         )
         SELECT 
             t1.stock_id,
@@ -45,10 +53,10 @@ def auto_adjust_historical_prices(db_path: str = "data/market_data.duckdb"):
         df = con.execute(query).fetchdf()
         adjustments_made = 0
         
-        for idx, row in df.iterrows():
-            stock_id = row['stock_id']
-            curr_open = row['current_open']
-            prev_close = row['prev_close']
+        for _, row in df.iterrows():
+            stock_id = str(row['stock_id'])
+            curr_open = float(row['current_open'])
+            prev_close = float(row['prev_close'])
             curr_date = str(row['current_date'])[:10]
             prev_date = str(row['prev_date'])[:10]
 
@@ -64,32 +72,34 @@ def auto_adjust_historical_prices(db_path: str = "data/market_data.duckdb"):
             # Taiwan's daily limit is 10%. Anything beyond 11% is definitely an adjustment.
             if gap_pct > 0.11 or gap_pct < -0.11:
                 ratio = curr_open / prev_close
-                logger.info(f"Anomaly Detected for {stock_id} on {curr_date}: Gap {gap_pct*100:.2f}%. Applying Ratio: {ratio:.4f}")
+                logger.info(f"[DB Update Log] {datetime.now():%Y-%m-%d %H:%M:%S} Auto-Adjust {stock_id} on {curr_date}: Gap {gap_pct*100:.2f}%, Ratio={ratio:.6f}")
                 
-                # Apply back-adjustment
-                adjust_query = f"""
-                UPDATE klines 
-                SET 
-                    open = open * {ratio},
-                    high = high * {ratio},
-                    low = low * {ratio},
-                    close = close * {ratio},
-                    volume = volume / {ratio}
-                WHERE stock_id='{stock_id}' AND date < '{curr_date}'
-                """
-                con.execute(adjust_query)
+                # Parameterized back-adjustment query (zero SQL interpolation)
+                con.execute(
+                    """
+                    UPDATE klines
+                    SET
+                        open = open * ?,
+                        high = high * ?,
+                        low = low * ?,
+                        close = close * ?,
+                        volume = volume / ?
+                    WHERE stock_id = ? AND date < CAST(? AS DATE)
+                    """,
+                    [ratio, ratio, ratio, ratio, ratio, stock_id, curr_date],
+                )
                 adjustments_made += 1
                 
         con.commit()
         if adjustments_made > 0:
-            logger.info(f"Successfully auto-adjusted {adjustments_made} stocks.")
-            print(f"Successfully auto-adjusted {adjustments_made} stocks.")
+            logger.info(f"[DB Update Log] {datetime.now():%Y-%m-%d %H:%M:%S} Auto-adjusted {adjustments_made} stocks.")
+            print(f"[DB Update Log] Auto-adjusted {adjustments_made} stocks.")
             
     except Exception as e:
         logger.error(f"Error in auto_adjust_historical_prices: {e}")
         print(f"Error in auto_adjust_historical_prices: {e}")
     finally:
-        if 'con' in locals():
+        if con is not None:
             con.close()
 
 if __name__ == "__main__":

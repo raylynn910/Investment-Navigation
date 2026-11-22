@@ -40,10 +40,6 @@ def render_html(html_str: str):
 
 import disposal_event_scanner
 
-importlib.reload(api_client)
-importlib.reload(disposal_event_scanner)
-importlib.reload(components)
-
 PROJECT_ROOT = _project_root
 SIGNALS_FILE = os.path.join(PROJECT_ROOT, "published_signals.json")
 

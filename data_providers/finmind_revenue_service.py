@@ -41,21 +41,21 @@ DB_PATH = os.path.join(PROJECT_ROOT, "data", "market_data.duckdb")
 
 
 def get_finmind_tokens():
+    """嚴格自 .env / 環境變數讀取 FinMind Token，嚴禁硬編碼 JWT 密鑰。"""
+    load_dotenv()
     tokens = [
         os.environ.get("FINMIND_TOKEN"),
         os.environ.get("FINMIND_TOKEN_2"),
         os.environ.get("FINMIND_TOKEN_3"),
         os.environ.get("FINMIND_TOKEN_4"),
     ]
-    tokens = [t.strip().strip('"').strip("'") for t in tokens if t and t.strip()]
-    if not tokens:
-        tokens = [
-            "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoicmF5bHlubjkxMEBnbWFpbC5jb20iLCJlbWFpbCI6InJheWx5bm45MTBAZ21haWwuY29tIiwidG9rZW5fdmVyc2lvbiI6Mn0.jNIfxQyrQQ0CAw0BrOzoJtpzZzC0etk5KmC4Uhd3Z4g",
-            "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoibHlubl9xayIsImVtYWlsIjoibHlubl9xazA5MTBAeWFob28uY29tLnR3IiwidG9rZW5fdmVyc2lvbiI6MH0.1FXHypT6ge0jaISUjmJoFtx0Xch908r4i6NNSQF6Scw",
-            "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiZWxvc3lkIiwiZW1haWwiOiJFbG9TeWRAZ21haWwuY29tIiwidG9rZW5fdmVyc2lvbiI6MH0.ZtNR3B5fOuBrdgFJF96ctyw5zP2LIWak6s0A4p3X9uo",
-            "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoieXVmYW5nIiwiZW1haWwiOiJ5dWZhbmcwODI2NzZAZ21haWwuY29tIiwidG9rZW5fdmVyc2lvbiI6MH0.8XyhbDI2cQAgSNmujPuxj-OZhyMgHQdlXXcOIEBpcAs"
-        ]
-    return tokens
+    cleaned = []
+    for t in tokens:
+        if t:
+            val = t.strip().strip('"').strip("'")
+            if val and val not in cleaned:
+                cleaned.append(val)
+    return cleaned
 
 
 class TokenRotator:
@@ -207,45 +207,48 @@ def _sync_official_twse_tpex_revenues() -> dict:
     df_cur = pd.DataFrame(current_records).drop_duplicates(subset=["stock_id", "date"], keep="last")
     df_cur = df_cur.replace({np.nan: None})
 
-    conn = duckdb.connect(DB_PATH)
-    conn.execute("CREATE UNIQUE INDEX IF NOT EXISTS idx_revenues_stock_date ON revenues(stock_id, date);")
+    from db_utils import safe_duckdb_connect
+    conn = safe_duckdb_connect(DB_PATH, read_only=False)
+    try:
+        conn.execute("CREATE UNIQUE INDEX IF NOT EXISTS idx_revenues_stock_date ON revenues(stock_id, date);")
 
-    # 1. 寫入官方全量當期營收 (如 2026-10-10 = 2026年9月營收)
-    conn.register("df_official_cur", df_cur)
-    conn.execute("""
-        INSERT INTO revenues (
-            stock_id, date, revenue, revenue_last_month, revenue_last_year,
-            revenue_mom_pct, revenue_yoy_pct, cumulative_revenue
-        )
-        SELECT
-            stock_id, date, revenue, revenue_last_month, revenue_last_year,
-            revenue_mom_pct, revenue_yoy_pct, cumulative_revenue
-        FROM df_official_cur
-        ON CONFLICT(stock_id, date) DO UPDATE SET
-            revenue = excluded.revenue,
-            revenue_last_month = excluded.revenue_last_month,
-            revenue_last_year = excluded.revenue_last_year,
-            revenue_mom_pct = excluded.revenue_mom_pct,
-            revenue_yoy_pct = excluded.revenue_yoy_pct,
-            cumulative_revenue = excluded.cumulative_revenue
-    """)
-
-    # 2. 校正前一期 (2026-09-10 = 2026年8月營收) 被誤寫為 9月營收之紀錄
-    if prev_month_repairs:
-        df_prev = pd.DataFrame(prev_month_repairs).drop_duplicates(subset=["stock_id", "date"], keep="last")
-        conn.register("df_official_prev", df_prev)
+        # 1. 寫入官方全量當期營收
+        conn.register("df_official_cur", df_cur)
         conn.execute("""
-            UPDATE revenues
-            SET revenue = df_official_prev.true_prev_revenue
-            FROM df_official_prev
-            WHERE revenues.stock_id = df_official_prev.stock_id
-              AND revenues.date = df_official_prev.date
-              AND revenues.revenue != df_official_prev.true_prev_revenue
+            INSERT INTO revenues (
+                stock_id, date, revenue, revenue_last_month, revenue_last_year,
+                revenue_mom_pct, revenue_yoy_pct, cumulative_revenue
+            )
+            SELECT
+                stock_id, date, revenue, revenue_last_month, revenue_last_year,
+                revenue_mom_pct, revenue_yoy_pct, cumulative_revenue
+            FROM df_official_cur
+            ON CONFLICT(stock_id, date) DO UPDATE SET
+                revenue = excluded.revenue,
+                revenue_last_month = excluded.revenue_last_month,
+                revenue_last_year = excluded.revenue_last_year,
+                revenue_mom_pct = excluded.revenue_mom_pct,
+                revenue_yoy_pct = excluded.revenue_yoy_pct,
+                cumulative_revenue = excluded.cumulative_revenue
         """)
 
-    conn.commit()
-    conn.close()
-    print(f"  ✅ [官方 TWSE/TPEx 權威同步] 已完成 {len(df_cur)} 檔 {detected_ym_label} (標籤日: {detected_pub_date}) 寫入與對齊！")
+        # 2. 校正前一期營收金額 (依官方上月營收精準比對)
+        if prev_month_repairs:
+            df_prev = pd.DataFrame(prev_month_repairs).drop_duplicates(subset=["stock_id", "date"], keep="last")
+            conn.register("df_official_prev", df_prev)
+            conn.execute("""
+                UPDATE revenues
+                SET revenue = df_official_prev.true_prev_revenue
+                FROM df_official_prev
+                WHERE revenues.stock_id = df_official_prev.stock_id
+                  AND revenues.date = df_official_prev.date
+                  AND revenues.revenue != df_official_prev.true_prev_revenue
+            """)
+
+        conn.commit()
+    finally:
+        conn.close()
+    print(f"[DB Update Log] {datetime.now():%Y-%m-%d %H:%M:%S} revenues 官方 TWSE/TPEx UPSERT {len(df_cur)} 檔 ({detected_ym_label}, 標籤日: {detected_pub_date})")
     return {
         "count": len(df_cur),
         "publish_date": detected_pub_date,
@@ -253,305 +256,243 @@ def _sync_official_twse_tpex_revenues() -> dict:
     }
 
 
-def _normalize_legacy_openapi_date_tags():
-    """
-    修復歷史舊版 update_revenue_openapi.py 將 11509 (2026年9月營收) 存於 2026-09-10、
-    以及舊版 FinMind 腳本使用 .shift(12) 造成 2026-10-10 (9月營收) 誤對齊 2025-10-10 (10月營收) 的問題。
-    完全基於 DuckDB 內已存在之官方證交所/櫃買中心真實申報數據進行精準日期標籤歸位，絕不產生任何虛擬數值。
-    """
-    conn = duckdb.connect(DB_PATH)
-    try:
-        # Step A: 針對 2026-10-10 與 2026-09-10 營收值重複之個股 (因舊版 openapi 將 9月營收寫入 2026-09-10)
-        # 先將 2026-09-10 內含之官方 9月 MoM/YoY/去年同月 歸位至 2026-10-10，再將 2026-09-10 還原為 8月營收
-        conn.execute("""
-            UPDATE revenues AS r10
-            SET revenue_last_month = r9.revenue_last_month,
-                revenue_last_year = r9.revenue_last_year,
-                revenue_mom_pct = r9.revenue_mom_pct,
-                revenue_yoy_pct = r9.revenue_yoy_pct,
-                cumulative_revenue = COALESCE(r9.cumulative_revenue, r10.cumulative_revenue)
-            FROM revenues AS r9
-            WHERE r10.date = '2026-10-10'
-              AND r9.stock_id = r10.stock_id AND r9.date = '2026-09-10'
-              AND r10.revenue = r9.revenue
-              AND r9.revenue_last_month IS NOT NULL
-              AND r9.revenue != r9.revenue_last_month
-        """)
-        conn.execute("""
-            UPDATE revenues AS r9
-            SET revenue = r9.revenue_last_month
-            FROM revenues AS r10
-            WHERE r9.date = '2026-09-10'
-              AND r10.stock_id = r9.stock_id AND r10.date = '2026-10-10'
-              AND r10.revenue = r9.revenue
-              AND r9.revenue_last_month IS NOT NULL
-              AND r9.revenue != r9.revenue_last_month
-        """)
-
-        # Step B: 針對尚未建立 2026-10-10，但官方 9月營收 (11509) 已由舊版 openapi 存入 2026-09-10 之個股 (468 檔上櫃股)
-        mig_cnt = conn.execute("""
-            SELECT COUNT(*) FROM revenues r9
-            WHERE r9.date = '2026-09-10'
-              AND NOT EXISTS (SELECT 1 FROM revenues r10 WHERE r10.stock_id = r9.stock_id AND r10.date = '2026-10-10')
-        """).fetchone()[0]
-        if mig_cnt > 0:
-            conn.execute("""
-                INSERT INTO revenues (
-                    stock_id, date, revenue, revenue_last_month, revenue_last_year,
-                    revenue_mom_pct, revenue_yoy_pct, cumulative_revenue
-                )
-                SELECT
-                    r9.stock_id, CAST('2026-10-10' AS DATE), r9.revenue, r9.revenue_last_month, r9.revenue_last_year,
-                    r9.revenue_mom_pct, r9.revenue_yoy_pct, r9.cumulative_revenue
-                FROM revenues r9
-                WHERE r9.date = '2026-09-10'
-                  AND NOT EXISTS (SELECT 1 FROM revenues r10 WHERE r10.stock_id = r9.stock_id AND r10.date = '2026-10-10')
-            """)
-            # 將原本 2026-09-10 還原為真實 8月營收 (r8)
-            conn.execute("""
-                UPDATE revenues AS r9
-                SET revenue = COALESCE(r8.revenue, r9.revenue_last_month),
-                    revenue_last_month = r8.revenue_last_month,
-                    revenue_last_year = r8.revenue_last_year,
-                    revenue_mom_pct = r8.revenue_mom_pct,
-                    revenue_yoy_pct = r8.revenue_yoy_pct,
-                    cumulative_revenue = r8.cumulative_revenue
-                FROM revenues AS r8, revenues AS r10
-                WHERE r9.date = '2026-09-10'
-                  AND r8.stock_id = r9.stock_id AND r8.date = '2026-08-10'
-                  AND r10.stock_id = r9.stock_id AND r10.date = '2026-10-10'
-                  AND r9.revenue = r10.revenue
-                  AND r9.revenue != r8.revenue
-            """)
-            print(f"  ✅ [官方標籤對齊] 已將 {mig_cnt} 檔原存於 2026-09-10 之官方 9月營收歸位至 2026-10-10！")
-
-        # Step C: 修正舊版 FinMind .shift(12) 將 2026-10-10 (2026年9月營收) 誤對齊至 2025-10-10 (2025年10月營收) 的去年同月偏差
-        conn.execute("""
-            UPDATE revenues AS r10
-            SET revenue_last_year = ly_sep.revenue,
-                revenue_yoy_pct = CASE WHEN ly_sep.revenue > 0 THEN (r10.revenue - ly_sep.revenue) / ly_sep.revenue * 100.0 ELSE r10.revenue_yoy_pct END
-            FROM revenues AS ly_oct, revenues AS ly_sep
-            WHERE r10.date = '2026-10-10'
-              AND ly_oct.stock_id = r10.stock_id AND ly_oct.date = '2025-10-10'
-              AND ly_sep.stock_id = r10.stock_id AND ly_sep.date = '2025-09-10'
-              AND ABS(COALESCE(r10.revenue_last_year, 0) - ly_oct.revenue) < 1000
-              AND ABS(ly_sep.revenue - ly_oct.revenue) >= 1000
-        """)
-        conn.commit()
-    finally:
-        conn.close()
+def _get_default_expected_pub_date(now: datetime = None) -> tuple[str, str]:
+    """依台灣每月 10 日營收法定公布規則，動態推算最新目標標籤日與名稱"""
+    if now is None:
+        now = datetime.now()
+    if now.day > 10:
+        rev_y = now.year - 1 if now.month == 1 else now.year
+        rev_m = 12 if now.month == 1 else (now.month - 1)
+        pub_date = f"{now.year}-{now.month:02d}-10"
+    else:
+        prev_y = now.year - 1 if now.month == 1 else now.year
+        prev_m = 12 if now.month == 1 else (now.month - 1)
+        rev_y = prev_y - 1 if prev_m == 1 else prev_y
+        rev_m = 12 if prev_m == 1 else (prev_m - 1)
+        pub_date = f"{prev_y}-{prev_m:02d}-10"
+    return pub_date, f"{rev_y}年{rev_m}月營收"
 
 
-def sync_finmind_revenues(start_date="2026-08-01", max_workers=3):
+def sync_finmind_revenues(start_date: str = None, max_workers: int = 3):
     """
-    全量同步最新月營收：
-    1. 優先執行 TWSE / TPEx 官方 OpenAPI 全量權威同步（確保全市場 1,980+ 檔 9月營收 100% 齊備且與官方數字完全一致）。
-    2. 執行 MoneyDJ 最新月份搶先快報同步（補齊月初已搶先公佈之 10月營收）。
-    3. 針對仍缺漏目標月份營收之個股，透過 FinMind API 進行低併發差額補齊（具備 403 IP Ban 與 402 Rate Limit 熔斷保護）。
+    全量同步最新月營收（全面動態月份化，零整表 DELETE 風險）：
+    1. 優先執行 TWSE / TPEx 官方 OpenAPI 全量權威同步（零限速涵蓋一般業與金融/金控業）。
+    2. 執行 MoneyDJ 最新月份搶先快報同步（補齊月初搶先公佈之個股）。
+    3. 針對仍缺漏目標月份營收之個股，透過 FinMind API 進行低併發差額補齊（嚴格讀 .env，具 403/402 熔斷）。
+    4. 僅針對缺少 MoM% 或 YoY% 之紀錄，以精準「上月同日 / 去年同月」比對進行增量 UPDATE，嚴禁整表 DELETE。
     """
+    from db_utils import safe_duckdb_connect
+    now = datetime.now()
+    if not start_date:
+        # 往回抓約 3 個月供 FinMind 差額補齊
+        m3 = now.month - 3
+        y3 = now.year
+        if m3 <= 0:
+            m3 += 12
+            y3 -= 1
+        start_date = f"{y3}-{m3:02d}-01"
+
     print("=" * 68)
     print("🚀 啟動全市場月營收權威同步管線 (TWSE/TPEx 官方 + MoneyDJ + FinMind 差額補齊)...")
     print("=" * 68)
 
     # -------------------------------------------------------------
-    # Stage 1: 官方 TWSE / TPEx 全量同步 + 歷史日期標籤對齊
+    # Stage 1: 官方 TWSE / TPEx 全量同步
     # -------------------------------------------------------------
     off_res = _sync_official_twse_tpex_revenues()
-    _normalize_legacy_openapi_date_tags()
-    target_pub_date = off_res.get("publish_date") or "2026-10-10"
+    default_pub_date, default_ym_label = _get_default_expected_pub_date(now)
+    target_pub_date = off_res.get("publish_date") or default_pub_date
+    target_ym_label = off_res.get("rev_ym_label") or default_ym_label
 
     # -------------------------------------------------------------
-    # Stage 2: MoneyDJ 當月搶先營收快報同步 (如 11月初搶先公佈之 10月營收 -> 2026-11-10)
+    # Stage 2: MoneyDJ 當月搶先營收快報同步 (僅於每月 1~15 日申報期執行，避免誤寫下月)
     # -------------------------------------------------------------
     early_cnt = 0
-    try:
-        from moneydj_revenue_scraper import scrape_moneydj_revenue
-        mdj_res = scrape_moneydj_revenue()
-        if isinstance(mdj_res, dict) and mdj_res.get("status") == "success":
-            early_cnt = int(mdj_res.get("count", 0))
-            print(f"  ✅ [MoneyDJ 搶先快報] 已同步 {early_cnt} 檔最新公告營收 (標籤日: {mdj_res.get('target_date')})")
-    except Exception as e:
-        print(f"  [MoneyDJ 搶先快報提示] {e}")
+    if now.day <= 15:
+        try:
+            from moneydj_revenue_scraper import scrape_moneydj_revenue
+            mdj_res = scrape_moneydj_revenue()
+            if isinstance(mdj_res, dict) and mdj_res.get("status") == "success":
+                early_cnt = int(mdj_res.get("count", 0))
+                print(f"  ✅ [MoneyDJ 搶先快報] 已同步 {early_cnt} 檔最新公告營收 (標籤日: {mdj_res.get('target_date')})")
+        except Exception as e:
+            print(f"  [MoneyDJ 搶先快報提示] {e}")
 
     # -------------------------------------------------------------
     # Stage 3: 檢查是否仍有缺漏個股需由 FinMind 差額補齊
     # -------------------------------------------------------------
-    conn = duckdb.connect(DB_PATH, read_only=True)
-    active_stocks = [
-        r[0] for r in conn.execute("""
-            SELECT DISTINCT stock_id
-            FROM klines
-            WHERE LENGTH(stock_id) = 4
-              AND stock_id NOT LIKE '0%'
-              AND date >= '2026-09-01'
-            ORDER BY stock_id
-        """).fetchall()
-    ]
-    have_target_stocks = set(
-        r[0] for r in conn.execute("SELECT DISTINCT stock_id FROM revenues WHERE date = ?", [target_pub_date]).fetchall()
-    )
-    conn.close()
+    conn = safe_duckdb_connect(DB_PATH, read_only=True)
+    try:
+        active_stocks = [
+            r[0] for r in conn.execute(
+                """
+                SELECT DISTINCT stock_id
+                FROM klines
+                WHERE LENGTH(stock_id) = 4
+                  AND stock_id NOT LIKE '0%'
+                  AND date >= CAST(? AS DATE)
+                ORDER BY stock_id
+                """,
+                [start_date],
+            ).fetchall()
+        ]
+        have_target_stocks = set(
+            r[0] for r in conn.execute(
+                "SELECT DISTINCT stock_id FROM revenues WHERE date = ?",
+                [target_pub_date],
+            ).fetchall()
+        )
+    finally:
+        conn.close()
 
     missing_stocks = [s for s in active_stocks if s not in have_target_stocks]
-    print(f"📊 全市場普通股母體: {len(active_stocks)} 檔 ｜ 已具備 {target_pub_date} 營收: {len(have_target_stocks)} 檔 ｜ 待 FinMind 差額補齊: {len(missing_stocks)} 檔")
+    print(f"📊 全市場普通股母體: {len(active_stocks)} 檔 ｜ 已具備 {target_pub_date} ({target_ym_label}): {len(have_target_stocks)} 檔 ｜ 待 FinMind 差額補齊: {len(missing_stocks)} 檔")
 
     finmind_added = 0
     ip_banned_flag = False
 
     if missing_stocks:
         tokens = get_finmind_tokens()
-        rotator = TokenRotator(tokens)
-        url = "https://api.finmindtrade.com/api/v4/data"
-        all_fetched_records = []
-        lock = threading.Lock()
-        rate_limited_tokens = set()
+        if not tokens:
+            print("  ⚠️ 未在 .env 偵測到 FINMIND_TOKEN，略過 FinMind 差額補齊。")
+        else:
+            rotator = TokenRotator(tokens)
+            url = "https://api.finmindtrade.com/api/v4/data"
+            all_fetched_records = []
+            lock = threading.Lock()
+            rate_limited_tokens = set()
 
-        def fetch_worker(stock_id):
-            nonlocal ip_banned_flag
-            if ip_banned_flag or len(rate_limited_tokens) >= len(tokens):
-                return
-            for _ in range(len(tokens)):
-                if ip_banned_flag:
+            def fetch_worker(stock_id):
+                nonlocal ip_banned_flag
+                if ip_banned_flag or len(rate_limited_tokens) >= len(tokens):
                     return
-                token = rotator.get_token()
-                if token in rate_limited_tokens:
-                    continue
-                headers = {"Authorization": f"Bearer {token}"}
-                params = {
-                    "dataset": "TaiwanStockMonthRevenue",
-                    "data_id": stock_id,
-                    "start_date": start_date
-                }
-                try:
-                    res = requests.get(url, params=params, headers=headers, timeout=10)
-                    if res.status_code == 403 or "ip banned" in res.text.lower():
-                        with lock:
-                            if not ip_banned_flag:
-                                print("  ⚠️ [FinMind 防護熔斷] 偵測到 FinMind 回傳 403 (ip banned)，已自動熔斷停止 FinMind 請求，採用官方權威數據！")
-                            ip_banned_flag = True
+                for _ in range(len(tokens)):
+                    if ip_banned_flag:
                         return
-                    if res.status_code == 402:
-                        with lock:
-                            rate_limited_tokens.add(token)
+                    token = rotator.get_token()
+                    if token in rate_limited_tokens:
                         continue
-                    if res.status_code == 200:
-                        js = res.json()
-                        if js.get("status") == 200:
-                            data = js.get("data", [])
-                            if data:
-                                with lock:
-                                    all_fetched_records.extend(data)
-                            return
-                        elif "ip banned" in str(js.get("msg", "")).lower():
+                    headers = {"Authorization": f"Bearer {token}"}
+                    params = {
+                        "dataset": "TaiwanStockMonthRevenue",
+                        "data_id": stock_id,
+                        "start_date": start_date
+                    }
+                    try:
+                        res = requests.get(url, params=params, headers=headers, timeout=10)
+                        if res.status_code == 403 or "ip banned" in res.text.lower():
                             with lock:
+                                if not ip_banned_flag:
+                                    print("  ⚠️ [FinMind 防護熔斷] 偵測到 FinMind 回傳 403 (ip banned)，已自動熔斷停止 FinMind 請求！")
                                 ip_banned_flag = True
                             return
-                        elif js.get("status") == 402:
+                        if res.status_code == 402:
                             with lock:
                                 rate_limited_tokens.add(token)
                             continue
-                        else:
-                            return
-                except Exception:
-                    time.sleep(0.2)
-                time.sleep(0.15)
+                        if res.status_code == 200:
+                            js = res.json()
+                            if js.get("status") == 200:
+                                data = js.get("data", [])
+                                if data:
+                                    with lock:
+                                        all_fetched_records.extend(data)
+                                return
+                            elif "ip banned" in str(js.get("msg", "")).lower():
+                                with lock:
+                                    ip_banned_flag = True
+                                return
+                            elif js.get("status") == 402:
+                                with lock:
+                                    rate_limited_tokens.add(token)
+                                continue
+                            else:
+                                return
+                    except Exception:
+                        time.sleep(0.2)
+                    time.sleep(0.15)
 
-        with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            executor.map(fetch_worker, missing_stocks)
+            with ThreadPoolExecutor(max_workers=max_workers) as executor:
+                executor.map(fetch_worker, missing_stocks)
 
-        if all_fetched_records:
-            df_raw = pd.DataFrame(all_fetched_records)
-            df_raw = df_raw.dropna(subset=["stock_id", "revenue_year", "revenue_month", "revenue"])
-            df_raw["revenue_year"] = df_raw["revenue_year"].astype(int)
-            df_raw["revenue_month"] = df_raw["revenue_month"].astype(int)
-            df_raw["revenue"] = df_raw["revenue"].astype(float)
-            df_raw["date"] = df_raw.apply(
-                lambda r: _rev_ym_to_publish_date(int(r["revenue_year"]), int(r["revenue_month"])),
-                axis=1
-            )
-            df_raw = df_raw.sort_values(by=["stock_id", "date"]).drop_duplicates(subset=["stock_id", "date"], keep="last")
+            if all_fetched_records:
+                df_raw = pd.DataFrame(all_fetched_records)
+                df_raw = df_raw.dropna(subset=["stock_id", "revenue_year", "revenue_month", "revenue"])
+                df_raw["revenue_year"] = df_raw["revenue_year"].astype(int)
+                df_raw["revenue_month"] = df_raw["revenue_month"].astype(int)
+                df_raw["revenue"] = df_raw["revenue"].astype(float)
+                df_raw["date"] = df_raw.apply(
+                    lambda r: _rev_ym_to_publish_date(int(r["revenue_year"]), int(r["revenue_month"])),
+                    axis=1
+                )
+                df_raw = df_raw.sort_values(by=["stock_id", "date"]).drop_duplicates(subset=["stock_id", "date"], keep="last")
 
-            conn = duckdb.connect(DB_PATH)
-            conn.register("df_fm_delta", df_raw[["stock_id", "date", "revenue"]])
-            conn.execute("""
-                INSERT INTO revenues (stock_id, date, revenue)
-                SELECT stock_id, date, revenue FROM df_fm_delta
-                ON CONFLICT(stock_id, date) DO UPDATE SET
-                    revenue = excluded.revenue
-            """)
-            conn.commit()
-            conn.close()
-            finmind_added = len(df_raw)
+                conn = safe_duckdb_connect(DB_PATH, read_only=False)
+                try:
+                    conn.register("df_fm_delta", df_raw[["stock_id", "date", "revenue"]])
+                    conn.execute("""
+                        INSERT INTO revenues (stock_id, date, revenue)
+                        SELECT stock_id, date, revenue FROM df_fm_delta
+                        ON CONFLICT(stock_id, date) DO UPDATE SET
+                            revenue = excluded.revenue
+                    """)
+                    conn.commit()
+                    finmind_added = len(df_raw)
+                    print(f"[DB Update Log] {datetime.now():%Y-%m-%d %H:%M:%S} revenues FinMind 差額 UPSERT {finmind_added} 筆")
+                finally:
+                    conn.close()
 
     # -------------------------------------------------------------
-    # Stage 4: 針對缺少 MoM% 或 YoY% 的紀錄進行安全補算，並校正 2026-11-10 (10月營收) 對齊 2025年10月營收
+    # Stage 4: 安全增量補算 NULL 之 MoM% / YoY%（嚴禁整表 DELETE！）
     # -------------------------------------------------------------
-    conn = duckdb.connect(DB_PATH)
-    # 校正先前舊版 FinMind 腳本在 2026-11-10 (2026年10月營收) 誤拿 2025-11-10 當去年同月的偏差
-    conn.execute("""
-        UPDATE revenues AS cur
-        SET revenue_last_month = sep.revenue,
-            revenue_last_year = ly_oct.revenue,
-            revenue_mom_pct = CASE WHEN sep.revenue > 0 THEN (cur.revenue - sep.revenue) / sep.revenue * 100.0 ELSE cur.revenue_mom_pct END,
-            revenue_yoy_pct = CASE WHEN ly_oct.revenue > 0 THEN (cur.revenue - ly_oct.revenue) / ly_oct.revenue * 100.0 ELSE cur.revenue_yoy_pct END
-        FROM revenues AS sep, revenues AS ly_oct
-        WHERE cur.date = '2026-11-10'
-          AND sep.stock_id = cur.stock_id AND sep.date = '2026-10-10'
-          AND ly_oct.stock_id = cur.stock_id AND ly_oct.date = '2025-10-10'
-    """)
-
-    df_all = conn.execute("SELECT * FROM revenues ORDER BY stock_id, date").df()
-    if not df_all.empty:
-        df_all["calc_last_month"] = df_all.groupby("stock_id")["revenue"].shift(1)
-        df_all["calc_last_year"] = df_all.groupby("stock_id")["revenue"].shift(12)
-
-        df_all["revenue_last_month"] = df_all["revenue_last_month"].combine_first(df_all["calc_last_month"])
-        df_all["revenue_last_year"] = df_all["revenue_last_year"].combine_first(df_all["calc_last_year"])
-
-        calc_mom = np.where(
-            (df_all["revenue_last_month"].notna()) & (df_all["revenue_last_month"] > 0),
-            (df_all["revenue"] - df_all["revenue_last_month"]) / np.abs(df_all["revenue_last_month"]) * 100.0,
-            np.nan
-        )
-        calc_yoy = np.where(
-            (df_all["revenue_last_year"].notna()) & (df_all["revenue_last_year"] > 0),
-            (df_all["revenue"] - df_all["revenue_last_year"]) / np.abs(df_all["revenue_last_year"]) * 100.0,
-            np.nan
-        )
-
-        # 僅在原本為 NULL 時才填入計算值，100% 保留官方 TWSE/TPEx/MoneyDJ 的精確百分比
-        df_all["revenue_mom_pct"] = df_all["revenue_mom_pct"].combine_first(pd.Series(calc_mom, index=df_all.index))
-        df_all["revenue_yoy_pct"] = df_all["revenue_yoy_pct"].combine_first(pd.Series(calc_yoy, index=df_all.index))
-
-        cols = [
-            "stock_id", "date", "revenue", "revenue_last_month", "revenue_last_year",
-            "revenue_mom_pct", "revenue_yoy_pct", "cumulative_revenue"
-        ]
-        if "cumulative_revenue" not in df_all.columns:
-            df_all["cumulative_revenue"] = 0.0
-        df_clean = df_all[cols].replace({np.nan: None})
-
-        conn.register("df_rebuilt", df_clean)
-        conn.execute("DELETE FROM revenues")
-        conn.execute("INSERT INTO revenues SELECT * FROM df_rebuilt")
-
-    sep_count = conn.execute("SELECT COUNT(DISTINCT stock_id) FROM revenues WHERE date = '2026-10-10'").fetchone()[0]
-    oct_count = conn.execute("SELECT COUNT(DISTINCT stock_id) FROM revenues WHERE date = '2026-11-10'").fetchone()[0]
-    conn.commit()
-    conn.close()
+    conn = safe_duckdb_connect(DB_PATH, read_only=False)
+    try:
+        # 透過嚴格日期關聯 (精準上個月 / 去年同月) 補齊缺少 MoM 或 YoY 之紀錄，絕不覆蓋官方已提供的精確百分比
+        conn.execute("""
+            UPDATE revenues AS cur
+            SET
+                revenue_last_month = COALESCE(cur.revenue_last_month, prev_m.revenue),
+                revenue_mom_pct = COALESCE(
+                    cur.revenue_mom_pct,
+                    CASE WHEN prev_m.revenue > 0 THEN (cur.revenue - prev_m.revenue) / prev_m.revenue * 100.0 ELSE NULL END
+                )
+            FROM revenues AS prev_m
+            WHERE cur.revenue_mom_pct IS NULL
+              AND prev_m.stock_id = cur.stock_id
+              AND strftime(CAST(prev_m.date AS DATE), '%Y-%m') = strftime(CAST(cur.date AS DATE) - INTERVAL 1 MONTH, '%Y-%m')
+        """)
+        conn.execute("""
+            UPDATE revenues AS cur
+            SET
+                revenue_last_year = COALESCE(cur.revenue_last_year, prev_y.revenue),
+                revenue_yoy_pct = COALESCE(
+                    cur.revenue_yoy_pct,
+                    CASE WHEN prev_y.revenue > 0 THEN (cur.revenue - prev_y.revenue) / prev_y.revenue * 100.0 ELSE NULL END
+                )
+            FROM revenues AS prev_y
+            WHERE cur.revenue_yoy_pct IS NULL
+              AND prev_y.stock_id = cur.stock_id
+              AND strftime(CAST(prev_y.date AS DATE), '%Y-%m') = strftime(CAST(cur.date AS DATE) - INTERVAL 1 YEAR, '%Y-%m')
+        """)
+        target_count = conn.execute(
+            "SELECT COUNT(DISTINCT stock_id) FROM revenues WHERE date = ?",
+            [target_pub_date],
+        ).fetchone()[0]
+        conn.commit()
+    finally:
+        conn.close()
 
     msg = (
-        f"🎉 全市場月營收權威同步完畢！9月營收 (2026-10-10) 共 {sep_count} 檔齊備"
-        f" ｜ 10月搶先營收 (2026-11-10) 共 {oct_count} 檔"
+        f"✅ 全市場月營收權威同步完畢！{target_ym_label} ({target_pub_date}) 共 {target_count} 檔齊備"
         f"（官方OpenAPI: {off_res.get('count', 0)}檔, MoneyDJ快報: {early_cnt}檔, FinMind補齊: {finmind_added}筆）"
     )
     print(msg)
     return {
         "status": "success",
         "message": msg,
-        "count": sep_count,
-        "early_oct_count": oct_count,
-        "latest_date": "2026-10-10"
+        "count": target_count,
+        "latest_date": target_pub_date,
+        "rev_ym_label": target_ym_label,
     }
 
 

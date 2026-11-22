@@ -64,10 +64,10 @@ def main():
     if not os.path.exists(py_exe):
         py_exe = sys.executable
 
-    # 2. 啟動 FastAPI 後端 (Port 8001)
-    print("[2/4] 啟動後端 FastAPI 服務 (Port 8001)...")
+    # 2. 啟動 FastAPI 後端 (Port 8001，僅綁定本機 127.0.0.1 確保資安)
+    print("[2/4] 啟動後端 FastAPI 服務 (127.0.0.1:8001)...")
     api_proc = subprocess.Popen(
-        [py_exe, "-m", "uvicorn", "api_server:app", "--host", "0.0.0.0", "--port", "8001"],
+        [py_exe, "-m", "uvicorn", "api_server:app", "--host", "127.0.0.1", "--port", "8001"],
         cwd=script_dir,
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL

@@ -56,7 +56,6 @@ def audit_duckdb_freshness(now: Optional[datetime.datetime] = None) -> Dict[str,
     if now is None:
         now = get_taiwan_now()
 
-    conn = safe_duckdb_connect(DB_PATH, read_only=True)
     today_str = now.strftime("%Y-%m-%d")
     today_is_trading = is_trading_day(today_str)
 
@@ -140,207 +139,229 @@ def audit_duckdb_freshness(now: Optional[datetime.datetime] = None) -> Dict[str,
     expected_fin_label = f"{req_fin_year} Q{req_fin_quarter} 季財報"
 
     # -------------------------------------------------------------
-    # 5. 檢索本地 DuckDB 當前儲存狀態
+    # 5. 檢索本地 DuckDB 當前儲存狀態 (嚴格 try...finally 確保連線必關，絕不洩漏唯讀鎖)
     # -------------------------------------------------------------
-    try:
-        db_kline_max = conn.execute("SELECT MAX(date) FROM klines WHERE stock_id NOT IN ('TAIEX', 'TXF', 'TXF_NIGHT')").fetchone()[0]
-    except Exception:
-        db_kline_max = None
-    db_kline_max_str = str(db_kline_max) if db_kline_max else ""
-
-    try:
-        db_kline_cnt = conn.execute("SELECT COUNT(DISTINCT stock_id) FROM klines WHERE date = ?", [db_kline_max]).fetchone()[0] if db_kline_max else 0
-    except Exception:
-        db_kline_cnt = 0
-
-    try:
-        db_taiex_max = conn.execute("SELECT MAX(date) FROM klines WHERE stock_id='TAIEX'").fetchone()[0]
-    except Exception:
-        db_taiex_max = None
-    db_taiex_str = str(db_taiex_max) if db_taiex_max else ""
-
-    try:
-        db_txf_max = conn.execute("SELECT MAX(date) FROM klines WHERE stock_id='TXF'").fetchone()[0]
-    except Exception:
-        db_txf_max = None
-    db_txf_str = str(db_txf_max) if db_txf_max else ""
-
-    try:
-        db_night_max = conn.execute("SELECT MAX(date) FROM klines WHERE stock_id='TXF_NIGHT'").fetchone()[0]
-    except Exception:
-        db_night_max = None
-    db_night_str = str(db_night_max) if db_night_max else ""
-
-    # 月營收覆蓋量
-    try:
-        db_rev_cnt = conn.execute("SELECT COUNT(*) FROM revenues WHERE date = ?", [expected_rev_date]).fetchone()[0]
-    except Exception:
-        db_rev_cnt = 0
-
-    try:
-        db_rev_latest_date = conn.execute("SELECT MAX(date) FROM revenues").fetchone()[0]
-    except Exception:
-        db_rev_latest_date = None
-
-    # 財報基準季覆蓋量
-    try:
-        db_fin_cnt = conn.execute("SELECT COUNT(*) FROM financials WHERE year = ? AND quarter = ?", [req_fin_year, req_fin_quarter]).fetchone()[0]
-    except Exception:
-        db_fin_cnt = 0
-
-    # 檢測是否有提早公佈之最新季度 (例如在 10月/11月 提早申報的 Q3 財報)
-    try:
-        db_early_q3_cnt = conn.execute("SELECT COUNT(*) FROM financials WHERE year = ? AND quarter = 3", [now.year]).fetchone()[0]
-    except Exception:
-        db_early_q3_cnt = 0
-
-    # 統計最近 3 期月營收與季財報的月份分佈 (方便主帥一眼查閱 DuckDB 更新到哪個月份)
+    db_kline_max = None
+    db_kline_cnt = 0
+    db_taiex_max = None
+    db_txf_max = None
+    db_night_max = None
+    db_rev_cnt = 0
+    db_rev_latest_date = None
+    db_fin_cnt = 0
+    db_early_q3_cnt = 0
+    db_fin_28_null_roe = 0
     monthly_rev_summary = []
-    try:
-        rev_rows = conn.execute("""
-            SELECT CAST(date AS VARCHAR) AS d, COUNT(DISTINCT stock_id) AS cnt
-            FROM revenues
-            GROUP BY d
-            ORDER BY d DESC
-            LIMIT 4
-        """).fetchall()
-        for r_d, r_cnt in rev_rows:
-            # 發布日 YYYY-MM-10 對應上個月營收
-            try:
-                dt_obj = datetime.datetime.strptime(str(r_d)[:10], "%Y-%m-%d")
-                rev_m = 12 if dt_obj.month == 1 else (dt_obj.month - 1)
-                rev_y = (dt_obj.year - 1) if dt_obj.month == 1 else dt_obj.year
-                m_label = f"{rev_y}年{rev_m}月營收"
-            except Exception:
-                m_label = str(r_d)
-            monthly_rev_summary.append({"publish_date": str(r_d)[:10], "rev_month_label": m_label, "count": int(r_cnt)})
-    except Exception:
-        pass
-
     quarterly_fin_summary = []
-    try:
-        fin_rows = conn.execute("""
-            SELECT year, quarter, COUNT(DISTINCT stock_id) AS cnt
-            FROM financials
-            GROUP BY year, quarter
-            ORDER BY year DESC, quarter DESC
-            LIMIT 4
-        """).fetchall()
-        q_month_map = {1: "3月/Q1季報", 2: "6月/Q2季報", 3: "9月/Q3季報", 4: "12月/Q4年報"}
-        for fy, fq, fcnt in fin_rows:
-            q_label = f"{int(fy)} Q{int(fq)} ({q_month_map.get(int(fq), f'Q{fq}')})"
-            quarterly_fin_summary.append({"year": int(fy), "quarter": int(fq), "quarter_label": q_label, "count": int(fcnt)})
-    except Exception:
-        pass
-
-    # 穿透最近一期跑分 (Top 9 / Top 15) 四大因子所採用的真實日期標籤
     factor_penetration = {
         "screener_updated_at": "未知",
-        "data_date": db_kline_max_str,
-        "momentum_tag": f"{db_kline_max_str} 收盤 (還原動能)",
+        "data_date": "",
+        "momentum_tag": "還原動能",
         "yoy_mom_tag": expected_rev_label,
         "roe_tag": expected_fin_label,
         "top_stocks": []
     }
+
+    conn = safe_duckdb_connect(DB_PATH, read_only=True)
     try:
-        sig_path = os.path.join(PROJECT_ROOT, "published_signals.json")
-        top_ids = []
-        top_names = {}
-        if os.path.exists(sig_path):
-            with open(sig_path, "r", encoding="utf-8") as sf:
-                sig_json = json.load(sf)
-            factor_penetration["screener_updated_at"] = sig_json.get("generated_at", "未知")
-            factor_penetration["data_date"] = sig_json.get("data_date", db_kline_max_str)
-            c1 = sig_json.get("core_1_swing", {})
-            for item in (c1.get("top_9", []) + c1.get("buffer_10_15", [])):
-                sid = str(item.get("stock_id", "")).strip()
-                if sid:
-                    top_ids.append(sid)
-                    top_names[sid] = str(item.get("stock_name") or item.get("name") or "")
+        try:
+            db_kline_max = conn.execute("SELECT MAX(date) FROM klines WHERE stock_id NOT IN ('TAIEX', 'TXF', 'TXF_NIGHT')").fetchone()[0]
+        except Exception:
+            db_kline_max = None
+        db_kline_max_str = str(db_kline_max)[:10] if db_kline_max else ""
+        factor_penetration["data_date"] = db_kline_max_str
+        factor_penetration["momentum_tag"] = f"{db_kline_max_str} 收盤 (還原動能)"
 
-        if not top_ids and os.path.exists(SCREENER_DB_PATH):
-            s_conn = safe_duckdb_connect(SCREENER_DB_PATH, read_only=True)
-            try:
-                st_row = s_conn.execute("SELECT last_updated_time FROM system_status LIMIT 1").fetchone()
-                if st_row:
-                    factor_penetration["screener_updated_at"] = str(st_row[0])
-                p_rows = s_conn.execute("SELECT stock_id, stock_name FROM current_portfolio LIMIT 15").fetchall()
-                for sid, sname in p_rows:
-                    top_ids.append(str(sid))
-                    top_names[str(sid)] = str(sname)
-            finally:
-                s_conn.close()
+        try:
+            db_kline_cnt = conn.execute("SELECT COUNT(DISTINCT stock_id) FROM klines WHERE date = ?", [db_kline_max]).fetchone()[0] if db_kline_max else 0
+        except Exception:
+            db_kline_cnt = 0
 
-        if top_ids:
-            placeholders = ",".join([f"'{sid}'" for sid in top_ids])
-            rev_latest_rows = conn.execute(f"""
-                SELECT stock_id, CAST(MAX(date) AS VARCHAR) AS max_rev_date
+        try:
+            db_taiex_max = conn.execute("SELECT MAX(date) FROM klines WHERE stock_id='TAIEX'").fetchone()[0]
+        except Exception:
+            db_taiex_max = None
+        db_taiex_str = str(db_taiex_max)[:10] if db_taiex_max else ""
+
+        try:
+            db_txf_max = conn.execute("SELECT MAX(date) FROM klines WHERE stock_id='TXF'").fetchone()[0]
+        except Exception:
+            db_txf_max = None
+        db_txf_str = str(db_txf_max)[:10] if db_txf_max else ""
+
+        try:
+            db_night_max = conn.execute("SELECT MAX(date) FROM klines WHERE stock_id='TXF_NIGHT'").fetchone()[0]
+        except Exception:
+            db_night_max = None
+        db_night_str = str(db_night_max)[:10] if db_night_max else ""
+
+        # 月營收覆蓋量
+        try:
+            db_rev_cnt = conn.execute("SELECT COUNT(*) FROM revenues WHERE date = ?", [expected_rev_date]).fetchone()[0]
+        except Exception:
+            db_rev_cnt = 0
+
+        try:
+            db_rev_latest_date = conn.execute("SELECT MAX(date) FROM revenues").fetchone()[0]
+        except Exception:
+            db_rev_latest_date = None
+
+        # 財報基準季覆蓋量與金融股 (28xx) ROE 缺失偵測
+        try:
+            db_fin_cnt = conn.execute("SELECT COUNT(*) FROM financials WHERE year = ? AND quarter = ?", [req_fin_year, req_fin_quarter]).fetchone()[0]
+        except Exception:
+            db_fin_cnt = 0
+
+        try:
+            db_fin_28_null_roe = conn.execute(
+                "SELECT COUNT(*) FROM financials WHERE stock_id LIKE '28%' AND year = ? AND quarter = ? AND roe IS NULL",
+                [req_fin_year, req_fin_quarter],
+            ).fetchone()[0]
+        except Exception:
+            db_fin_28_null_roe = 0
+
+        try:
+            db_early_q3_cnt = conn.execute("SELECT COUNT(*) FROM financials WHERE year = ? AND quarter = 3", [now.year]).fetchone()[0]
+        except Exception:
+            db_early_q3_cnt = 0
+
+        # 統計最近 4 期月營收與季財報的月份分佈
+        try:
+            rev_rows = conn.execute("""
+                SELECT CAST(date AS VARCHAR) AS d, COUNT(DISTINCT stock_id) AS cnt
                 FROM revenues
-                WHERE stock_id IN ({placeholders})
-                GROUP BY stock_id
+                GROUP BY d
+                ORDER BY d DESC
+                LIMIT 4
             """).fetchall()
-            rev_map = {str(r[0]): str(r[1])[:10] for r in rev_latest_rows}
-
-            fin_latest_rows = conn.execute(f"""
-                SELECT stock_id, year, quarter
-                FROM (
-                    SELECT stock_id, year, quarter,
-                           ROW_NUMBER() OVER(PARTITION BY stock_id ORDER BY year DESC, quarter DESC) AS rn
-                    FROM financials
-                    WHERE stock_id IN ({placeholders}) AND (roe IS NOT NULL OR eps < 0)
-                ) sub
-                WHERE rn = 1
-            """).fetchall()
-            fin_map = {str(r[0]): f"{int(r[1])} Q{int(r[2])}" for r in fin_latest_rows}
-
-            kline_latest_rows = conn.execute(f"""
-                SELECT stock_id, CAST(MAX(date) AS VARCHAR) AS max_k_date
-                FROM klines
-                WHERE stock_id IN ({placeholders})
-                GROUP BY stock_id
-            """).fetchall()
-            k_map = {str(r[0]): str(r[1])[:10] for r in kline_latest_rows}
-
-            rev_dist = {}
-            fin_dist = {}
-            top_details = []
-            for rank_i, sid in enumerate(top_ids[:15], 1):
-                r_date = rev_map.get(sid, "")
+            for r_d, r_cnt in rev_rows:
                 try:
-                    dt_r = datetime.datetime.strptime(r_date, "%Y-%m-%d")
-                    rm = 12 if dt_r.month == 1 else (dt_r.month - 1)
-                    ry = (dt_r.year - 1) if dt_r.month == 1 else dt_r.year
-                    r_label = f"{ry}年{rm}月"
+                    dt_obj = datetime.datetime.strptime(str(r_d)[:10], "%Y-%m-%d")
+                    rev_m = 12 if dt_obj.month == 1 else (dt_obj.month - 1)
+                    rev_y = (dt_obj.year - 1) if dt_obj.month == 1 else dt_obj.year
+                    m_label = f"{rev_y}年{rev_m}月營收"
                 except Exception:
-                    r_label = r_date or "未知"
-                f_label = fin_map.get(sid, "未知")
-                k_date = k_map.get(sid, db_kline_max_str)
+                    m_label = str(r_d)
+                monthly_rev_summary.append({"publish_date": str(r_d)[:10], "rev_month_label": m_label, "count": int(r_cnt)})
+        except Exception:
+            pass
 
-                if rank_i <= 9:
-                    rev_dist[r_label] = rev_dist.get(r_label, 0) + 1
-                    fin_dist[f_label] = fin_dist.get(f_label, 0) + 1
+        try:
+            fin_rows = conn.execute("""
+                SELECT year, quarter, COUNT(DISTINCT stock_id) AS cnt
+                FROM financials
+                GROUP BY year, quarter
+                ORDER BY year DESC, quarter DESC
+                LIMIT 4
+            """).fetchall()
+            q_month_map = {1: "3月/Q1季報", 2: "6月/Q2季報", 3: "9月/Q3季報", 4: "12月/Q4年報"}
+            for fy, fq, fcnt in fin_rows:
+                q_label = f"{int(fy)} Q{int(fq)} ({q_month_map.get(int(fq), f'Q{fq}')})"
+                quarterly_fin_summary.append({"year": int(fy), "quarter": int(fq), "quarter_label": q_label, "count": int(fcnt)})
+        except Exception:
+            pass
 
-                top_details.append({
-                    "rank": rank_i,
-                    "stock_id": sid,
-                    "stock_name": top_names.get(sid, ""),
-                    "kline_date": k_date,
-                    "rev_month": r_label,
-                    "rev_publish_date": r_date,
-                    "roe_quarter": f_label
-                })
+        # 穿透最近一期跑分 (Top 9 / Top 15) 四大因子所採用的真實日期標籤 (參數化 SQL)
+        try:
+            sig_path = os.path.join(PROJECT_ROOT, "published_signals.json")
+            top_ids = []
+            top_names = {}
+            if os.path.exists(sig_path):
+                with open(sig_path, "r", encoding="utf-8") as sf:
+                    sig_json = json.load(sf)
+                factor_penetration["screener_updated_at"] = sig_json.get("generated_at", "未知")
+                factor_penetration["data_date"] = sig_json.get("data_date", db_kline_max_str)
+                c1 = sig_json.get("core_1_swing", {})
+                for item in (c1.get("top_9", []) + c1.get("buffer_10_15", [])):
+                    sid = str(item.get("stock_id", "")).strip()
+                    if sid and sid.isalnum():
+                        top_ids.append(sid)
+                        top_names[sid] = str(item.get("stock_name") or item.get("name") or "")
 
-            factor_penetration["top_stocks"] = top_details
-            if rev_dist:
-                factor_penetration["yoy_mom_tag"] = " ｜ ".join([f"{k}營收 ({v}檔)" for k, v in sorted(rev_dist.items(), reverse=True)])
-            if fin_dist:
-                factor_penetration["roe_tag"] = " ｜ ".join([f"{k} ({v}檔)" for k, v in sorted(fin_dist.items(), reverse=True)])
-            if top_details:
-                factor_penetration["momentum_tag"] = f"{top_details[0]['kline_date']} 收盤 (20D/10D還原動能)"
-    except Exception as e:
-        logger.warning(f"Factor penetration check error: {e}")
+            if not top_ids and os.path.exists(SCREENER_DB_PATH):
+                s_conn = safe_duckdb_connect(SCREENER_DB_PATH, read_only=True)
+                try:
+                    st_row = s_conn.execute("SELECT last_updated_time FROM system_status LIMIT 1").fetchone()
+                    if st_row:
+                        factor_penetration["screener_updated_at"] = str(st_row[0])
+                    p_rows = s_conn.execute("SELECT stock_id, stock_name FROM current_portfolio LIMIT 15").fetchall()
+                    for sid, sname in p_rows:
+                        sid_s = str(sid).strip()
+                        if sid_s and sid_s.isalnum():
+                            top_ids.append(sid_s)
+                            top_names[sid_s] = str(sname)
+                finally:
+                    s_conn.close()
 
-    conn.close()
+            if top_ids:
+                q_marks = ",".join(["?"] * len(top_ids))
+                rev_latest_rows = conn.execute(
+                    f"SELECT stock_id, CAST(MAX(date) AS VARCHAR) AS max_rev_date FROM revenues WHERE stock_id IN ({q_marks}) GROUP BY stock_id",
+                    top_ids,
+                ).fetchall()
+                rev_map = {str(r[0]): str(r[1])[:10] for r in rev_latest_rows}
+
+                fin_latest_rows = conn.execute(
+                    f"""
+                    SELECT stock_id, year, quarter
+                    FROM (
+                        SELECT stock_id, year, quarter,
+                               ROW_NUMBER() OVER(PARTITION BY stock_id ORDER BY year DESC, quarter DESC) AS rn
+                        FROM financials
+                        WHERE stock_id IN ({q_marks}) AND (roe IS NOT NULL OR eps < 0)
+                    ) sub
+                    WHERE rn = 1
+                    """,
+                    top_ids,
+                ).fetchall()
+                fin_map = {str(r[0]): f"{int(r[1])} Q{int(r[2])}" for r in fin_latest_rows}
+
+                kline_latest_rows = conn.execute(
+                    f"SELECT stock_id, CAST(MAX(date) AS VARCHAR) AS max_k_date FROM klines WHERE stock_id IN ({q_marks}) GROUP BY stock_id",
+                    top_ids,
+                ).fetchall()
+                k_map = {str(r[0]): str(r[1])[:10] for r in kline_latest_rows}
+
+                rev_dist = {}
+                fin_dist = {}
+                top_details = []
+                for rank_i, sid in enumerate(top_ids[:15], 1):
+                    r_date = rev_map.get(sid, "")
+                    try:
+                        dt_r = datetime.datetime.strptime(r_date, "%Y-%m-%d")
+                        rm = 12 if dt_r.month == 1 else (dt_r.month - 1)
+                        ry = (dt_r.year - 1) if dt_r.month == 1 else dt_r.year
+                        r_label = f"{ry}年{rm}月"
+                    except Exception:
+                        r_label = r_date or "未知"
+                    f_label = fin_map.get(sid, "未知")
+                    k_date = k_map.get(sid, db_kline_max_str)
+
+                    if rank_i <= 9:
+                        rev_dist[r_label] = rev_dist.get(r_label, 0) + 1
+                        fin_dist[f_label] = fin_dist.get(f_label, 0) + 1
+
+                    top_details.append({
+                        "rank": rank_i,
+                        "stock_id": sid,
+                        "stock_name": top_names.get(sid, ""),
+                        "kline_date": k_date,
+                        "rev_month": r_label,
+                        "rev_publish_date": r_date,
+                        "roe_quarter": f_label
+                    })
+
+                factor_penetration["top_stocks"] = top_details
+                if rev_dist:
+                    factor_penetration["yoy_mom_tag"] = " ｜ ".join([f"{k}營收 ({v}檔)" for k, v in sorted(rev_dist.items(), reverse=True)])
+                if fin_dist:
+                    factor_penetration["roe_tag"] = " ｜ ".join([f"{k} ({v}檔)" for k, v in sorted(fin_dist.items(), reverse=True)])
+                if top_details:
+                    factor_penetration["momentum_tag"] = f"{top_details[0]['kline_date']} 收盤 (20D/10D還原動能)"
+        except Exception as e:
+            logger.warning(f"Factor penetration check error: {e}")
+    finally:
+        conn.close()
 
     # -------------------------------------------------------------
     # 5.5 智慧時效提醒文案 (現在應該是幾月份的營收？幾月份的財報 ROE？)
@@ -385,10 +406,13 @@ def audit_duckdb_freshness(now: Optional[datetime.datetime] = None) -> Dict[str,
     # -------------------------------------------------------------
     # 6. 決策邏輯判定
     # -------------------------------------------------------------
+    prev_rev_cnt = monthly_rev_summary[1]["count"] if len(monthly_rev_summary) >= 2 and monthly_rev_summary[0]["publish_date"] == expected_rev_date else 0
     needs_kline_sync = (db_kline_max_str < expected_kline_date) or (db_kline_cnt < 1500)
     needs_taiex_sync = (db_taiex_str < expected_kline_date) or (db_txf_str < expected_txf_date) or (db_night_str < expected_night_date)
-    needs_revenue_sync = (db_rev_cnt < 1500)
-    needs_financials_sync = (db_fin_cnt < 1500)
+    # 除了 < 1500 門檻外，若過了 15 號仍較前月少 >= 10 檔（例如金控 15 號後補公告）自動觸發補齊
+    needs_revenue_sync = (db_rev_cnt < 1500) or (now.day >= 15 and prev_rev_cnt > 0 and (prev_rev_cnt - db_rev_cnt) >= 10)
+    # 若目標季未達 1500 檔，或金融股 (28xx) 仍有大量 ROE=NULL，自動觸發 6 業別補齊
+    needs_financials_sync = (db_fin_cnt < 1500) or (db_fin_28_null_roe >= 5)
 
     # 判定處置股名單是否為今日更新
     needs_disposal_sync = True
@@ -535,11 +559,20 @@ def run_smart_sync_and_publish(
             update_progress(35, f"2/6 正在校正全市場 K 線歷史與除權息跳空 (目標: {targets['kline_date']})...")
             try:
                 from daily_openapi_klines import fetch_openapi_klines
-                kline_res = fetch_openapi_klines()
-                # 執行 Auto-Adjuster 消除除權息與減資造成的假動能
-                from data_providers.price_adjuster import auto_adjust_historical_prices
-                auto_adjust_historical_prices()
-                result_summary["actions_taken"].append(f"全市場 K 線與除權息校正完成 (覆蓋日期: {targets['kline_date']})")
+                kline_res = fetch_openapi_klines(target_date=targets["kline_date"], run_adjuster=True)
+                updated_cnt = int(kline_res.get("updated_records", 0)) if isinstance(kline_res, dict) else 0
+                if isinstance(kline_res, dict) and kline_res.get("status") == "success" and updated_cnt > 0:
+                    actual_twse = kline_res.get("twse_date") or targets["kline_date"]
+                    actual_tpex = kline_res.get("tpex_date") or targets["kline_date"]
+                    result_summary["actions_taken"].append(
+                        f"全市場 K 線與除權息校正完成 (寫入 {updated_cnt} 筆, TWSE={actual_twse}, TPEx={actual_tpex})"
+                    )
+                else:
+                    msg = kline_res.get("message", "K 線回傳 0 筆") if isinstance(kline_res, dict) else "K 線同步回傳異常"
+                    err_msg = f"K線同步未寫入資料: {msg}"
+                    logger.error(err_msg)
+                    result_summary["errors"].append(err_msg)
+                    result_summary["actions_taken"].append(f"⚠️ {err_msg}")
             except Exception as e:
                 err_msg = f"K線同步例外: {e}"
                 logger.error(err_msg)

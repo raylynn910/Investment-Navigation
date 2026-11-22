@@ -157,19 +157,24 @@ class DisposalEventScanner:
         df_db = pd.DataFrame()
         try:
             conn = safe_duckdb_connect(self.db_path, read_only=True)
-            max_d = conn.execute("""
-                SELECT MAX(date) FROM klines 
-                WHERE LENGTH(stock_id) = 4 AND regexp_matches(stock_id, '^[0-9]{4}$')
-            """).fetchone()[0]
-            ref_d = str(max_d)[:10] if max_d else str(datetime.date.today())
-            df_db = conn.execute(f"""
-                SELECT stock_id, name, market, disposal_tier, prepay_type, disposal_stage, regulatory_regime,
-                       start_date, end_date, exit_date, reason
-                FROM disposals
-                WHERE end_date >= (CAST('{ref_d}' AS DATE) - INTERVAL 25 DAY)
-                ORDER BY end_date ASC
-            """).df()
-            conn.close()
+            try:
+                max_d = conn.execute("""
+                    SELECT MAX(date) FROM klines 
+                    WHERE LENGTH(stock_id) = 4 AND regexp_matches(stock_id, '^[0-9]{4}$')
+                """).fetchone()[0]
+                ref_d = str(max_d)[:10] if max_d else str(datetime.date.today())
+                df_db = conn.execute(
+                    """
+                    SELECT stock_id, name, market, disposal_tier, prepay_type, disposal_stage, regulatory_regime,
+                           start_date, end_date, exit_date, reason
+                    FROM disposals
+                    WHERE end_date >= (CAST(? AS DATE) - INTERVAL 25 DAY)
+                    ORDER BY end_date ASC
+                    """,
+                    [ref_d],
+                ).df()
+            finally:
+                conn.close()
         except Exception as e:
             print(f"[DisposalEventScanner] DuckDB fallback error: {e}")
 
@@ -372,20 +377,27 @@ class DisposalEventScanner:
         last_closed_w = WEEKDAY_NAMES[last_closed_date.weekday()]
         next_trading_w = WEEKDAY_NAMES[next_trading_date.weekday()]
 
-        # 取得大盤/台指期基準日漲跌幅 (供策略 B* 大盤順風濾網 >= 0.0% 檢核)
+        # 取得大盤/台指期基準日漲跌幅 (供策略 B* 大盤順風濾網 >= 0.0% 檢核，參數化查詢)
         tx_ret_pct = 0.0
+        cur_date_str = str(current_date)[:10]
         try:
-            df_tx = conn.execute(f"""
+            df_tx = conn.execute(
+                """
                 SELECT date, close FROM klines
-                WHERE stock_id = 'TXF' AND date <= '{current_date}'
+                WHERE stock_id = 'TXF' AND date <= CAST(? AS DATE)
                 ORDER BY date DESC LIMIT 2
-            """).df()
+                """,
+                [cur_date_str],
+            ).df()
             if len(df_tx) < 2:
-                df_tx = conn.execute(f"""
+                df_tx = conn.execute(
+                    """
                     SELECT date, close FROM klines
-                    WHERE stock_id = 'TAIEX' AND date <= '{current_date}'
+                    WHERE stock_id = 'TAIEX' AND date <= CAST(? AS DATE)
                     ORDER BY date DESC LIMIT 2
-                """).df()
+                    """,
+                    [cur_date_str],
+                ).df()
             if len(df_tx) >= 2 and float(df_tx.iloc[1]['close']) > 0:
                 tx_ret_pct = ((float(df_tx.iloc[0]['close']) / float(df_tx.iloc[1]['close'])) - 1.0) * 100.0
         except Exception:
@@ -411,13 +423,16 @@ class DisposalEventScanner:
             if td_to_exit < -3:
                 continue
             
-            # 撈取該股最近 30 日歷史 K 線
-            df_k = conn.execute(f"""
+            # 撈取該股最近 30 日歷史 K 線 (參數化查詢)
+            df_k = conn.execute(
+                """
                 SELECT date, open, high, low, close, volume 
                 FROM klines 
-                WHERE stock_id = '{sid}' AND date <= '{current_date}'
+                WHERE stock_id = ? AND date <= CAST(? AS DATE)
                 ORDER BY date DESC LIMIT 30
-            """).df()
+                """,
+                [sid, cur_date_str],
+            ).df()
             
             if df_k.empty:
                 continue
@@ -436,12 +451,15 @@ class DisposalEventScanner:
                 p_20 = float(df_k.iloc[19]['close'])
                 mom_20 = ((latest_close / p_20) - 1.0) * 100 if p_20 > 0 else 0.0
                 
-            # 處置前一交易日收盤價 (基準價)
-            pre_k = conn.execute(f"""
+            # 處置前一交易日收盤價 (基準價，參數化查詢)
+            pre_k = conn.execute(
+                """
                 SELECT close FROM klines 
-                WHERE stock_id = '{sid}' AND date < '{start_d}'
+                WHERE stock_id = ? AND date < CAST(? AS DATE)
                 ORDER BY date DESC LIMIT 1
-            """).fetchone() if start_d else None
+                """,
+                [sid, str(start_d)[:10]],
+            ).fetchone() if start_d else None
             
             pre_close = float(pre_k[0]) if (pre_k and pre_k[0] is not None) else latest_close
             disp_cum_ret = ((latest_close / pre_close) - 1.0) * 100.0 if pre_close > 0 else 0.0

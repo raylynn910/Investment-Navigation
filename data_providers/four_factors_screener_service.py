@@ -178,21 +178,9 @@ def compute_four_factors_from_db() -> list[dict]:
         daily_chg_map, _ = load_daily_change_map(db)
 
         # ===================================================================
-        # 第 4 步：籌碼面 — 近 20 日外資與投信淨買超累計
+        # 第 4 步：籌碼面 (陣型 C 純因子輕量化：不依賴過期 2024 籌碼表，直接歸零避免誤導)
         # ===================================================================
-        chip_sql = """
-            SELECT stock_id,
-                   SUM(foreign_buy - foreign_sell) AS foreign_net_20d,
-                   SUM(trust_buy - trust_sell) AS trust_net_20d
-            FROM chips
-            WHERE date >= (
-                SELECT d FROM (
-                    SELECT DISTINCT date AS d FROM chips ORDER BY date DESC LIMIT 20
-                ) sub ORDER BY d ASC LIMIT 1
-            )
-            GROUP BY stock_id
-        """
-        df_chip = db.execute(chip_sql).df()
+        df_chip = pd.DataFrame(columns=["stock_id", "foreign_net_20d", "trust_net_20d"])
 
         # ===================================================================
         # 進行合併全部因子

@@ -74,36 +74,40 @@ def seed_initial_snapshot_if_needed(snapshots: dict, target_date_str: str) -> di
     # 嘗試從 screener_results.duckdb 讀取 baseline_portfolio
     try:
         if os.path.exists(SCREENER_DB_PATH):
-            conn = duckdb.connect(SCREENER_DB_PATH, read_only=True)
-            tables = [t[0] for t in conn.execute("SHOW TABLES").fetchall()]
-            if "baseline_portfolio" in tables:
-                rows = conn.execute("SELECT stock_id, stock_name FROM baseline_portfolio LIMIT 15").fetchall()
-                if rows:
-                    prev_date_obj = datetime.date.fromisoformat(target_date_str) - datetime.timedelta(days=1)
-                    if prev_date_obj.weekday() == 6:  # 週日往前推到週五
-                        prev_date_obj -= datetime.timedelta(days=2)
-                    elif prev_date_obj.weekday() == 5:  # 週六往前推到週五
-                        prev_date_obj -= datetime.timedelta(days=1)
-                    prev_date_str = prev_date_obj.isoformat()
-                    
-                    seeded_top15 = []
-                    seeded_ids = []
-                    for idx, (sid, sname) in enumerate(rows, 1):
-                        sid_str = str(sid)
-                        seeded_ids.append(sid_str)
-                        seeded_top15.append({
-                            "rank": idx,
-                            "stock_id": sid_str,
-                            "stock_name": str(sname),
-                            "latest_close": 0.0
-                        })
-                    
-                    snapshots[prev_date_str] = {
-                        "date": prev_date_str,
-                        "stock_ids": seeded_ids,
-                        "top15": seeded_top15
-                    }
-            conn.close()
+            conn = safe_duckdb_connect(SCREENER_DB_PATH, read_only=True)
+            try:
+                tables = [t[0] for t in conn.execute("SHOW TABLES").fetchall()]
+                if "baseline_portfolio" in tables:
+                    rows = conn.execute("SELECT stock_id, stock_name FROM baseline_portfolio LIMIT 15").fetchall()
+                else:
+                    rows = []
+            finally:
+                conn.close()
+            if rows:
+                prev_date_obj = datetime.date.fromisoformat(target_date_str) - datetime.timedelta(days=1)
+                if prev_date_obj.weekday() == 6:  # 週日往前推到週五
+                    prev_date_obj -= datetime.timedelta(days=2)
+                elif prev_date_obj.weekday() == 5:  # 週六往前推到週五
+                    prev_date_obj -= datetime.timedelta(days=1)
+                prev_date_str = prev_date_obj.isoformat()
+                
+                seeded_top15 = []
+                seeded_ids = []
+                for idx, (sid, sname) in enumerate(rows, 1):
+                    sid_str = str(sid)
+                    seeded_ids.append(sid_str)
+                    seeded_top15.append({
+                        "rank": idx,
+                        "stock_id": sid_str,
+                        "stock_name": str(sname),
+                        "latest_close": 0.0
+                    })
+                
+                snapshots[prev_date_str] = {
+                    "date": prev_date_str,
+                    "stock_ids": seeded_ids,
+                    "top15": seeded_top15
+                }
     except Exception as e:
         print(f"[signal_publisher] 補建種子快照警示: {e}")
 
@@ -199,12 +203,13 @@ def compute_market_regime_and_water_level(regime_data: dict = None) -> dict:
                 night_close = float(last_night['close'])
                 night_date_str = str(last_night['date'])
                 
-                # 防呆：若夜盤日期早於日盤日期（當日夜盤尚未更新），以日盤收盤為平盤基準
-                if 'last_txf' in locals() and str(last_night['date']) < str(last_txf['date']):
+                # 防呆：夜盤 (TXF_NIGHT) 標籤日為「次一交易日 (T+1)」，對應日盤 date=T 的盤後夜盤必滿足 night_date > txf_date！
+                # 若 night_date <= txf_date，代表最新盤後夜盤尚未寫入（該筆夜盤屬於當日日盤開盤前），嚴禁拿舊夜盤減今日日盤算出假漲跌幅！
+                if 'last_txf' in locals() and str(last_night['date'])[:10] <= str(last_txf['date'])[:10]:
                     night_close = txf_close
                     night_ret = 0.0
                     night_k_val = txf_k_val
-                    night_date_str = str(last_txf['date'])
+                    night_date_str = str(last_txf['date'])[:10]
                 else:
                     if txf_close > 0:
                         night_ret = (night_close - txf_close) / txf_close
@@ -1414,10 +1419,16 @@ def run_git_sync(data_date: str) -> dict:
         "components_weapons.py",
         "signal_publisher.py",
         "launcher.py",
+        "db_utils.py",
+        "daily_openapi_klines.py",
         "disposal_event_scanner.py",
+        "download_disposals_history.py",
+        "fetch_txf_klines.py",
+        "pure_openapi_financials_backfill.py",
         "update_taiex.py",
-        "update_revenue_openapi.py",
         "moneydj_revenue_scraper.py",
+        "api_server.py",
+        "api_client.py",
         "data_providers/smart_sync_manager.py",
         "data_providers/four_factors_screener_service.py",
         "data_providers/price_adjuster.py",

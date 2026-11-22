@@ -2800,6 +2800,118 @@
           "latest_close": 59.9
         }
       ]
+    },
+    "2026-11-20": {
+      "date": "2026-11-20",
+      "stock_ids": [
+        "7717",
+        "6108",
+        "7828",
+        "3661",
+        "7765",
+        "6148",
+        "2471",
+        "9933",
+        "3491",
+        "4916",
+        "8415",
+        "6199",
+        "3570",
+        "3293",
+        "6223"
+      ],
+      "top15": [
+        {
+          "rank": 1,
+          "stock_id": "7717",
+          "stock_name": "萊德光電-KY",
+          "latest_close": 462.0
+        },
+        {
+          "rank": 2,
+          "stock_id": "6108",
+          "stock_name": "競國",
+          "latest_close": 34.45
+        },
+        {
+          "rank": 3,
+          "stock_id": "7828",
+          "stock_name": "創新服務",
+          "latest_close": 1295.0
+        },
+        {
+          "rank": 4,
+          "stock_id": "3661",
+          "stock_name": "世芯-KY",
+          "latest_close": 3240.0
+        },
+        {
+          "rank": 5,
+          "stock_id": "7765",
+          "stock_name": "中華資安",
+          "latest_close": 294.5
+        },
+        {
+          "rank": 6,
+          "stock_id": "6148",
+          "stock_name": "驊宏資",
+          "latest_close": 52.5
+        },
+        {
+          "rank": 7,
+          "stock_id": "2471",
+          "stock_name": "資通",
+          "latest_close": 62.8
+        },
+        {
+          "rank": 8,
+          "stock_id": "9933",
+          "stock_name": "中鼎",
+          "latest_close": 51.5
+        },
+        {
+          "rank": 9,
+          "stock_id": "3491",
+          "stock_name": "昇達科",
+          "latest_close": 1225.0
+        },
+        {
+          "rank": 10,
+          "stock_id": "4916",
+          "stock_name": "事欣科",
+          "latest_close": 90.0
+        },
+        {
+          "rank": 11,
+          "stock_id": "8415",
+          "stock_name": "大國鋼",
+          "latest_close": 39.85
+        },
+        {
+          "rank": 12,
+          "stock_id": "6199",
+          "stock_name": "天品",
+          "latest_close": 169.5
+        },
+        {
+          "rank": 13,
+          "stock_id": "3570",
+          "stock_name": "大塚",
+          "latest_close": 162.5
+        },
+        {
+          "rank": 14,
+          "stock_id": "3293",
+          "stock_name": "鈊象",
+          "latest_close": 754.0
+        },
+        {
+          "rank": 15,
+          "stock_id": "6223",
+          "stock_name": "旺矽",
+          "latest_close": 3560.0
+        }
+      ]
     }
   }
 }

@@ -208,19 +208,19 @@ def sync_txf_recent_if_needed(conn, lookback_days: int = 20) -> dict:
     result = {"source": None, "rows": 0, "txf_max": None, "night_max": None, "errors": []}
     now = datetime.now()
     start_date = (now - timedelta(days=lookback_days)).strftime("%Y-%m-%d")
-    end_date = now.strftime("%Y-%m-%d")
+    # 關鍵校正：夜盤標籤歸屬「次一交易日」(例：週五 11/20 夜盤 -> 週一 11/23，春節連假更長)，
+    # 故 end_date 必須往後外推 7 天，避免週末或連假呼叫 FinMind 時把最新夜盤直接截斷！
+    end_date = (now + timedelta(days=7)).strftime("%Y-%m-%d")
 
     try:
-        from fetch_txf_klines import FINMIND_TOKENS, _extract_front_month
+        from fetch_txf_klines import get_finmind_tokens, _extract_front_month
     except Exception as e:
         result["errors"].append(f"載入 fetch_txf_klines 失敗: {e}")
         return result
 
-    tokens = []
-    env_tok = os.environ.get("FINMIND_TOKEN", "").strip().strip('"').strip("'")
-    if env_tok:
-        tokens.append(env_tok)
-    tokens.extend([t for t in FINMIND_TOKENS if t not in tokens])
+    tokens = get_finmind_tokens()
+    if not tokens:
+        result["errors"].append("未在 .env 或環境變數偵測到 FINMIND_TOKEN，改用期交所 TAIFEX OpenAPI 備援")
 
     df_comb = pd.DataFrame()
 
