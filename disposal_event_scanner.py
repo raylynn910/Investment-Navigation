@@ -384,7 +384,7 @@ class DisposalEventScanner:
             df_tx = conn.execute(
                 """
                 SELECT date, close FROM klines
-                WHERE stock_id = 'TXF' AND date <= CAST(? AS DATE)
+                WHERE stock_id = 'TXF' AND date <= ?
                 ORDER BY date DESC LIMIT 2
                 """,
                 [cur_date_str],
@@ -393,7 +393,7 @@ class DisposalEventScanner:
                 df_tx = conn.execute(
                     """
                     SELECT date, close FROM klines
-                    WHERE stock_id = 'TAIEX' AND date <= CAST(? AS DATE)
+                    WHERE stock_id = 'TAIEX' AND date <= ?
                     ORDER BY date DESC LIMIT 2
                     """,
                     [cur_date_str],
@@ -428,7 +428,7 @@ class DisposalEventScanner:
                 """
                 SELECT date, open, high, low, close, volume 
                 FROM klines 
-                WHERE stock_id = ? AND date <= CAST(? AS DATE)
+                WHERE stock_id = ? AND date <= ?
                 ORDER BY date DESC LIMIT 30
                 """,
                 [sid, cur_date_str],
@@ -455,7 +455,7 @@ class DisposalEventScanner:
             pre_k = conn.execute(
                 """
                 SELECT close FROM klines 
-                WHERE stock_id = ? AND date < CAST(? AS DATE)
+                WHERE stock_id = ? AND date < ?
                 ORDER BY date DESC LIMIT 1
                 """,
                 [sid, str(start_d)[:10]],

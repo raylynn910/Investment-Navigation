@@ -108,7 +108,7 @@ def sync_finmind_financials(start_date: str = None, max_workers: int = 3):
             FROM klines
             WHERE LENGTH(stock_id) = 4
               AND stock_id NOT LIKE '0%'
-              AND date >= CAST(? AS DATE)
+              AND date >= ?
             ORDER BY stock_id
             """,
             [kline_cutoff],

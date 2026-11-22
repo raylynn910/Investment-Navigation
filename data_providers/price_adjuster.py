@@ -84,7 +84,7 @@ def auto_adjust_historical_prices(db_path: str = None):
                         low = low * ?,
                         close = close * ?,
                         volume = volume / ?
-                    WHERE stock_id = ? AND date < CAST(? AS DATE)
+                    WHERE stock_id = ? AND date < ?
                     """,
                     [ratio, ratio, ratio, ratio, ratio, stock_id, curr_date],
                 )
